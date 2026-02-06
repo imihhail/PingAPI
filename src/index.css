@@ -1,8 +1,328 @@
+:root {
+  --bg-progressBoxes: rgba(60, 105, 95, 0.432);
+  --input-border: rgba(114, 255, 126, 0.705);
+
+  --primary: #63e468;
+  --success: #48a14b;
+
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  
+}
+
 body {
-  font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
-    sans-serif;
-  margin: auto;
-  max-width: 38rem;
-  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: black;
+  color: white;
+  line-height: 1.6;
+  letter-spacing: 0.7px;
+}
+
+.content {
+  flex: 1;
+  overflow: auto;
+}
+
+#startBtn:not(:disabled):hover,
+#choose-folder:not(:disabled):hover {
+  filter: brightness(1.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+
+/* INPUTS */
+#settingsForm {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 10px;
+  margin-top: 3px;
+}
+
+.inputWrapper {
+  margin-bottom: 40px;
+}
+
+.field {
+  height: 40px;
+  width: 100%;
+  position: relative;
+  margin-bottom: 25px;
+  letter-spacing: 0.7px;
+}
+
+.field input {
+  height: 100%;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid var(--input-border);
+  background: #1c313800;
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  letter-spacing: 0.7px;
+}
+
+input::placeholder {
+  font-size: 1.1rem; 
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  letter-spacing: 0.7px;
+  color: #ffffffab; 
+  padding-left: 3px;
+}
+
+input:focus::placeholder {
+  color: #c0c0c0bb;
+}
+
+input:focus {
+  outline: none;
+  border-bottom: 2px solid rgb(114, 255, 126);
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* FOLDER */
+#choose-folder {
+  padding: 0;
+  padding-bottom: 7px;
+  background-color: rgba(54, 129, 98, 0);
+  border: none;
+  cursor: pointer;
+}
+
+#choose-folder:hover img {
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.5)) brightness(1);
+}
+
+#choose-folder:active {
+  transform: scale(0.97);
+}
+
+.folder-section{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.folderOutput {
+  height: 100%;
+  width: 85%;
+  font-size: 1rem;
+  border: none;
+  border-bottom: 1px solid var(--input-border);
+  background: transparent;
+  font-size: 1rem; 
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  color: #c0c0c0bb; 
+  padding-left: 3px;
+  padding-bottom: 2px;
+}
+
+/* START */
+#startBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  letter-spacing: 0.8px;
+  padding: 0.5rem 0.7rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  background-color: hsl(184, 43%, 50%);
+  border: none;
+  cursor: pointer;
+}
+
+#startBtn:disabled {
+  opacity: 0.6;              
+  cursor: not-allowed;  
+}
+
+#startBtn { 
+  display: block;
+  margin-top: 35px;
+  width: 400px;
+  background-color: rgb(76, 175, 79);
+}
+
+/* * { outline: 1px dashed red; } */
+
+.section-divider {
+  border: none;
+  height: 1px;
+  background-color: white;
+  margin: 0;
+  opacity: 0.8;
+}
+
+.loading-line {
+  position: relative; 
+  top: -1px;  
+  border: none;
+  height: 1px;
+  background-color: rgb(82, 164, 192);
+  box-shadow: -5px -1px 3px 2px rgba(109, 188, 214, 0.308);
+  margin: 0;
+  width: 100px;
+  transform: translateX(-700%);
+  animation-duration: 1.6s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes loading {
+  100% {transform: translateX(600%);}
+}
+
+
+/* PROGRESS CONTAINER */
+.bottom-section {
+  background :rgba(255, 255, 255, 0);
+  width: 100%;   
+}
+
+.status-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 30px 0 20px 0;   
+}
+
+.progress-container {
+  position: relative;
+  height: 30px;
+  background: var(--bg-progressBoxes);
+  overflow: hidden;
+  max-width: 400px;
+  margin-bottom: 30px;
+}
+
+.progress-bar {
+  width: 0;
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--success));
+  transition: width 0.4s ease-in-out;
+}
+
+.progress-text {
+  font-family: sans-serif;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  line-height: 30px;
+  font-weight: 600;
+  color: var(--text);
+  pointer-events: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.output-container {
+  min-height: 52px;
+  background: transparent;
+  border: none;
+  padding: 0px;
+}
+
+#output, #timeLeft {
+  margin: 0px;
+  padding-left: 5px;
+  font-size: 14px;
+  overflow: hidden;
+  font-size: 1rem; 
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  color: #dbdada; 
+  letter-spacing: 0.7px;
+}
+
+/* TOPBAR */
+.titlebar {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  height: 36px;
+  padding: 0 8px;
+  color: #e6eef0;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
+}
+
+.titlebar-left {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  -webkit-app-region: drag; 
+}
+
+/* .titlebar-center {
+  flex:1;
+  -webkit-app-region: drag;
+} */
+
+.titlebar-right { display:flex; gap:6px; align-items:center; }
+
+.win-btn {
+  -webkit-app-region: no-drag;
+  border: none;
+  background: transparent;
+  color: #cfe7ea;
+  width: 44px;
+  height: 28px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+.win-btn:hover { background: rgba(255, 255, 255, 0.13); }
+
+.win-btn.close { color: #f84040; }
+.win-btn.close:hover { background: rgba(255, 107, 107, 0.397); }
+
+
+/* ERROR POPUP */
+.error-popup {
+  background-color: red;
+  font-size: 15px;
+  font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  align-items: center;   
+  justify-content: space-between;
+  gap: 12px;
+  padding: 1px 10px;
+  display: none;
+}
+
+.errorMsg-box {
+  font-weight: bold;
+  flex: 1 1 auto;       
+  text-align: center;
+  white-space: nowrap;          
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.closeErrorBtn {
+  color: rgb(0, 0, 0);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.closeErrorBtn:hover {
+  color: rgba(0, 0, 0, 0.555);
+}
+
+.loading {
+  cursor: progress; 
 }

@@ -26,9 +26,23 @@
  * ```
  */
 // Add this to the end of the existing file
-import './app.jsx';
-import './index.css';
 
-console.log(
-  '👋 This message is being logged by "renderer.js", included via Vite',
+// src/renderer.tsx
+// src/renderer.tsx  (still TSX file but using plain JS-safe syntax)
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import './index.css';
+import App from './app';
+
+const container = document.getElementById('root');
+if (!container) throw new Error('Root element #root not found');
+
+createRoot(container).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
 );
+
+
+
+
