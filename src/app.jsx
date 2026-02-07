@@ -2,16 +2,48 @@ import React from 'react';
 import { useRef, useState } from "react";
 
 
+
 export default function App() {
-    const inputRef = useRef(null);
-    const [ipSlice, setIpSlice] = useState("");
+    const [ipParts, setIpParts] = useState(["", "", "", ""]);
 
 
-    function changeIP(e) {
-        setIpSlice(e.target.value)
-        if (e.target.value.length > 2) {
-           console.log("stop")
-        } 
+    function changeIP(index, e) {
+        const value = e.target.value
+        
+        if (value.length <= 3) {
+            const ip = [...ipParts];
+            ip[index] = value;
+            setIpParts(ip);
+        }
+        
+        if (value.length == 3 && index != 3) {
+            e.target.nextSibling.nextSibling.focus()
+        }
+    }
+
+    function handleKeys(index, e) {
+        const notAllowedKeys = ['-', '+', ".", 'ArrowUp', 'ArrowDown']
+        const target = e.target
+
+        if (notAllowedKeys.some(num => num == e.key)) {
+            e.preventDefault()
+            return
+        }
+
+        if (e.key == 'Backspace' && target.value.length == 0 && index != 0) {           
+           target.previousSibling.previousSibling.focus()
+           e.preventDefault()
+        }        
+    }
+
+
+    function ping() {
+        const ipAddress = ipParts.join(".");
+        window.startPig.sendIP(ipAddress)
+        
+        window.startPig.onPing((line) => {
+            console.log('ping line:', line);
+        });
     }
 
 
@@ -33,10 +65,10 @@ export default function App() {
             <div id="settingsForm">
                 <div className="inputWrapper">
                     <div className="field">
-                        <input id="IPinput" value={ipSlice} ref={inputRef} onChange={changeIP} type='number' />
-                        <span className="dot">.</span><input id="IPinput" maxLength={3} ref={inputRef} onChange={changeIP} type="text" />
-                        <span className="dot">.</span><input id="IPinput" maxLength={3} ref={inputRef} onChange={changeIP} type="text" />
-                        <span className="dot">.</span><input id="IPinput" maxLength={3} ref={inputRef} onChange={changeIP} type="text" />
+                        <input id="IPinput1" value={ipParts[0]} onChange={(e) => changeIP(0, e)} onKeyDown={(e) => handleKeys(0, e)}  type='number'/>
+                        <span className="dot">.</span><input id="IPinput2" value={ipParts[1]} onChange={(e) => changeIP(1, e)} onKeyDown={(e) => handleKeys(1, e)} type='number'/>
+                        <span className="dot">.</span><input id="IPinput3" value={ipParts[2]} onChange={(e) => changeIP(2, e)} onKeyDown={(e) => handleKeys(2, e)} type='number'/>
+                        <span className="dot">.</span><input id="IPinput4" value={ipParts[3]} onChange={(e) => changeIP(3, e)} onKeyDown={(e) => handleKeys(3, e)} type='number'/>
                     </div>
 
                     <div className="field">
@@ -48,7 +80,7 @@ export default function App() {
                     </div>
                 </div>
 
-                <button id="startBtn" disabled>Ping</button>
+                <button onClick={ping} id="startBtn" >Ping</button>
             </div>
         </div>
       <hr className="loading-line" />

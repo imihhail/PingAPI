@@ -1,6 +1,7 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
+import { process, spawn } from 'child_process'
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -54,8 +55,15 @@ app.on('window-all-closed', () => {
   }
 });
 
-ipcMain.handle('window-minimize', () => {
-  win.minimize()
+ipcMain.handle('startPing', (e, options) => {  
+  const ping = spawn('ping', [options]);
+
+  ping.stdout.on('data', chunk => {
+    const text = chunk.toString();
+    e.sender.send('ping-data', text);
+  });
 });
 
+// CLOSE AND MINIMIZE WINDOW
+ipcMain.handle('window-minimize', () => win.minimize());
 ipcMain.handle('window-close', () => win.close());
