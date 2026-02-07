@@ -1,22 +1,19 @@
 import React from 'react';
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 
 export default function App() {
     const inputRef = useRef(null);
+    const [ipSlice, setIpSlice] = useState("");
+
 
     function changeIP(e) {
-
-
+        setIpSlice(e.target.value)
+        if (e.target.value.length > 2) {
+           console.log("stop")
+        } 
     }
 
-    function middleFocus(e) {
-        e.preventDefault();
-        const input = inputRef.current || e.target;
-
-        input.focus();
-        input.setSelectionRange(2, 2);
-    }
 
   return (
     <div>
@@ -36,10 +33,10 @@ export default function App() {
             <div id="settingsForm">
                 <div className="inputWrapper">
                     <div className="field">
-                        <input id="IPinput" ref={inputRef} onChange={changeIP} type="text" onMouseDown={middleFocus} defaultValue={'\u2007\u2007\u2007.'}/>
-                        {/* <input id="IPinput" onChange={changeIP}  defaultValue={'123.'}/>
-                        <input id="IPinput" onChange={changeIP}  defaultValue={'\u2007\u2007\u2007.'}/>
-                        <input id="IPinput" onChange={changeIP}  defaultValue={'777'}/> */}
+                        <input id="IPinput" value={ipSlice} ref={inputRef} onChange={changeIP} type='number' />
+                        <span className="dot">.</span><input id="IPinput" maxLength={3} ref={inputRef} onChange={changeIP} type="text" />
+                        <span className="dot">.</span><input id="IPinput" maxLength={3} ref={inputRef} onChange={changeIP} type="text" />
+                        <span className="dot">.</span><input id="IPinput" maxLength={3} ref={inputRef} onChange={changeIP} type="text" />
                     </div>
 
                     <div className="field">

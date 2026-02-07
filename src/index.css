@@ -21,18 +21,13 @@ body {
   background: black;
   color: white;
   line-height: 1.6;
+  font-size: 1.1rem;
   letter-spacing: 0.7px;
 }
 
 .content {
   flex: 1;
   overflow: auto;
-}
-
-#startBtn:not(:disabled):hover,
-#choose-folder:not(:disabled):hover {
-  filter: brightness(1.1);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
 }
 
 
@@ -49,25 +44,33 @@ body {
 }
 
 .field {
-  text-align: center;
   display: flex;
-  height: 40px;
-  position: relative;
+  align-items: center;
   margin-bottom: 25px;
   letter-spacing: 0.7px;
 }
 
 .field input {
   padding: 0;
-  height: 100%;
-  max-width: 35px;
+  height: 28px;       
+  line-height: 1;          
+  box-sizing: border-box;  
   border: none;
   border-bottom: 1px solid var(--input-border);
-  background: #1c313800;
-  color: #ffffff;
+  background: transparent;
+  color: #fff;
   font-size: 1.1rem;
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  letter-spacing: 0.7px;
+  max-width: 37px;     
+  min-width: 24px;
+  text-align: center;
+}
+
+.field .dot {
+  font-weight: bolder;
+  margin: 0;
+  padding: 0;
+  align-self: center;
+  user-select: none;
 }
 
 input::placeholder {
