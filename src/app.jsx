@@ -1,21 +1,60 @@
 import React from 'react';
+import { useRef } from "react";
+
 
 export default function App() {
+    const inputRef = useRef(null);
+
+    function changeIP(e) {
+
+
+    }
+
+    function middleFocus(e) {
+        e.preventDefault();
+        const input = inputRef.current || e.target;
+
+        input.focus();
+        input.setSelectionRange(2, 2);
+    }
+
   return (
     <div>
-      <header className="titlebar">
-      <div className="titlebar-left">
-        <div className="app-icon"></div>
-      </div>
+        <header className="titlebar">
+            <div className="titlebar-left">
+                <div className="app-icon"></div>
+            </div>
 
-      <div className="titlebar-right">
-        <button onClick={() => window.winapi.minimize()} id="minBtn" className="win-btn" title="Minimize">—</button>
-        <button id="maxBtn" className="win-btn" title="Maximize" disabled>▢</button>
-        <button onClick={() => window.winapi.close()} id="closeWin" className="win-btn close" title="Close">✕</button>
-      </div>
-      </header>
-      <hr class="loading-line" />
-      <h1>Hello — Electron + Vite + React (JavaScript)</h1>
+            <div className="titlebar-right">
+                <button onClick={() => window.winapi.minimize()} id="minBtn" className="win-btn" title="Minimize">—</button>
+                <button id="maxBtn" className="win-btn" title="Maximize" disabled>▢</button>
+                <button onClick={() => window.winapi.close()} id="closeWin" className="win-btn close" title="Close">✕</button>
+            </div>
+        </header>
+      
+        <div className="content">
+            <div id="settingsForm">
+                <div className="inputWrapper">
+                    <div className="field">
+                        <input id="IPinput" ref={inputRef} onChange={changeIP} type="text" onMouseDown={middleFocus} defaultValue={'\u2007\u2007\u2007.'}/>
+                        {/* <input id="IPinput" onChange={changeIP}  defaultValue={'123.'}/>
+                        <input id="IPinput" onChange={changeIP}  defaultValue={'\u2007\u2007\u2007.'}/>
+                        <input id="IPinput" onChange={changeIP}  defaultValue={'777'}/> */}
+                    </div>
+
+                    <div className="field">
+                        <input id="fileNameInput" type="text" placeholder=".."/>
+                    </div>
+
+                    <div className="field">
+                        <input id="delayInput" type="number" placeholder="..." />
+                    </div>
+                </div>
+
+                <button id="startBtn" disabled>Ping</button>
+            </div>
+        </div>
+      <hr className="loading-line" />
     </div>
   );
 }

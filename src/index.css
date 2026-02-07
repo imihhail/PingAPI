@@ -49,16 +49,18 @@ body {
 }
 
 .field {
+  text-align: center;
+  display: flex;
   height: 40px;
-  width: 100%;
   position: relative;
   margin-bottom: 25px;
   letter-spacing: 0.7px;
 }
 
 .field input {
+  padding: 0;
   height: 100%;
-  width: 100%;
+  max-width: 35px;
   border: none;
   border-bottom: 1px solid var(--input-border);
   background: #1c313800;
@@ -89,43 +91,6 @@ input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
-}
-
-/* FOLDER */
-#choose-folder {
-  padding: 0;
-  padding-bottom: 7px;
-  background-color: rgba(54, 129, 98, 0);
-  border: none;
-  cursor: pointer;
-}
-
-#choose-folder:hover img {
-  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.5)) brightness(1);
-}
-
-#choose-folder:active {
-  transform: scale(0.97);
-}
-
-.folder-section{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.folderOutput {
-  height: 100%;
-  width: 85%;
-  font-size: 1rem;
-  border: none;
-  border-bottom: 1px solid var(--input-border);
-  background: transparent;
-  font-size: 1rem; 
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  color: #c0c0c0bb; 
-  padding-left: 3px;
-  padding-bottom: 2px;
 }
 
 /* START */
@@ -176,6 +141,7 @@ input[type="number"]::-webkit-inner-spin-button {
   width: 100px;
   transform: translateX(-700%);
   animation-duration: 1.6s;
+  animation-name: loading;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
 }
