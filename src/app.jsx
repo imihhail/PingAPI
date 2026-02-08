@@ -4,19 +4,22 @@ import { useRef, useState } from "react";
 
 
 export default function App() {
-const [ipPartsList, setIpPartsList] = useState(
-  Array.from({ length: 5 }, (_, y) =>
-    y === 0 ? ["8", "8", "8", "8"] : ["", "", "", ""]
-  )
-);
+    const [latency, setLatency] = useState(Array(5).fill(null))
 
+    const [ipPartsList, setIpPartsList] = useState(
+        Array.from({ length: 5 }, (_, y) =>
+            y === 0
+            ? { id: y, ip: ["8", "8", "8", "8"] }
+            : { id: y, ip: ["", "", "", ""] }
+        )
+    )
 
     function changeIP(y, x, e) {
         const value = e.target.value
         
         if (value.length <= 3) {
             const ipListCopy = [...ipPartsList];
-            ipListCopy[y][x] = value;
+            ipListCopy[y].ip[x] = value;
             setIpPartsList(ipListCopy)
         }
         
@@ -42,14 +45,17 @@ const [ipPartsList, setIpPartsList] = useState(
 
 
     function ping() {
-        const ipAddresses = ipPartsList.map(ip => ip.join("."))
-        console.log(ipAddresses);
+        const ipAddresses = ipPartsList
+        .map(item => (item.ip.some(o => o === "") ? null : {...item, ip: item.ip.join(".") }))
+        .filter(Boolean); // removes null/undefined/empty
         
-        // window.startPig.sendIP(ipAddress)
-        
-        // window.startPig.onPing((line) => {
-        //     console.log('ping line:', line);
-        // });
+        window.startPig.sendIP(ipAddresses)
+        window.startPig.clearPingListeners();
+        window.startPig.onPing((pingResp) => {
+            const pingRespCopy  = [...latency]
+            pingRespCopy[pingResp.id] = pingResp.speed
+            setLatency(pingRespCopy)
+        });
     }
 
 
@@ -78,7 +84,7 @@ const [ipPartsList, setIpPartsList] = useState(
                                         {y == 0 ? <input value={8} readOnly /> :
                                             <input
                                                 id={`ipPart${y}-${x}`}
-                                                value={ipPartsList[y][x]}
+                                                value={ipPartsList[y].ip[x]}
                                                 onChange={(e) => changeIP(y, x, e)}
                                                 onKeyDown={(e) => handleKeys(x, e)}
                                                 type="number"
@@ -90,7 +96,7 @@ const [ipPartsList, setIpPartsList] = useState(
                                 ))}
                             </div>
                             <div className='pingResult'>
-                                High <span>100</span>
+                                High <span>{latency[y]}</span>
                             </div>
                         </div>
                     ))}

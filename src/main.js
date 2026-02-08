@@ -3,6 +3,7 @@ import path from 'node:path';
 import started from 'electron-squirrel-startup';
 import { process, spawn } from 'child_process'
 
+
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
   app.quit();
@@ -55,13 +56,20 @@ app.on('window-all-closed', () => {
   }
 });
 
-ipcMain.handle('startPing', (e, options) => {  
-  const ping = spawn('ping', [options]);
+ipcMain.handle('startPing', (e, ipListObj) => {
+  ipListObj.forEach(ipList=> {
+    const ping = spawn('ping', [ipList.ip]);
+    
+    ping.stdout.on('data', pingResp => {
+      const text = pingResp.toString();
+      const speedArr = text.match(/time(?:=|<)\s*([0-9]*\.?[0-9]+)/i);
 
-  ping.stdout.on('data', chunk => {
-    const text = chunk.toString();
-    e.sender.send('ping-data', text);
+      if (!speedArr) return null
+      const latency = parseFloat(speedArr[1]);
+      e.sender.send('ping-data', {id: ipList.id, speed: latency});
+    })
   });
+
 });
 
 // CLOSE AND MINIMIZE WINDOW

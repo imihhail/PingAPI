@@ -8,11 +8,7 @@ contextBridge.exposeInMainWorld('winapi', {
 });
 
 contextBridge.exposeInMainWorld('startPig', {
-  // send an IP to main
   sendIP: (ip) => ipcRenderer.invoke('startPing', ip),
-
-  // allow renderer to register a callback for ping output
-  onPing: (cb) => {
-    ipcRenderer.on('ping-data', (event, data) => cb(data));
-  }
+  onPing: (cb) => ipcRenderer.on('ping-data', (event, data) => cb(data)),
+  clearPingListeners: () => ipcRenderer.removeAllListeners('ping-data')
 });
