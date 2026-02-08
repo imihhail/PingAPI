@@ -4,19 +4,21 @@ import { useRef, useState } from "react";
 
 
 export default function App() {
-    const [ipParts, setIpParts] = useState(["", "", "", ""]);
+    const [ipPartsList, setIpPartsList] = useState(
+        Array.from({ length: 5 }, () => ["", "", "", ""])
+    );
 
 
-    function changeIP(index, e) {
+    function changeIP(y, x, e) {
         const value = e.target.value
         
         if (value.length <= 3) {
-            const ip = [...ipParts];
-            ip[index] = value;
-            setIpParts(ip);
+            const ipListCopy = [...ipPartsList];
+            ipListCopy[y][x] = value;
+            setIpPartsList(ipListCopy)
         }
         
-        if (value.length == 3 && index != 3) {
+        if (value.length == 3 && x != 3) {
             e.target.nextSibling.nextSibling.focus()
         }
     }
@@ -64,23 +66,26 @@ export default function App() {
         <div className="content">
             <div id="settingsForm">
                 <div className="inputWrapper">
-                    <div className="field">
-                        <input id="IPinput1" value={ipParts[0]} onChange={(e) => changeIP(0, e)} onKeyDown={(e) => handleKeys(0, e)}  type='number'/>
-                        <span className="dot">.</span><input id="IPinput2" value={ipParts[1]} onChange={(e) => changeIP(1, e)} onKeyDown={(e) => handleKeys(1, e)} type='number'/>
-                        <span className="dot">.</span><input id="IPinput3" value={ipParts[2]} onChange={(e) => changeIP(2, e)} onKeyDown={(e) => handleKeys(2, e)} type='number'/>
-                        <span className="dot">.</span><input id="IPinput4" value={ipParts[3]} onChange={(e) => changeIP(3, e)} onKeyDown={(e) => handleKeys(3, e)} type='number'/>
-                    </div>
+                    {Array.from({ length: 5 }, (_, y) => (
+                        <div key={y} className="field">
+                            {Array.from({ length: 4 }, (_, x) => (
+                                <React.Fragment key={x}>
+                                    <input
+                                        id={`ipPart${y}-${x}`}
+                                        value={ipPartsList[y][x]}
+                                        onChange={(e) => changeIP(y, x, e)}
+                                        onKeyDown={(e) => handleKeys(x, e)}
+                                        type="number"
+                                    />
 
-                    <div className="field">
-                        <input id="fileNameInput" type="text" placeholder=".."/>
-                    </div>
-
-                    <div className="field">
-                        <input id="delayInput" type="number" placeholder="..." />
-                    </div>
+                                    {x < 3 && <span className="dot">.</span>}
+                                </React.Fragment>
+                            ))} 
+                        </div>
+                    ))}
                 </div>
 
-                <button onClick={ping} id="startBtn" >Ping</button>
+                <button onClick={ping} id="startBtn">Ping</button>
             </div>
         </div>
       <hr className="loading-line" />
