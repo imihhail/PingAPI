@@ -4,9 +4,11 @@ import { useRef, useState } from "react";
 
 
 export default function App() {
-    const [ipPartsList, setIpPartsList] = useState(
-        Array.from({ length: 5 }, () => ["", "", "", ""])
-    );
+const [ipPartsList, setIpPartsList] = useState(
+  Array.from({ length: 5 }, (_, y) =>
+    y === 0 ? ["8", "8", "8", "8"] : ["", "", "", ""]
+  )
+);
 
 
     function changeIP(y, x, e) {
@@ -40,12 +42,14 @@ export default function App() {
 
 
     function ping() {
-        const ipAddress = ipParts.join(".");
-        window.startPig.sendIP(ipAddress)
+        const ipAddresses = ipPartsList.map(ip => ip.join("."))
+        console.log(ipAddresses);
         
-        window.startPig.onPing((line) => {
-            console.log('ping line:', line);
-        });
+        // window.startPig.sendIP(ipAddress)
+        
+        // window.startPig.onPing((line) => {
+        //     console.log('ping line:', line);
+        // });
     }
 
 
@@ -68,19 +72,26 @@ export default function App() {
                 <div className="inputWrapper">
                     {Array.from({ length: 5 }, (_, y) => (
                         <div key={y} className="field">
-                            {Array.from({ length: 4 }, (_, x) => (
-                                <React.Fragment key={x}>
-                                    <input
-                                        id={`ipPart${y}-${x}`}
-                                        value={ipPartsList[y][x]}
-                                        onChange={(e) => changeIP(y, x, e)}
-                                        onKeyDown={(e) => handleKeys(x, e)}
-                                        type="number"
-                                    />
+                            <div className='IPinput'>
+                                {Array.from({ length: 4 }, (_, x) => (
+                                    <React.Fragment key={x}>
+                                        {y == 0 ? <input value={8} readOnly /> :
+                                            <input
+                                                id={`ipPart${y}-${x}`}
+                                                value={ipPartsList[y][x]}
+                                                onChange={(e) => changeIP(y, x, e)}
+                                                onKeyDown={(e) => handleKeys(x, e)}
+                                                type="number"
+                                            />
+                                        }
 
-                                    {x < 3 && <span className="dot">.</span>}
-                                </React.Fragment>
-                            ))} 
+                                        {x < 3 && <span className="dot">.</span>}
+                                    </React.Fragment>
+                                ))}
+                            </div>
+                            <div className='pingResult'>
+                                High <span>100</span>
+                            </div>
                         </div>
                     ))}
                 </div>
