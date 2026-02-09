@@ -53,7 +53,7 @@ export default function App() {
         window.startPig.clearPingListeners();
         window.startPig.onPing((pingResp) => {
             const pingRespCopy  = [...latency]
-            pingRespCopy[pingResp.id] = pingResp.speed
+            pingResp.forEach(el => pingRespCopy[el.id] = el.speed)
             setLatency(pingRespCopy)
         });
     }

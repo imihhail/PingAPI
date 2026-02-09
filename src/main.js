@@ -57,19 +57,33 @@ app.on('window-all-closed', () => {
 });
 
 ipcMain.handle('startPing', (e, ipListObj) => {
-  ipListObj.forEach(ipList=> {
-    const ping = spawn('ping', [ipList.ip]);
-    
-    ping.stdout.on('data', pingResp => {
-      const text = pingResp.toString();
-      const speedArr = text.match(/time(?:=|<)\s*([0-9]*\.?[0-9]+)/i);
+  const pingPromises = []
 
-      if (!speedArr) return null
-      const latency = parseFloat(speedArr[1]);
-      e.sender.send('ping-data', {id: ipList.id, speed: latency});
-    })
+  ipListObj.forEach(ipList=> {
+    pingPromises.push(pingQueue(ipList))
   });
 
+  function pingQueue(ipList) {
+    return new Promise((resolve, reject) => {
+      const ping = spawn('ping', ['-n', '1', ipList.ip]);
+    
+      ping.stdout.on('data', pingResp => {
+        const text     = pingResp.toString();
+        
+        const speedArr = text.match(/time(?:=|<)\s*([0-9]*\.?[0-9]+)/i);
+
+        if (!speedArr) return null
+        const latency = parseFloat(speedArr[1]);
+
+        resolve({id: ipList.id, speed: latency})
+        ping.kill()
+      })
+    })
+  }
+
+  Promise.all(pingPromises).then((res)=> {
+    e.sender.send('ping-data', res)
+  })
 });
 
 // CLOSE AND MINIMIZE WINDOW
