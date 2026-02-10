@@ -21,7 +21,7 @@ body {
   background: black;
   color: white;
   line-height: 1.6;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   letter-spacing: 0.7px;
 }
 
@@ -47,31 +47,24 @@ body {
   display: flex;
   align-items: center;
   margin-bottom: 25px;
-  letter-spacing: 0.7px;
   gap: 40px;
 }
 
 .field input {
-  padding: 0;
-  height: 22px;       
-  line-height: 1;          
-  box-sizing: border-box;  
   border: none;
   border-bottom: 1px solid var(--input-border);
   background: transparent;
   color: #fff;
+  user-select: none;
   font-size: 1.1rem;
   max-width: 37px;     
   min-width: 24px;
   text-align: center;
+
 }
 
 .field .dot {
-  font-weight: bolder;
-  margin: 0;
-  padding: 0;
-  align-self: center;
-  user-select: none;
+  font-size: 1.6rem;
   border-bottom: 1px solid var(--input-border);
 }
 
@@ -80,14 +73,16 @@ input:focus {
   border-bottom: 2px solid rgb(114, 255, 126);
 }
 
+
+.IPinput {
+
+
+}
+
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
-}
-
-.IPinput{
-
 }
 
 /* START */

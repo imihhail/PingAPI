@@ -57,11 +57,21 @@ app.on('window-all-closed', () => {
 });
 
 ipcMain.handle('startPing', (e, ipListObj) => {
-  const pingPromises = []
+    const senderId = e.sender.id;
+    console.log("id: ", senderId);
+    
+  let pingPromises = [];
 
-  ipListObj.forEach(ipList=> {
-    pingPromises.push(pingQueue(ipList))
-  });
+  function startPing() {
+    console.log("pinging");
+    
+    pingPromises = []
+    
+    ipListObj.forEach(ipList=> {
+      pingPromises.push(pingQueue(ipList))
+    });
+  }
+
 
   function pingQueue(ipList) {
     return new Promise((resolve, reject) => {
@@ -69,7 +79,6 @@ ipcMain.handle('startPing', (e, ipListObj) => {
     
       ping.stdout.on('data', pingResp => {
         const text     = pingResp.toString();
-        
         const speedArr = text.match(/time(?:=|<)\s*([0-9]*\.?[0-9]+)/i);
 
         if (!speedArr) return null
@@ -81,9 +90,16 @@ ipcMain.handle('startPing', (e, ipListObj) => {
     })
   }
 
-  Promise.all(pingPromises).then((res)=> {
-    e.sender.send('ping-data', res)
-  })
+  (function loop() {
+    startPing();
+
+    Promise.all(pingPromises)
+      .then(res => {
+        e.sender.send('ping-data', res);
+
+        setTimeout(loop, 2000);
+      })
+  })();
 });
 
 // CLOSE AND MINIMIZE WINDOW
