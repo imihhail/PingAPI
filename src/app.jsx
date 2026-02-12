@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 
 export default function App() {
     const [latency, setLatency] = useState(Array(5).fill(null))
+    const [isPinging, setIsPinging] = useState(false)
 
     const [ipPartsList, setIpPartsList] = useState(
         Array.from({ length: 5 }, (_, y) =>
@@ -52,10 +53,20 @@ export default function App() {
         window.startPig.sendIP(ipAddresses)
         window.startPig.clearPingListeners();
         window.startPig.onPing((pingResp) => {
+            console.log("Sending stuff");
+            
             const pingRespCopy  = [...latency]
             pingResp.forEach(el => pingRespCopy[el.id] = el.speed)
             setLatency(pingRespCopy)
         });
+        setIsPinging(true)
+    }
+
+    function stopPing() {
+        setIsPinging(false)
+        window.startPig.stopPing()
+        window.startPig.clearPingListeners();
+
     }
 
 
@@ -101,8 +112,8 @@ export default function App() {
                         </div>
                     ))}
                 </div>
-
-                <button onClick={ping} id="startBtn">Ping</button>
+                {isPinging ? <button onClick={stopPing} className="stopBtn">Stop</button>:
+                <button onClick={ping} className="startBtn">Ping</button>}    
             </div>
         </div>
       <hr className="loading-line" />

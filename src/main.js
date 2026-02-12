@@ -56,11 +56,26 @@ app.on('window-all-closed', () => {
   }
 });
 
+const controllers = new Map()
+
+
 ipcMain.handle('startPing', (e, ipListObj) => {
-    const senderId = e.sender.id;
-    console.log("id: ", senderId);
+  const senderId = e.sender.id;
+
+  let isRunning = true
+let   pingPromises = []
+
+
+
+
+
+  ipcMain.once('stopPing', () => {
+    isRunning = false
     
-  let pingPromises = [];
+  });
+
+    
+  
 
   function startPing() {
     console.log("pinging");
@@ -91,12 +106,15 @@ ipcMain.handle('startPing', (e, ipListObj) => {
   }
 
   (function loop() {
-    startPing();
+    if (isRunning) {
+      startPing();
+    } 
+    
 
     Promise.all(pingPromises)
       .then(res => {
         e.sender.send('ping-data', res);
-
+ 
         setTimeout(loop, 2000);
       })
   })();

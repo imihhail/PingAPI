@@ -1,0 +1,40 @@
+/* TOPBAR */
+.titlebar {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  height: 36px;
+  padding: 0 8px;
+  color: #e6eef0;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
+}
+
+.titlebar-left {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  -webkit-app-region: drag; 
+}
+
+.titlebar-right { display:flex; gap:6px; align-items:center; }
+
+.win-btn {
+  -webkit-app-region: no-drag;
+  border: none;
+  background: transparent;
+  color: #cfe7ea;
+  width: 44px;
+  height: 28px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+.win-btn:hover { background: rgba(255, 255, 255, 0.13); }
+
+.win-btn.close { color: #f84040; }
+.win-btn.close:hover { background: rgba(255, 107, 107, 0.397); }
