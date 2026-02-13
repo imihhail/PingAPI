@@ -1,11 +1,12 @@
 import React from 'react';
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
 
 
 export default function App() {
     const [latency, setLatency] = useState(Array(5).fill(null))
     const [isPinging, setIsPinging] = useState(false)
+    const [expandedIndex, setExpandedIndex] = useState(null);
 
     const [ipPartsList, setIpPartsList] = useState(
         Array.from({ length: 5 }, (_, y) =>
@@ -14,6 +15,15 @@ export default function App() {
             : { id: y, ip: ["", "", "", ""] }
         )
     )
+
+    useEffect(() => {
+        async function getData() { 
+            const ipData = await window.storeAPI.get('pingList')
+            setIpPartsList(ipData)
+        }
+
+        getData() 
+    }, []);
 
     function changeIP(y, x, e) {
         const value = e.target.value
@@ -41,16 +51,18 @@ export default function App() {
         if (e.key == 'Backspace' && target.value.length == 0 && index != 0) {           
            target.previousSibling.previousSibling.focus()
            e.preventDefault()
-        }        
+        } 
+    }
+
+
+    async function saveAndExit() {
+        await window.storeAPI.set('pingList', ipPartsList)
+        window.winapi.close()
     }
 
 
     async function ping() {
         await window.storeAPI.set('pingList', ipPartsList)
-        const storedData = await window.storeAPI.get('pingList')
-        console.log("stored data: ", storedData);
-        
-        
 
         const ipAddresses = ipPartsList
         .map(item => (item.ip.some(o => o === "") ? null : {...item, ip: item.ip.join(".") }))
@@ -59,9 +71,7 @@ export default function App() {
         
         window.startPig.sendIP(ipAddresses)
         window.startPig.clearPingListeners();
-        window.startPig.onPing((pingResp) => {
-            console.log("Sending stuff");
-            
+        window.startPig.onPing((pingResp) => {            
             const pingRespCopy  = [...latency]
             pingResp.forEach(el => pingRespCopy[el.id] = el.speed)
             setLatency(pingRespCopy)
@@ -73,7 +83,10 @@ export default function App() {
         setIsPinging(false)
         window.startPig.stopPing()
         window.startPig.clearPingListeners();
+    }
 
+    function reziseLog(index) {
+        setExpandedIndex(prev => (prev == index ? null : index));
     }
 
 
@@ -87,7 +100,7 @@ export default function App() {
             <div className="titlebar-right">
                 <button onClick={() => window.winapi.minimize()} id="minBtn" className="win-btn" title="Minimize">—</button>
                 <button id="maxBtn" className="win-btn" title="Maximize" disabled>▢</button>
-                <button onClick={() => window.winapi.close()} id="closeWin" className="win-btn close" title="Close">✕</button>
+                <button onClick={() => saveAndExit()} id="closeWin" className="win-btn close" title="Close">✕</button>
             </div>
         </header>
       
@@ -113,7 +126,7 @@ export default function App() {
                                     </React.Fragment>
                                 ))}
                             </div>
-                            <div className='pingResult'>
+                            <div onClick={() => reziseLog(y)} className={`pingLog ${expandedIndex == y ? 'expanded' : ''}`}>
                                 High <span>{latency[y]}</span>
                             </div>
                         </div>

@@ -53,18 +53,13 @@ app.whenReady().then(() => {
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
-app.on('window-all-closed', () => {
-  
-  //if (process.platform !== 'darwin') {
-    app.quit();
-  //}
-});
+app.on('window-all-closed', () => app.quit());
 
 
-ipcMain.handle('store-get', (event, key) => store.get(key));
-ipcMain.handle('store-set', (event, { key, value }) => store.set(key, value));
-ipcMain.handle('store-has', (event, key) => store.has(key));
-ipcMain.handle('store-delete', (event, key) => store.delete(key));
+ipcMain.handle('store-get', (_, key) => store.get(key));
+ipcMain.handle('store-set', (_, { key, value }) => store.set(key, value));
+ipcMain.handle('store-has', (_, key) => store.has(key));
+ipcMain.handle('store-delete', (_, key) => store.delete(key));
 
 
 ipcMain.handle('startPing', (e, ipListObj) => {
@@ -78,6 +73,8 @@ ipcMain.handle('startPing', (e, ipListObj) => {
   });
 
   function startPing() {
+    console.log("pinging");
+    
     pingPromises = []
     
     ipListObj.forEach(ipList=> {
@@ -87,7 +84,7 @@ ipcMain.handle('startPing', (e, ipListObj) => {
 
   function pingQueue(ipList) {
     return new Promise((resolve, reject) => {
-      const ping = spawn('ping', ['-c', '1', ipList.ip]);
+      const ping = spawn('ping', ['-n', '1', ipList.ip]);
     
       ping.stdout.on('data', pingResp => {
         const text     = pingResp.toString();
