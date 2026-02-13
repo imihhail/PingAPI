@@ -45,10 +45,17 @@ export default function App() {
     }
 
 
-    function ping() {
+    async function ping() {
+        await window.storeAPI.set('pingList', ipPartsList)
+        const storedData = await window.storeAPI.get('pingList')
+        console.log("stored data: ", storedData);
+        
+        
+
         const ipAddresses = ipPartsList
         .map(item => (item.ip.some(o => o === "") ? null : {...item, ip: item.ip.join(".") }))
         .filter(Boolean); // removes null/undefined/empty
+
         
         window.startPig.sendIP(ipAddresses)
         window.startPig.clearPingListeners();
@@ -120,4 +127,3 @@ export default function App() {
     </div>
   );
 }
-

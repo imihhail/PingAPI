@@ -1,7 +1,10 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
-import { process, spawn } from 'child_process'
+import { spawn } from 'child_process'
+import Store from 'electron-store';
+
+const store = new Store();
 
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -51,35 +54,30 @@ app.whenReady().then(() => {
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
+  
+  //if (process.platform !== 'darwin') {
     app.quit();
-  }
+  //}
 });
 
-const controllers = new Map()
+
+ipcMain.handle('store-get', (event, key) => store.get(key));
+ipcMain.handle('store-set', (event, { key, value }) => store.set(key, value));
+ipcMain.handle('store-has', (event, key) => store.has(key));
+ipcMain.handle('store-delete', (event, key) => store.delete(key));
 
 
 ipcMain.handle('startPing', (e, ipListObj) => {
-  const senderId = e.sender.id;
 
   let isRunning = true
-let   pingPromises = []
+  let pingPromises = []
 
-
-
-
-
-  ipcMain.once('stopPing', () => {
+  ipcMain.once('stopPing', (e) => {
     isRunning = false
-    
+    e.sender.delete();
   });
 
-    
-  
-
   function startPing() {
-    console.log("pinging");
-    
     pingPromises = []
     
     ipListObj.forEach(ipList=> {
@@ -87,10 +85,9 @@ let   pingPromises = []
     });
   }
 
-
   function pingQueue(ipList) {
     return new Promise((resolve, reject) => {
-      const ping = spawn('ping', ['-n', '1', ipList.ip]);
+      const ping = spawn('ping', ['-c', '1', ipList.ip]);
     
       ping.stdout.on('data', pingResp => {
         const text     = pingResp.toString();
@@ -108,18 +105,20 @@ let   pingPromises = []
   (function loop() {
     if (isRunning) {
       startPing();
-    } 
-    
-
+     
     Promise.all(pingPromises)
       .then(res => {
         e.sender.send('ping-data', res);
  
         setTimeout(loop, 2000);
       })
+    }
   })();
 });
 
 // CLOSE AND MINIMIZE WINDOW
 ipcMain.handle('window-minimize', () => win.minimize());
-ipcMain.handle('window-close', () => win.close());
+ipcMain.handle('window-close', () => {
+  
+  win.close()
+});
