@@ -133,7 +133,12 @@ export default function App() {
                     ))}
                 </div>
                 {isPinging ? <button onClick={stopPing} className="stopBtn">Stop</button>:
-                <button onClick={ping} className="startBtn">Ping</button>}    
+                <button onClick={ping} className="startBtn">Ping</button>}  
+                        {isPinging && (
+          <div className="modal" >
+         
+          </div>
+        )}  
             </div>
         </div>
       <hr className="loading-line" />
