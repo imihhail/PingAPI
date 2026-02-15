@@ -6,7 +6,7 @@ import { useRef, useState, useEffect } from "react";
 export default function App() {
     const [latency, setLatency] = useState(Array(5).fill(null))
     const [isPinging, setIsPinging] = useState(false)
-    const [expandedIndex, setExpandedIndex] = useState(null);
+    const [expandLog, setExpandLog] = useState(false);
 
     const [ipPartsList, setIpPartsList] = useState(
         Array.from({ length: 5 }, (_, y) =>
@@ -86,7 +86,7 @@ export default function App() {
     }
 
     function reziseLog(index) {
-        setExpandedIndex(prev => (prev == index ? null : index));
+        setExpandLog(prev => !prev);
     }
 
 
@@ -126,19 +126,19 @@ export default function App() {
                                     </React.Fragment>
                                 ))}
                             </div>
-                            <div onClick={() => reziseLog(y)} className={`pingLog ${expandedIndex == y ? 'expanded' : ''}`}>
+                            <div onClick={() => reziseLog(y)} className='pingLog'>
                                 High <span>{latency[y]}</span>
                             </div>
                         </div>
                     ))}
                 </div>
                 {isPinging ? <button onClick={stopPing} className="stopBtn">Stop</button>:
-                <button onClick={ping} className="startBtn">Ping</button>}  
-                        {isPinging && (
-          <div className="modal" >
-         
-          </div>
-        )}  
+                    <button onClick={ping} className="startBtn">Ping</button>}  
+                {expandLog && (
+                    <div onClick={reziseLog} className="pingLogExpanded" >
+                        {}
+                    </div>
+                )}  
             </div>
         </div>
       <hr className="loading-line" />

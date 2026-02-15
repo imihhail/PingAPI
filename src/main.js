@@ -84,7 +84,7 @@ ipcMain.handle('startPing', (e, ipListObj) => {
 
   function pingQueue(ipList) {
     return new Promise((resolve, reject) => {
-      const ping = spawn('ping', ['-n', '1', ipList.ip]);
+      const ping = spawn('ping', ['-c', '1', ipList.ip]);
     
       ping.stdout.on('data', pingResp => {
         const text     = pingResp.toString();
