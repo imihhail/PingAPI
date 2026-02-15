@@ -1,15 +1,16 @@
 import React from 'react';
 import { useRef, useState, useEffect } from "react";
 
+const IP_LENGHT = 5
 
 
 export default function App() {
-    const [latency, setLatency] = useState(Array(5).fill(null))
+    const [latency, setLatency] = useState(() => Array.from({ length: IP_LENGHT }, () => []));
     const [isPinging, setIsPinging] = useState(false)
     const [expandLog, setExpandLog] = useState(false);
 
     const [ipPartsList, setIpPartsList] = useState(
-        Array.from({ length: 5 }, (_, y) =>
+        Array.from({ length: IP_LENGHT }, (_, y) =>
             y === 0
             ? { id: y, ip: ["8", "8", "8", "8"] }
             : { id: y, ip: ["", "", "", ""] }
@@ -19,10 +20,9 @@ export default function App() {
     useEffect(() => {
         async function getData() { 
             const ipData = await window.storeAPI.get('pingList')
-            setIpPartsList(ipData)
+            ipData ? setIpPartsList(ipData) : console.log("JSON file missing");
         }
-
-        getData() 
+        getData()
     }, []);
 
     function changeIP(y, x, e) {
@@ -68,15 +68,25 @@ export default function App() {
         .map(item => (item.ip.some(o => o === "") ? null : {...item, ip: item.ip.join(".") }))
         .filter(Boolean); // removes null/undefined/empty
 
-        
         window.startPig.sendIP(ipAddresses)
         window.startPig.clearPingListeners();
+
         window.startPig.onPing((pingResp) => {            
-            const pingRespCopy  = [...latency]
-            pingResp.forEach(el => pingRespCopy[el.id] = el.speed)
+            const pingRespCopy = [...latency]
+            
+            pingResp.forEach(el =>{
+                const pingResult = regex(el.log)
+                pingRespCopy[el.id].push(pingResult)
+            } )
             setLatency(pingRespCopy)
         });
+
         setIsPinging(true)
+    }
+
+    function regex(str) {
+
+        return str
     }
 
     function stopPing() {
@@ -85,7 +95,7 @@ export default function App() {
         window.startPig.clearPingListeners();
     }
 
-    function reziseLog(index) {
+    function reziseLog() {
         setExpandLog(prev => !prev);
     }
 
@@ -107,7 +117,7 @@ export default function App() {
         <div className="content">
             <div id="settingsForm">
                 <div className="inputWrapper">
-                    {Array.from({ length: 5 }, (_, y) => (
+                    {Array.from({ length: IP_LENGHT }, (_, y) => (
                         <div key={y} className="field">
                             <div className='IPinput'>
                                 {Array.from({ length: 4 }, (_, x) => (
@@ -127,7 +137,7 @@ export default function App() {
                                 ))}
                             </div>
                             <div onClick={() => reziseLog(y)} className='pingLog'>
-                                High <span>{latency[y]}</span>
+                                High <span>{latency[y][latency[y].length-1]}</span>
                             </div>
                         </div>
                     ))}
@@ -136,7 +146,7 @@ export default function App() {
                     <button onClick={ping} className="startBtn">Ping</button>}  
                 {expandLog && (
                     <div onClick={reziseLog} className="pingLogExpanded" >
-                        {}
+                        
                     </div>
                 )}  
             </div>

@@ -83,18 +83,26 @@ ipcMain.handle('startPing', (e, ipListObj) => {
   }
 
   function pingQueue(ipList) {
+    let pingCount = 0
+
     return new Promise((resolve, reject) => {
-      const ping = spawn('ping', ['-c', '1', ipList.ip]);
+      const ping = spawn('ping', ['-n', '1', ipList.ip]);
     
       ping.stdout.on('data', pingResp => {
+        pingCount++
+        if (pingCount != 2) return null
+          
         const text     = pingResp.toString();
+        const pingResult = stripPingOutput(text)
+
+
         const speedArr = text.match(/time(?:=|<)\s*([0-9]*\.?[0-9]+)/i);
-
-        if (!speedArr) return null
-        const latency = parseFloat(speedArr[1]);
-
-        resolve({id: ipList.id, speed: latency})
+        
+        console.log("res: ", pingResult);
+        
+        resolve({id: ipList.id, log: pingResult })
         ping.kill()
+        pingCount = 0
       })
     })
   }
@@ -112,6 +120,14 @@ ipcMain.handle('startPing', (e, ipListObj) => {
     }
   })();
 });
+
+function stripPingOutput(input) {
+  console.log("input: ", input);
+  
+  return input
+    .replace(/^Ping statistics for .*:\r?\n(?:[ \t].*(?:\r?\n|$))*/gm, '')
+    .trim();
+}
 
 // CLOSE AND MINIMIZE WINDOW
 ipcMain.handle('window-minimize', () => win.minimize());
