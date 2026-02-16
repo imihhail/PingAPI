@@ -1,8 +1,8 @@
 import React from 'react';
 import { useRef, useState, useEffect } from "react";
 
-const IP_LENGHT = 5
 
+const IP_LENGHT = 5
 
 export default function App() {
     const [latency, setLatency] = useState(() => Array.from({ length: IP_LENGHT }, () => []));
@@ -59,7 +59,6 @@ export default function App() {
         window.winapi.close()
     }
 
-
     async function ping() {
         await window.storeAPI.set('pingList', ipPartsList)
 
@@ -84,7 +83,6 @@ export default function App() {
     }
 
     function regex(str) {
-
         return str
     }
 
@@ -144,8 +142,8 @@ export default function App() {
                         </div>
                     ))}
                 </div>
-                {isPinging ? <button onClick={stopPing} className="stopBtn">Stop</button>:
-                    <button onClick={ping} className="startBtn">Ping</button>
+                {isPinging ? <button onClick={stopPing} className="stopBtn">Stop</button>
+                             : <button onClick={ping} className="startBtn">Ping</button>
                 }  
                 {pingLog.isExpanded && (
                     <div onClick={resizeLog} className="pingLogExpanded" >

@@ -148,11 +148,13 @@ input[type="number"]::-webkit-inner-spin-button {
 @keyframes expand {
   from {
     transform: scale(0.2);
+    opacity: 1;
   }
   to {
     transform: scale(1);
     top: 0px;
     left: 0px;
+    opacity: 0.8;
   }
 }
 
