@@ -6,6 +6,7 @@ import Store from 'electron-store';
 
 const store = new Store();
 const arg   = process.platform == "darwin" ? "-c" : "-n"
+const stdOS = process.platform == "darwin" ? 1 : 0
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -83,14 +84,23 @@ ipcMain.handle('startPing', (e, ipListObj) => {
   }
 
   function pingQueue(ipList) {
-    return new Promise((resolve, reject) => {
-      const ping = spawn('ping', [[arg], '1', ipList.ip]);
     
+    return new Promise((resolve, reject) => {
+      let ignoreFirstChunk = false
+      
+      const ping = spawn('ping', [[arg], '1', ipList.ip]);
+
       ping.stdout.on('data', pingResp => {
-        const [pingOutput, pingSpeed] = regexPing(1, pingResp);
+        if (!ignoreFirstChunk) {
+          ignoreFirstChunk = true
+          return
+        }
+
+        const [pingOutput, pingSpeed] = regexPing(stdOS, pingResp);
 
         resolve({ id: ipList.id, log: pingOutput, speed: pingSpeed })
         ping.kill()
+ 
       })
 
       ping.stderr.on('data', pingResp => {

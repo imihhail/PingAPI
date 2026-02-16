@@ -8,7 +8,7 @@ export default function App() {
     const [latency, setLatency] = useState(() => Array.from({ length: IP_LENGHT }, () => [{log: null, speed: null}]));
     const [isPinging, setIsPinging] = useState(false)
     const [pingLog, setpingLog] = useState({id: null, isExpanded: false});
-    const [pingStats, setPingStats] = useRef({count: 0, avg: null, high: null, low: null})
+    //const [pingStats, setPingStats] = useRef({count: 0, avg: null, high: null, low: null})
 
     const [ipPartsList, setIpPartsList] = useState(
         Array.from({ length: IP_LENGHT }, (_, y) =>
