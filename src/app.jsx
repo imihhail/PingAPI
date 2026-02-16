@@ -5,9 +5,10 @@ import { useRef, useState, useEffect } from "react";
 const IP_LENGHT = 5
 
 export default function App() {
-    const [latency, setLatency] = useState(() => Array.from({ length: IP_LENGHT }, () => []));
+    const [latency, setLatency] = useState(() => Array.from({ length: IP_LENGHT }, () => [{log: null, speed: null}]));
     const [isPinging, setIsPinging] = useState(false)
     const [pingLog, setpingLog] = useState({id: null, isExpanded: false});
+    const [pingStats, setPingStats] = useRef({count: 0, avg: null, high: null, low: null})
 
     const [ipPartsList, setIpPartsList] = useState(
         Array.from({ length: IP_LENGHT }, (_, y) =>
@@ -72,18 +73,11 @@ export default function App() {
         window.startPig.onPing((pingResp) => {            
             const pingRespCopy = [...latency]
             
-            pingResp.forEach(el =>{
-                const pingResult = regex(el.log)
-                pingRespCopy[el.id].push(pingResult)
-            })
+            pingResp.forEach(el => pingRespCopy[el.id].push(el))
             setLatency(pingRespCopy)
         });
 
         setIsPinging(true)
-    }
-
-    function regex(str) {
-        return str
     }
 
     function stopPing() {
@@ -137,7 +131,7 @@ export default function App() {
                                 ))}
                             </div>
                             <div onClick={() => resizeLog(y)} className='pingLog'>
-                                High <span>{latency[y][latency[y].length-1]}</span>
+                                <span>{latency[y][latency[y].length-1].speed}</span>
                             </div>
                         </div>
                     ))}
@@ -146,9 +140,9 @@ export default function App() {
                              : <button onClick={ping} className="startBtn">Ping</button>
                 }  
                 {pingLog.isExpanded && (
-                    <div onClick={resizeLog} className="pingLogExpanded" >
+                    <div onClick={resizeLog} className="pingLogExpanded">
                         {latency[pingLog.id].map((el) =>
-                            <p>{el}</p>
+                            <p>{el.log}</p>
                         )}
                     </div>
                 )}  

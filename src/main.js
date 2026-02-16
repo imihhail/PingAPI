@@ -5,7 +5,7 @@ import { spawn } from 'child_process'
 import Store from 'electron-store';
 
 const store = new Store();
-
+const arg   = process.platform == "darwin" ? "-c" : "-n"
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -83,34 +83,21 @@ ipcMain.handle('startPing', (e, ipListObj) => {
   }
 
   function pingQueue(ipList) {
-    let pingCount = 0
-
     return new Promise((resolve, reject) => {
-
-      
-      
-      
-      const ping = spawn('ping', ['-n', '1', ipList.ip]);
+      const ping = spawn('ping', [[arg], '1', ipList.ip]);
     
       ping.stdout.on('data', pingResp => {
-        pingCount++
-        if (pingCount != 2) return null
-          
-        const text     = pingResp.toString();
-        const pingResult = stripPingOutput(text)
+        const [pingOutput, pingSpeed] = regexPing(1, pingResp);
 
-const beforeFirstNewline = (s) => s.split(/\r?\n/)[0];
-
-// examples
-console.log(beforeFirstNewline(text));
-
-        const speedArr = text.match(/time(?:=|<)\s*([0-9]*\.?[0-9]+)/i);
-        //const pingLog = parseFloat(speedArr[1])
-      
-        
-        resolve({id: ipList.id, log: pingResult })
+        resolve({ id: ipList.id, log: pingOutput, speed: pingSpeed })
         ping.kill()
-        pingCount = 0
+      })
+
+      ping.stderr.on('data', pingResp => {
+        const [pingOutput, pingSpeed] = regexPing(0, pingResp);
+
+        resolve({ id: ipList.id, log: pingOutput, speed: pingSpeed })
+        ping.kill()
       })
     })
   }
@@ -119,23 +106,23 @@ console.log(beforeFirstNewline(text));
     if (isRunning) {
       startPing();
      
-    Promise.all(pingPromises)
-      .then(res => {
-        e.sender.send('ping-data', res);
- 
-        setTimeout(loop, 2000);
+      Promise.all(pingPromises).then(res => {
+          e.sender.send('ping-data', res);
+          setTimeout(loop, 2000);
       })
     }
   })();
 });
 
-function stripPingOutput(input) {
-  //console.log("input: ", input);
-  
-  return input
-    .replace(/^Ping statistics for .*:\r?\n(?:[ \t].*(?:\r?\n|$))*/gm, '')
-    .trim();
+function regexPing(std, str) {
+  const text       = str.toString();
+  const pingOutput = text.split(/\r?\n/)[std];
+  const speedArr   = pingOutput.match(/time(?:=|<)\s*([0-9]*\.?[0-9]+)/i);
+  const pingSpeed  = speedArr ? parseFloat(speedArr[1]) : pingOutput
+
+  return [pingOutput, pingSpeed]
 }
+
 
 // CLOSE AND MINIMIZE WINDOW
 ipcMain.handle('window-minimize', () => win.minimize());

@@ -29,9 +29,9 @@
 // Promise.all(promises).then(() => {
 //   console.log('all async work finished',promises);
 // });
+const test = [2, 5, 7, 12]
+const res = test.reduce((acc, nr) =>{
+    return acc + nr
+}, 0)
 
-const hasNewline = (s) => /\r?\n/.test(s);
-
-console.log( hasNewline("") ); // true
-console.log( hasNewline("hello\r\nworld") ); // true
-console.log( hasNewline("hello world") ); // false
+console.log(res);
