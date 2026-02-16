@@ -7,7 +7,7 @@ const IP_LENGHT = 5
 export default function App() {
     const [latency, setLatency] = useState(() => Array.from({ length: IP_LENGHT }, () => []));
     const [isPinging, setIsPinging] = useState(false)
-    const [expandLog, setExpandLog] = useState(false);
+    const [pingLog, setpingLog] = useState({id: null, isExpanded: false});
 
     const [ipPartsList, setIpPartsList] = useState(
         Array.from({ length: IP_LENGHT }, (_, y) =>
@@ -54,7 +54,6 @@ export default function App() {
         } 
     }
 
-
     async function saveAndExit() {
         await window.storeAPI.set('pingList', ipPartsList)
         window.winapi.close()
@@ -77,7 +76,7 @@ export default function App() {
             pingResp.forEach(el =>{
                 const pingResult = regex(el.log)
                 pingRespCopy[el.id].push(pingResult)
-            } )
+            })
             setLatency(pingRespCopy)
         });
 
@@ -95,8 +94,11 @@ export default function App() {
         window.startPig.clearPingListeners();
     }
 
-    function reziseLog() {
-        setExpandLog(prev => !prev);
+    function resizeLog(y) {
+        setpingLog(prev => ({
+            id: y,
+            isExpanded: !prev.isExpanded
+        }));
     }
 
 
@@ -136,17 +138,20 @@ export default function App() {
                                     </React.Fragment>
                                 ))}
                             </div>
-                            <div onClick={() => reziseLog(y)} className='pingLog'>
+                            <div onClick={() => resizeLog(y)} className='pingLog'>
                                 High <span>{latency[y][latency[y].length-1]}</span>
                             </div>
                         </div>
                     ))}
                 </div>
                 {isPinging ? <button onClick={stopPing} className="stopBtn">Stop</button>:
-                    <button onClick={ping} className="startBtn">Ping</button>}  
-                {expandLog && (
-                    <div onClick={reziseLog} className="pingLogExpanded" >
-                        
+                    <button onClick={ping} className="startBtn">Ping</button>
+                }  
+                {pingLog.isExpanded && (
+                    <div onClick={resizeLog} className="pingLogExpanded" >
+                        {latency[pingLog.id].map((el) =>
+                            <p>{el}</p>
+                        )}
                     </div>
                 )}  
             </div>
