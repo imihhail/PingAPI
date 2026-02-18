@@ -6,7 +6,9 @@ const IP_LENGHT = 5
 
 export default function App() {
     const [latency, setLatency] = useState(() => Array.from({ length: IP_LENGHT }, () => 
-          [{log: null, speed: null, count: 0, avg: null, high: null, low: null, packetLoss: null}]));
+          [{ id: null, log: null, speed: null, avg: 0, high: null, low: null, 
+             packetLoss: null, pingSum: 0, errorCount: 0, pingCount: 0 }]));
+
     const [isPinging, setIsPinging] = useState(false)
     const [pingLog, setpingLog] = useState({id: null, isExpanded: false});
     const [ipPartsList, setIpPartsList] = useState(
@@ -69,13 +71,11 @@ export default function App() {
         window.startPig.sendIP(ipAddresses)
         window.startPig.clearPingListeners();
         window.startPig.onPing((pingResp) => {    
-            console.log(latency);
+            console.log(pingResp);
                     
             const pingRespCopy = [...latency]
             
             pingResp.forEach(el => {
-                
-                
                pingRespCopy[el.id].push(el) 
             })
 

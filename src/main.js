@@ -63,13 +63,11 @@ ipcMain.handle('store-set', (_, { key, value }) => store.set(key, value));
 ipcMain.handle('store-has', (_, key) => store.has(key));
 ipcMain.handle('store-delete', (_, key) => store.delete(key));
 
-
+//RECIEVE INPUT
 ipcMain.handle('startPing', (e, ipListObj) => {
-  let connectionFound = false
+  //let connectionFound = false
   let isRunning = true
-  let pingStats = { id: null, log: null, speed: null, count: 0, avg: null, high: null, low: null, packetLoss: null }
-  let totalPing = 0
-  let totalErr  = 0
+
   let pingPromises = []
 
   ipcMain.once('stopPing', (e) => {
@@ -86,6 +84,11 @@ ipcMain.handle('startPing', (e, ipListObj) => {
   }
 
   function pingQueue(ipList) {
+    console.log(ipList);
+    
+    let pingStats = { id: null, log: null, speed: null, avg: 0, high: null, low: null, 
+                      packetLoss: null, pingSum: 0, errorCount: 0, pingCount: 0 }
+
     return new Promise((resolve, reject) => {
       let ignoreFirstChunk = false
       
@@ -97,20 +100,28 @@ ipcMain.handle('startPing', (e, ipListObj) => {
           ignoreFirstChunk = true
           return
         }
-
+        
         const [pingOutput, pingSpeed] = regexPing(stdOS, pingResp);
 
-        connectionFound = true
-        pingStats.id    = ipList.id,
-        pingStats.log   = pingOutput
-        pingStats.speed = Math.round(pingSpeed)
-        totalPing       = totalPing + pingStats.speed
-        pingStats.count++
-        pingStats.avg   = Math.round(totalPing/pingStats.count)
-        pingStats.packetLoss = Math.round((totalErr / (pingStats.count + totalErr))*100)
-
-        resolve(pingStats)
-        ping.kill()
+        if (pingSpeed) {
+          //connectionFound      = true
+          pingStats.id         = ipList.id,
+          pingStats.log        = pingOutput
+          pingStats.speed      = Math.round(pingSpeed)
+          pingStats.pingSum    = ipList.pingSum + pingStats.speed
+          pingStats.pingCount  = ipList.pingCount + pingStats.pingCount
+          pingStats.avg        = Math.round(pingStats.pingSum/pingStats.pingCount)
+         // pingStats.packetLoss = Math.round((totalErr / (pingStats.count + totalErr))*100)
+          //console.log(pingStats);
+          
+          resolve(pingStats)
+          ping.kill()
+        } else {
+          //if (connectionFound)
+             totalErr++
+          resolve({ id: ipList.id, log: pingOutput })
+          ping.kill()
+        }
       })
 
       //ON STD ERROR
@@ -140,7 +151,7 @@ function regexPing(std, str) {
   const text       = str.toString();
   const pingOutput = text.split(/\r?\n/)[std];
   const speedArr   = pingOutput.match(/time(?:=|<)\s*([0-9]*\.?[0-9]+)/i);
-  const pingSpeed  = speedArr ? parseFloat(speedArr[1]) : pingOutput
+  const pingSpeed  = speedArr ? parseFloat(speedArr[1]) : null
 
   return [pingOutput, pingSpeed]
 }

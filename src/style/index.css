@@ -4,9 +4,10 @@
 
   --primary: #63e468;
   --success: #48a14b;
+  font-size: 1rem; 
 }
 
-:root { font-size: 1rem; } 
+
 
 html, body {
   height: 100%;
@@ -60,11 +61,11 @@ body {
   max-width: 37px;     
   min-width: 24px;
   text-align: center;
-  font-size: 1rem; 
 }
 
 .field .dot {
   border-bottom: 1px solid var(--input-border);
+  font-size: 1.5rem; 
 }
 
 .pingLog {
