@@ -5,11 +5,10 @@ import { useRef, useState, useEffect } from "react";
 const IP_LENGHT = 5
 
 export default function App() {
-    const [latency, setLatency] = useState(() => Array.from({ length: IP_LENGHT }, () => [{log: null, speed: null}]));
+    const [latency, setLatency] = useState(() => Array.from({ length: IP_LENGHT }, () => 
+          [{log: null, speed: null, count: 0, avg: null, high: null, low: null, packetLoss: null}]));
     const [isPinging, setIsPinging] = useState(false)
     const [pingLog, setpingLog] = useState({id: null, isExpanded: false});
-    //const [pingStats, setPingStats] = useRef({count: 0, avg: null, high: null, low: null})
-
     const [ipPartsList, setIpPartsList] = useState(
         Array.from({ length: IP_LENGHT }, (_, y) =>
             y === 0
@@ -69,11 +68,17 @@ export default function App() {
 
         window.startPig.sendIP(ipAddresses)
         window.startPig.clearPingListeners();
-
-        window.startPig.onPing((pingResp) => {            
+        window.startPig.onPing((pingResp) => {    
+            console.log(latency);
+                    
             const pingRespCopy = [...latency]
             
-            pingResp.forEach(el => pingRespCopy[el.id].push(el))
+            pingResp.forEach(el => {
+                
+                
+               pingRespCopy[el.id].push(el) 
+            })
+
             setLatency(pingRespCopy)
         });
 
@@ -131,7 +136,13 @@ export default function App() {
                                 ))}
                             </div>
                             <div onClick={() => resizeLog(y)} className='pingLog'>
-                                <span>{latency[y][latency[y].length-1].speed}</span>
+                                <span>
+                                    {latency[y][latency[y].length-1].speed?
+                                     `Ping: ${latency[y][latency[y].length-1].speed} 
+                                      Avg: ${latency[y][latency[y].length-1].avg}
+                                      PL: ${latency[y][latency[y].length-1].packetLoss}
+                                    `: latency[y][latency[y].length-1].log}
+                                </span>
                             </div>
                         </div>
                     ))}
