@@ -65,7 +65,7 @@ ipcMain.handle('store-delete', (_, key) => store.delete(key));
 
 
 ipcMain.handle('startPing', (e, ipListObj) => {
-
+  let connectionFound = false
   let isRunning = true
   let pingStats = { id: null, log: null, speed: null, count: 0, avg: null, high: null, low: null, packetLoss: null }
   let totalPing = 0
@@ -78,8 +78,6 @@ ipcMain.handle('startPing', (e, ipListObj) => {
   });
 
   function startPing() {
-    console.log("pinging");
-    
     pingPromises = []
     
     ipListObj.forEach(ipList=> {
@@ -88,12 +86,12 @@ ipcMain.handle('startPing', (e, ipListObj) => {
   }
 
   function pingQueue(ipList) {
-    
     return new Promise((resolve, reject) => {
       let ignoreFirstChunk = false
       
       const ping = spawn('ping', [[arg], '1', ipList.ip]);
 
+      //ON STD OUTPUT
       ping.stdout.on('data', pingResp => {
         if (!ignoreFirstChunk && os != "darwin") {
           ignoreFirstChunk = true
@@ -101,24 +99,25 @@ ipcMain.handle('startPing', (e, ipListObj) => {
         }
 
         const [pingOutput, pingSpeed] = regexPing(stdOS, pingResp);
-        
+
+        connectionFound = true
         pingStats.id    = ipList.id,
         pingStats.log   = pingOutput
         pingStats.speed = Math.round(pingSpeed)
         totalPing       = totalPing + pingStats.speed
         pingStats.count++
         pingStats.avg   = Math.round(totalPing/pingStats.count)
-        pingStats.packetLoss = ((pingStats.count + totalErr) / totalErr)*100
+        pingStats.packetLoss = Math.round((totalErr / (pingStats.count + totalErr))*100)
 
         resolve(pingStats)
         ping.kill()
- 
       })
 
+      //ON STD ERROR
       ping.stderr.on('data', pingResp => {
         const pingOutput = regexPing(0, pingResp);
-        totalErr++
-
+        if (connectionFound) totalErr++
+        
         resolve({ id: ipList.id, log: pingOutput })
         ping.kill()
       })
