@@ -3,11 +3,13 @@ import path from 'node:path';
 import started from 'electron-squirrel-startup';
 import { spawn } from 'child_process'
 import Store from 'electron-store';
+import { PingAttributes } from "./ipCLass";
 
 const store = new Store();
 const os    = process.platform
 const arg   = os == "darwin" ? "-c" : "-n"
 const stdOS = os == "darwin" ? 1 : 0
+
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -65,6 +67,14 @@ ipcMain.handle('store-delete', (_, key) => store.delete(key));
 
 //RECIEVE INPUT
 ipcMain.handle('startPing', (e, ipListObj) => {
+  const ipMap = new Map();
+
+  ipListObj.forEach((ip => {
+    const ipStats = new PingAttributes(ip.ip)
+    console.log(ipStats);
+    
+    
+  }))
   //let connectionFound = false
   let isRunning = true
 
@@ -76,6 +86,8 @@ ipcMain.handle('startPing', (e, ipListObj) => {
   });
 
   function startPing() {
+    console.log("pinging");
+    
     pingPromises = []
     
     ipListObj.forEach(ipList=> {
@@ -84,8 +96,7 @@ ipcMain.handle('startPing', (e, ipListObj) => {
   }
 
   function pingQueue(ipList) {
-    console.log(ipList);
-    
+  
     let pingStats = { id: null, log: null, speed: null, avg: 0, high: null, low: null, 
                       packetLoss: null, pingSum: 0, errorCount: 0, pingCount: 0 }
 
@@ -118,7 +129,7 @@ ipcMain.handle('startPing', (e, ipListObj) => {
           ping.kill()
         } else {
           //if (connectionFound)
-             totalErr++
+            // totalErr++
           resolve({ id: ipList.id, log: pingOutput })
           ping.kill()
         }
@@ -127,7 +138,7 @@ ipcMain.handle('startPing', (e, ipListObj) => {
       //ON STD ERROR
       ping.stderr.on('data', pingResp => {
         const pingOutput = regexPing(0, pingResp);
-        if (connectionFound) totalErr++
+       // if (connectionFound) totalErr++
         
         resolve({ id: ipList.id, log: pingOutput })
         ping.kill()
