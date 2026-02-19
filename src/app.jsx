@@ -1,21 +1,18 @@
 import React from 'react';
 import { useRef, useState, useEffect } from "react";
+import { PingAttributes } from "./ipCLass";
 
 
 const IP_LENGHT = 5
 
 export default function App() {
-    const [latency, setLatency] = useState(() => Array.from({ length: IP_LENGHT }, () => 
-          [{ id: null, log: null, speed: null, avg: 0, high: null, low: null, 
-             packetLoss: null, pingSum: 0, errorCount: 0, pingCount: 0 }]));
-
     const [isPinging, setIsPinging] = useState(false)
     const [pingLog, setpingLog] = useState({id: null, isExpanded: false});
     const [ipPartsList, setIpPartsList] = useState(
         Array.from({ length: IP_LENGHT }, (_, y) =>
             y === 0
-            ? { id: y, ip: ["8", "8", "8", "8"] }
-            : { id: y, ip: ["", "", "", ""] }
+            ? new PingAttributes(y, ["8", "8", "8", "8"])
+            : new PingAttributes(y, ["", "", "", ""]) 
         )
     )
 
@@ -73,13 +70,14 @@ export default function App() {
         window.startPig.onPing((pingResp) => {    
             console.log(pingResp);
                     
-            const pingRespCopy = [...latency]
+            const pingRespCopy = [...ipPartsList]
             
             pingResp.forEach(el => {
-               pingRespCopy[el.id].push(el) 
+                
+
             })
 
-            setLatency(pingRespCopy)
+            setIpPartsList(pingRespCopy)
         });
 
         setIsPinging(true)
@@ -124,7 +122,7 @@ export default function App() {
                                         {y == 0 ? <input value={8} readOnly /> :
                                             <input
                                                 id={`ipPart${y}-${x}`}
-                                                value={ipPartsList[y].ip[x]}
+                                                value={ipPartsList[y]?.ip?.[x] ?? ''}
                                                 onChange={(e) => changeIP(y, x, e)}
                                                 onKeyDown={(e) => handleKeys(x, e)}
                                                 type="number"
@@ -137,11 +135,11 @@ export default function App() {
                             </div>
                             <div onClick={() => resizeLog(y)} className='pingLog'>
                                 <span>
-                                    {latency[y][latency[y].length-1].speed?
-                                     `Ping: ${latency[y][latency[y].length-1].speed} 
-                                      Avg: ${latency[y][latency[y].length-1].avg}
-                                      PL: ${latency[y][latency[y].length-1].packetLoss}
-                                    `: latency[y][latency[y].length-1].log}
+                                    {ipPartsList[y].speed?
+                                     `Ping: ${ipPartsList[y].speed} 
+                                      Avg: ${ipPartsList[y].avg}
+                                      PL: ${ipPartsList[y].avg}
+                                    `: ipPartsList[y].log}
                                 </span>
                             </div>
                         </div>
@@ -152,7 +150,7 @@ export default function App() {
                 }  
                 {pingLog.isExpanded && (
                     <div onClick={resizeLog} className="pingLogExpanded">
-                        {latency[pingLog.id].map((el) =>
+                        {ipPartsList[pingLog.id].map((el) =>
                             <p>{el.log}</p>
                         )}
                     </div>

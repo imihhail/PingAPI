@@ -70,11 +70,9 @@ ipcMain.handle('startPing', (e, ipListObj) => {
   const ipMap = new Map();
 
   ipListObj.forEach((ip => {
-    const ipStats = new PingAttributes(ip.ip)
-    console.log(ipStats);
-    
-    
-  }))
+    ipMap.set(ip.id, new PingAttributes(ip.id, ip.ip))
+  }))  
+  
   //let connectionFound = false
   let isRunning = true
 
@@ -125,7 +123,11 @@ ipcMain.handle('startPing', (e, ipListObj) => {
          // pingStats.packetLoss = Math.round((totalErr / (pingStats.count + totalErr))*100)
           //console.log(pingStats);
           
-          resolve(pingStats)
+          //resolve(pingStats)
+          
+          ipMap.get(ipList.id).calculatePingStats(stdOS, pingResp)
+          
+          resolve(ipMap.get(ipList.id))
           ping.kill()
         } else {
           //if (connectionFound)

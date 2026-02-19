@@ -1,16 +1,32 @@
 export class PingAttributes {
-    pingLog = []
-    pingCount = 0
+    pingLog    = []
+    pingCount  = 0
     errorCount = 0
-    avg = null
-    pingSum = 0
-    outPut = null
+    pingSum    = 0
+    avg        = null
+    speed      = null
 
-    constructor(ip) {
+    constructor(id, ip = ['', '', '', '']) {
+        this.id = id
         this.ip = ip
+    }
+
+    calculatePingStats(std, str) {
+        //EXTRACT PINGRESPONSE AND PINGSPEED
+        const text       = str.toString();
+        const pingOutput = text.split(/\r?\n/)[std];
+        const speedArr   = pingOutput.match(/time(?:=|<)\s*([0-9]*\.?[0-9]+)/i);
+        const pingSpeed  = speedArr ? parseFloat(speedArr[1]) : null
+        this.speed       = Math.round(pingSpeed)
+
+        //CALCULATE STATS
+        this.pingCount++
+        this.pingSum   = this.pingSum + this.speed
+        this.avg       = Math.round(this.pingSum / this.pingCount)
+
+        this.pingLog.push(pingOutput)
     }
 }
 
-const test = new PingAttributes(0, '8.8.8.8')
 
 
