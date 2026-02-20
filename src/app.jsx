@@ -7,7 +7,7 @@ const IP_LENGHT = 5
 
 export default function App() {
     const [isPinging, setIsPinging] = useState(false)
-    const [pingLog, setpingLog] = useState({id: null, isExpanded: false});
+    const [selectedIpLog, setSelectedIpLog] = useState({id: null, isExpanded: false});
     const [ipPartsList, setIpPartsList] = useState(
         Array.from({ length: IP_LENGHT }, (_, y) =>
             y === 0
@@ -68,20 +68,19 @@ export default function App() {
         window.startPig.sendIP(ipAddresses)
         window.startPig.clearPingListeners();
 
-        window.startPig.onPing((pingResp) => {  
+        window.startPig.onPing((pingResp) => { 
             setIpPartsList(prev => {
-                  const copy = prev.slice()
-                pingResp.forEach(el => {
-                    prev[el.id].speed = el.speed
-                    // console.log("prev: ", prev);
-                    // console.log("el: ", el);
-                });
-            })
+                const copy = prev.slice()             
 
-            
+                pingResp.forEach(el => {
+                    copy[el.id].speed   = el.speed
+                    copy[el.id].avg     = el.avg
+                    copy[el.id].pingLog = el.pingLog
+                })
+                return copy
+            })
         });
 
-        
         setIsPinging(true)
     }
 
@@ -92,7 +91,7 @@ export default function App() {
     }
 
     function resizeLog(y) {
-        setpingLog(prev => ({
+        setSelectedIpLog(prev => ({
             id: y,
             isExpanded: !prev.isExpanded
         }));
@@ -137,9 +136,9 @@ export default function App() {
                             </div>
                             <div onClick={() => resizeLog(y)} className='pingLog'>
                                 <span>
-                                    {ipPartsList[0].speed?
-                                     `Ping: ${ipPartsList[y].speed} 
-                                      Avg: ${ipPartsList[y].avg}
+                                    {ipPartsList[y].speed?
+                                     `Ping: ${ipPartsList[y]?.speed} 
+                                      Avg: ${ipPartsList[y]?.avg}
                                       PL: ${ipPartsList[y].avg}
                                     `: ipPartsList[y].log}
                                 </span>
@@ -150,10 +149,10 @@ export default function App() {
                 {isPinging ? <button onClick={stopPing} className="stopBtn">Stop</button>
                              : <button onClick={ping} className="startBtn">Ping</button>
                 }  
-                {pingLog.isExpanded && (
+                {selectedIpLog.isExpanded && (
                     <div onClick={resizeLog} className="pingLogExpanded">
-                        {ipPartsList[pingLog.id].map((el) =>
-                            <p>{el.log}</p>
+                        {ipPartsList[selectedIpLog.id].pingLog.map((el) =>
+                            <p>{el}</p>
                         )}
                     </div>
                 )}  

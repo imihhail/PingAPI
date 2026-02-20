@@ -94,10 +94,6 @@ ipcMain.handle('startPing', (e, ipListObj) => {
   }
 
   function pingQueue(ipList) {
-  
-    let pingStats = { id: null, log: null, speed: null, avg: 0, high: null, low: null, 
-                      packetLoss: null, pingSum: 0, errorCount: 0, pingCount: 0 }
-
     return new Promise((resolve, reject) => {
       let ignoreFirstChunk = false
       
