@@ -67,19 +67,21 @@ export default function App() {
 
         window.startPig.sendIP(ipAddresses)
         window.startPig.clearPingListeners();
-        window.startPig.onPing((pingResp) => {    
-            console.log(pingResp);
-                    
-            const pingRespCopy = [...ipPartsList]
-            
-            pingResp.forEach(el => {
-                
 
+        window.startPig.onPing((pingResp) => {  
+            setIpPartsList(prev => {
+                  const copy = prev.slice()
+                pingResp.forEach(el => {
+                    prev[el.id].speed = el.speed
+                    // console.log("prev: ", prev);
+                    // console.log("el: ", el);
+                });
             })
 
-            setIpPartsList(pingRespCopy)
+            
         });
 
+        
         setIsPinging(true)
     }
 
@@ -135,7 +137,7 @@ export default function App() {
                             </div>
                             <div onClick={() => resizeLog(y)} className='pingLog'>
                                 <span>
-                                    {ipPartsList[y].speed?
+                                    {ipPartsList[0].speed?
                                      `Ping: ${ipPartsList[y].speed} 
                                       Avg: ${ipPartsList[y].avg}
                                       PL: ${ipPartsList[y].avg}
