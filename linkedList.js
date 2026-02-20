@@ -50,14 +50,7 @@ class LinkedList {
   }
 }
 
-const list = new LinkedList
+console.log(1+null);
 
-list.append(3)
-list.append(5)
-list.append(7)
-list.append(8)
-list.append(9)
-list.append(10)
-list.removeStart()
-list.removeEnd()
-for (const v of list) console.log(v)
+
+

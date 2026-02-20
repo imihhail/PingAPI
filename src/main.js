@@ -67,6 +67,7 @@ ipcMain.handle('store-delete', (_, key) => store.delete(key));
 
 //RECIEVE INPUT
 ipcMain.handle('startPing', (e, ipListObj) => {
+  let warnId
   const ipMap = new Map();
 
   ipListObj.forEach((ip => {
@@ -95,6 +96,13 @@ ipcMain.handle('startPing', (e, ipListObj) => {
 
   function pingQueue(ipList) {
     return new Promise((resolve, reject) => {
+      const start = performance.now?.() ?? Date.now();
+
+      warnId = setTimeout(() => {
+        const elapsed = Math.round((performance.now?.() ?? Date.now()) - start);
+        console.warn(`Still running after ${elapsed}ms`);
+      }, 6000);
+      
       let ignoreFirstChunk = false
       
       const ping = spawn('ping', [[arg], '1', ipList.ip]);
@@ -106,37 +114,20 @@ ipcMain.handle('startPing', (e, ipListObj) => {
           return
         }
         
-        const [pingOutput, pingSpeed] = regexPing(stdOS, pingResp);
+        const ipClass = ipMap.get(ipList.id)
 
-        if (pingSpeed) {
-          //connectionFound      = true
-          pingStats.id         = ipList.id,
-          pingStats.log        = pingOutput
-          pingStats.speed      = Math.round(pingSpeed)
-          pingStats.pingSum    = ipList.pingSum + pingStats.speed
-          pingStats.pingCount  = ipList.pingCount + pingStats.pingCount
-          pingStats.avg        = Math.round(pingStats.pingSum/pingStats.pingCount)
-         // pingStats.packetLoss = Math.round((totalErr / (pingStats.count + totalErr))*100)
-          //console.log(pingStats);
-          
-          //resolve(pingStats)
-          
-          ipMap.get(ipList.id).calculatePingStats(stdOS, pingResp)
-          
-          resolve(ipMap.get(ipList.id))
-          ping.kill()
-        } else {
-          //if (connectionFound)
-            // totalErr++
-          resolve({ id: ipList.id, log: pingOutput })
-          ping.kill()
-        }
+        ipClass.calculatePingStats(stdOS, pingResp)
+        
+        resolve(ipClass)
+        ping.kill()
       })
 
       //ON STD ERROR
       ping.stderr.on('data', pingResp => {
         const pingOutput = regexPing(0, pingResp);
        // if (connectionFound) totalErr++
+       console.log("FINALLY ERROR");
+       
         
         resolve({ id: ipList.id, log: pingOutput })
         ping.kill()
@@ -151,24 +142,15 @@ ipcMain.handle('startPing', (e, ipListObj) => {
       Promise.all(pingPromises).then(res => {
           e.sender.send('ping-data', res);
           setTimeout(loop, 2000);
-      })
+      }).finally(() =>{
+        console.log(warnId);
+        
+      } );
     }
   })();
 });
 
-function regexPing(std, str) {
-  const text       = str.toString();
-  const pingOutput = text.split(/\r?\n/)[std];
-  const speedArr   = pingOutput.match(/time(?:=|<)\s*([0-9]*\.?[0-9]+)/i);
-  const pingSpeed  = speedArr ? parseFloat(speedArr[1]) : null
-
-  return [pingOutput, pingSpeed]
-}
-
 
 // CLOSE AND MINIMIZE WINDOW
 ipcMain.handle('window-minimize', () => win.minimize());
-ipcMain.handle('window-close', () => {
-  
-  win.close()
-});
+ipcMain.handle('window-close', ()    => win.close());

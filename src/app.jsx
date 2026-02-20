@@ -19,7 +19,7 @@ export default function App() {
     useEffect(() => {
         async function getData() { 
             const ipData = await window.storeAPI.get('pingList')
-            ipData ? setIpPartsList(ipData) : console.log("JSON file missing");
+            ipData ? setIpPartsList(ipData) : console.error("JSON file missing!");
         }
         getData()
     }, []);
@@ -73,13 +73,15 @@ export default function App() {
                 const copy = prev.slice()             
 
                 pingResp.forEach(el => {
-                    copy[el.id].speed   = el.speed
-                    copy[el.id].avg     = el.avg
-                    copy[el.id].pingLog = el.pingLog
+                    copy[el.id].speed      = el.speed
+                    copy[el.id].avg        = el.avg
+                    copy[el.id].pingLog    = el.pingLog
+                    copy[el.id].packetLoss = el.packetLoss
                 })
+                
                 return copy
             })
-        });
+        })
 
         setIsPinging(true)
     }
@@ -137,10 +139,10 @@ export default function App() {
                             <div onClick={() => resizeLog(y)} className='pingLog'>
                                 <span>
                                     {ipPartsList[y].speed?
-                                     `Ping: ${ipPartsList[y]?.speed} 
-                                      Avg: ${ipPartsList[y]?.avg}
-                                      PL: ${ipPartsList[y].avg}
-                                    `: ipPartsList[y].log}
+                                     `Ping: ${ipPartsList[y].speed}ms 
+                                      Avg: ${ipPartsList[y].avg}ms
+                                      PL: ${ipPartsList[y].packetLoss}%
+                                    `: ipPartsList[y].pingLog[ipPartsList[y].pingLog.length-1]}
                                 </span>
                             </div>
                         </div>
@@ -151,8 +153,8 @@ export default function App() {
                 }  
                 {selectedIpLog.isExpanded && (
                     <div onClick={resizeLog} className="pingLogExpanded">
-                        {ipPartsList[selectedIpLog.id].pingLog.map((el) =>
-                            <p>{el}</p>
+                        {ipPartsList[selectedIpLog.id].pingLog.map((log) =>
+                            <p>{log}</p>
                         )}
                     </div>
                 )}  
