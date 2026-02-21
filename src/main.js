@@ -9,7 +9,7 @@ import readline from 'readline'
 const store = new Store();
 const os    = process.platform
 const arg   = os == "darwin" ? "-c" : "-n"
-const stdOS = os == "darwin" ? 1 : 0
+const stdOS = os == "darwin" ? 2 : 3
 
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -68,21 +68,20 @@ ipcMain.handle('store-delete', (_, key) => store.delete(key));
 
 //RECIEVE INPUT
 ipcMain.handle('startPing', (e, ipListObj) => {
-  const timoutArr = []
-  const ipMap = new Map();
+  const ipMap         = new Map()
+  let pingPromises    = []
+  let connectionFound = false
+  let isRunning       = true
 
   ipListObj.forEach((ip => ipMap.set(ip.id, new PingAttributes(ip.id, ip.ip))))  
   
-  //let connectionFound = false
-  let isRunning = true
-
-  let pingPromises = []
-
+  //STOP PING
   ipcMain.once('stopPing', (e) => {
     isRunning = false
     e.sender.delete();
   });
 
+  //START PING
   function startPing() {
     console.log("pinging");
     
@@ -94,21 +93,15 @@ ipcMain.handle('startPing', (e, ipListObj) => {
   }
 
   function pingQueue(ipList) {
-    let lineCount = 0
     const ipClass = ipMap.get(ipList.id)
-
+    let lineCount = 0
+    
     return new Promise((resolve, reject) => {
-      const start = performance.now?.() ?? Date.now();
+      const ping  = spawn('ping', [[arg], '1', ipList.ip]);
 
-      const warnId = setTimeout(() => {
-        const elapsed = Math.round((performance.now?.() ?? Date.now()) - start);
-        console.warn(`Still running after ${elapsed}ms`);
-      }, 6000);
-
-      timoutArr.push(warnId)
-      
-      const ping = spawn('ping', [[arg], '1', ipList.ip]);
       ping.stdout.setEncoding('utf8')
+      ping.stderr.setEncoding('utf8')
+
       const rl    = readline.createInterface({ input: ping.stdout });
       const rlErr = readline.createInterface({ input: ping.stderr });
 
@@ -116,21 +109,28 @@ ipcMain.handle('startPing', (e, ipListObj) => {
       rl.on('line', (line) => {
         lineCount += 1
 
-        if (lineCount === 2) {
+        if (lineCount === stdOS) {
           ipClass.calculatePingStats(line)
           resolve(ipClass);
-          rl.close()
-          ping.kill()
+          cleanUp()
         }
-      });
+      })
 
       //ON STD ERROR
       rlErr.on('line', (line) => {
         ipClass.calculatePingStats(line)
         resolve(ipClass);
-        rl.close()
-        ping.kill()
+        cleanUp()
       })
+
+      function cleanUp() {
+        ping.kill()
+        ping.removeAllListeners()
+        rl.close()
+        rl.removeAllListeners()
+        rlErr.close()
+        rlErr.removeAllListeners()
+      }
     })
   }
 
@@ -141,12 +141,7 @@ ipcMain.handle('startPing', (e, ipListObj) => {
       Promise.all(pingPromises).then(res => {
           e.sender.send('ping-data', res);
           setTimeout(loop, 2000);
-      }).finally(() =>{
-        timoutArr.forEach(id => {
-          clearTimeout(id)
-        });
-        
-      } );
+      })
     }
   })();
 });

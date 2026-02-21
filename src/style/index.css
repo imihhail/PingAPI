@@ -1,81 +1,77 @@
-:root {
-  --bg-progressBoxes: rgba(60, 105, 95, 0.432);
-  --input-border: rgba(114, 255, 126, 0.705);
-
-  --primary: #63e468;
-  --success: #48a14b;
-  font-size: 1rem; 
+:root{
+  --bg: #0f172496;            /* dark background */
+  --panel: #0b122073;         /* inner panels */
+  --muted: #9aa4b2;
+    --accent: #00d1b2;        /* teal accent for ping fast */
+  --danger: #ff6b6b;
+  --glass: rgba(255, 255, 255, 0.244);
+  --glass-2: rgba(255, 255, 255, 0.323);
+  --text: #e6eef6;
+  --subtle: rgba(230, 238, 246, 0.172);
+  --radius: 8px;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
-
-
-html, body {
+body, #root, html {
   height: 100%;
+  background: rgba(10,12,18,0.85);
   margin: 0;
+  color: var(--text);
   overflow: hidden;
-  font-size: 1rem; 
 }
 
-body {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  background: black;
-  color: white;
-  /* line-height: 1.6; */
-  letter-spacing: 0.7px;
-}
-
+/* Content area */
 .content {
-  flex: 1;
-  overflow: auto;
+  padding: 18px;
+  max-width: 980px;
+  margin: 10px auto;
 }
 
-/* INPUTS */
+/* Settings form panel */
 #settingsForm {
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 10px;
-  margin-top: 3px;
+  background-color: rgb(0, 0, 0);
+  border: 1px solid var(--subtle);
+  padding: 14px;
+  border-radius: 7px;
+
 }
 
-.inputWrapper {
-  margin-bottom: 40px;
-}
-
+/* Each IP row */
 .field {
   display: flex;
-  text-align: center;
   align-items: center;
-  margin-bottom: 25px;
-  gap: 40px;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  border: 1px solid rgba(255,255,255,0.01);
 }
 
-.field input {
-  font-size: 1rem; 
-  border: none;
-  border-bottom: 1px solid var(--input-border);
-  background: transparent;
-  color: #fff;
-  user-select: none;
-  max-width: 37px;     
-  min-width: 24px;
+/* IP input group */
+.IPinput {
+  display: inline-flex;
+  gap: 6px;
+  align-items:center;
+  flex: 0 0 auto;
+}
+
+/* each octet input */
+.IPinput input {
+  width: 50px;
+  padding: 8px 10px;
+  border-radius: 3px;
+  border: 1px solid rgba(255,255,255,0.04);
+  background: rgba(255, 255, 255, 0.117);
+  color: var(--text);
+  font-size: 15px;
   text-align: center;
-}
-
-.field .dot {
-  border-bottom: 1px solid var(--input-border);
-  font-size: 1.5rem; 
-}
-
-.pingLog {
-  transition: 1s;
-  font-size: 1rem;
-}
-
-input:focus {
   outline: none;
-  border-bottom: 2px solid rgb(114, 255, 126);
+  height: 17px;
+}
+
+.IPinput input:focus {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.914);
 }
 
 input[type="number"]::-webkit-outer-spin-button,
@@ -84,118 +80,95 @@ input[type="number"]::-webkit-inner-spin-button {
   margin: 0;
 }
 
-/* START */
-.startBtn, .stopBtn {
-  display: block;
-  align-items: center;
-  gap: 0.5rem;
-  letter-spacing: 0.8px;
-  padding: 0.5rem 0.7rem;
+.dot {
+  font-size: 20px;
+  color: var(--muted);
   font-weight: 600;
-  color: white;
-  background-color: rgb(76, 175, 79);
-  border: none;
-  cursor: pointer;
-  width: 400px;
+  margin: 0 4px;
 }
 
-.stopBtn {
-  background-color: rgb(171, 73, 40);
-}
-
-
-
-.section-divider {
-  border: none;
-  height: 1px;
-  background-color: white;
-  margin: 0;
-  opacity: 0.8;
-}
-
-.loading-line {
-  position: relative; 
-  top: -1px;  
-  border: none;
-  height: 1px;
-  background-color: rgb(82, 164, 192);
-  box-shadow: -5px -1px 3px 2px rgba(109, 188, 214, 0.308);
-  margin: 0;
-  width: 100px;
-  transform: translateX(-700%);
-  animation-duration: 1.6s;
-  /* animation-name: loading; */
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-}
-
-@keyframes loading {
-  100% {transform: translateX(600%);}
-}
-
-.pingLogExpanded {
-  position: fixed;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  box-sizing: border-box; 
-  top: -250px;
-  left: 250px;
-  width: 100%;
-  height: 100%;
-  background-color: rgb(0, 0, 0);
-  padding: 1rem;
-  animation: expand 0.4s ease-out forwards;
-}
-
-@keyframes expand {
-  from {
-    transform: scale(0.2);
-    opacity: 1;
-  }
-  to {
-    transform: scale(1);
-    top: 0px;
-    left: 0px;
-    opacity: 0.8;
-  }
-}
-
-p {
-  margin: 0rem;
-}
-
-/* ERROR POPUP */
-.error-popup {
-  background-color: red;
-  font-family: Arial, Helvetica, sans-serif;
-  display: flex;
-  align-items: center;   
-  justify-content: space-between;
+/* Ping log preview area inside row */
+.pingLog {
+  display:flex;
+  align-items:center;
   gap: 12px;
-  padding: 1px 10px;
-  display: none;
-}
+  flex: 1 1 auto;
+  min-width: 0;
+  cursor: pointer;
+height: 17px;
+  padding: 8px 10px;
+  border-radius: 3px;
+  border: 1px solid rgba(255,255,255,0.04);
+  background: rgba(255, 255, 255, 0.117);
+}   
 
-.errorMsg-box {
-  font-weight: bold;
-  flex: 1 1 auto;       
-  text-align: center;
-  white-space: nowrap;          
+/* ping stats container */
+.pingStats {
+  display:flex;
+  gap: 12px;
+  align-items:center;
+  width: 100%;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 13px;
+  color: var(--muted);
 }
+.pingStats strong { color: var(--text); font-weight: 700; }
+.pingStats_ping { color: var(--accent); }
+.pingStats_avg { color: #ffd86b; }
+.pingStats_pl  { color: #ff9aa2; }
 
-.closeErrorBtn {
-  color: rgb(0, 0, 0);
-  font-weight: bold;
+.startBtn, .stopBtn {
+  margin-top: 8px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
   cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  transition: transform .08s ease, box-shadow .12s ease;
+}
+.startBtn {
+  color: #021020;
+  box-shadow: 0 8px 30px rgba(11, 188, 168, 0.14);
 }
 
-.closeErrorBtn:hover {
-  color: rgba(0, 0, 0, 0.555);
+.startBtn:hover { transform: translateY(-2px); }
+.stopBtn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.06);
+  color: var(--text);
+}
+.stopBtn:hover { background: rgba(255,255,255,0.02); }
+
+/* expanded log overlay */
+.pingLogExpanded {
+  margin-top: 8px;
+  padding: 12px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(10,14,22,0.7), rgba(7,9,14,0.6));
+  border: 1px solid rgba(255,255,255,0.03);
+  max-height: 220px;
+  overflow: auto;
+  color: var(--muted);
+}
+.pingLogExpanded p {
+  margin: 0 0 6px 0;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.01);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
+  font-size: 13px;
+  color: #cbe7ff;
 }
 
-.loading {
-  cursor: progress; 
+/* subtle loading line */
+
+
+/* responsive tweaks */
+@media (max-width: 720px) {
+  .IPinput input { width: 44px; font-size: 13px; padding: 6px 8px; }
+  .pingStats { font-size: 12px; gap: 8px; }
+  .app-icon { width:20px; height:20px; }
 }

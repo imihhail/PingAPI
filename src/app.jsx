@@ -116,51 +116,52 @@ export default function App() {
       
         <div className="content">
             <div id="settingsForm">
-                <div className="inputWrapper">
-                    {Array.from({ length: IP_LENGHT }, (_, y) => (
-                        <div key={y} className="field">
-                            <div className='IPinput'>
-                                {Array.from({ length: 4 }, (_, x) => (
-                                    <React.Fragment key={x}>
-                                        {y == 0 ? <input value={8} readOnly /> :
-                                            <input
-                                                id={`ipPart${y}-${x}`}
-                                                value={ipPartsList[y]?.ip?.[x] ?? ''}
-                                                onChange={(e) => changeIP(y, x, e)}
-                                                onKeyDown={(e) => handleKeys(x, e)}
-                                                type="number"
-                                            />
-                                        }
+                {Array.from({ length: IP_LENGHT }, (_, y) => (
+                    <div key={y} className="field">
+                        <div className='IPinput'>
+                            {Array.from({ length: 4 }, (_, x) => (
+                                <React.Fragment key={x}>
+                                    {y == 0 ? <input value={8} readOnly /> :
+                                        <input
+                                            id={`ipPart${y}-${x}`}
+                                            value={ipPartsList[y]?.ip?.[x] ?? ''}
+                                            onChange={(e) => changeIP(y, x, e)}
+                                            onKeyDown={(e) => handleKeys(x, e)}
+                                            type="number"
+                                        />
+                                    }
 
-                                        {x < 3 && <span className="dot">.</span>}
-                                    </React.Fragment>
-                                ))}
-                            </div>
-                            <div onClick={() => resizeLog(y)} className='pingLog'>
-                                <span>
-                                    {ipPartsList[y].speed?
-                                     `Ping: ${ipPartsList[y].speed}ms 
-                                      Avg: ${ipPartsList[y].avg}ms
-                                      PL: ${ipPartsList[y].packetLoss}%
-                                    `: ipPartsList[y].pingLog[ipPartsList[y].pingLog.length-1]}
-                                </span>
-                            </div>
+                                    {x < 3 && <span className="dot">.</span>}
+                                </React.Fragment>
+                            ))}
                         </div>
-                    ))}
-                </div>
+                        <div onClick={() => resizeLog(y)} className='pingLog'>
+                            <span className="pingStats">
+                            {ipPartsList[y].speed ? (
+                                <>
+                                <span className="pingStats_ping">Ping: <strong>{ipPartsList[y].speed}ms</strong></span>
+                                <span className="pingStats_avg">Avg: <strong>{ipPartsList[y].avg ?? '-'}ms</strong></span>
+                                <span className="pingStats_pl">PL: <strong>{ipPartsList[y].packetLoss ?? '-'}%</strong></span>
+                                </>
+                            ) : (
+                                ipPartsList[y].pingLog[ipPartsList[y].pingLog.length - 1]
+                            )}
+                            </span>
+                        </div>
+                    </div>
+                ))}
                 {isPinging ? <button onClick={stopPing} className="stopBtn">Stop</button>
                              : <button onClick={ping} className="startBtn">Ping</button>
                 }  
                 {selectedIpLog.isExpanded && (
                     <div onClick={resizeLog} className="pingLogExpanded">
-                        {ipPartsList[selectedIpLog.id].pingLog.map((log) =>
-                            <p>{log}</p>
+                        {ipPartsList[selectedIpLog.id].pingLog.map((log, i) =>
+                        <p key={i}>{log}</p>
                         )}
                     </div>
                 )}  
             </div>
         </div>
-      <hr className="loading-line" />
     </div>
   );
 }
