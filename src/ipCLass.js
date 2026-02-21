@@ -14,6 +14,8 @@ export class PingAttributes {
 
     calculatePingStats(std, str) {
         //EXTRACT PING RESPONSE AND PINGSPEED
+        console.log("recieved str: ", str);
+        
         const text       = str.toString();
         const pingOutput = text.split(/\r?\n/)[std];
         const speedArr   = pingOutput.match(/time(?:=|<)\s*([0-9]*\.?[0-9]+)/i);

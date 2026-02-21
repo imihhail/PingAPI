@@ -4,6 +4,7 @@ import started from 'electron-squirrel-startup';
 import { spawn } from 'child_process'
 import Store from 'electron-store';
 import { PingAttributes } from "./ipCLass";
+import readline from 'readline'
 
 const store = new Store();
 const os    = process.platform
@@ -67,7 +68,7 @@ ipcMain.handle('store-delete', (_, key) => store.delete(key));
 
 //RECIEVE INPUT
 ipcMain.handle('startPing', (e, ipListObj) => {
-  let warnId
+  const timoutArr = []
   const ipMap = new Map();
 
   ipListObj.forEach((ip => {
@@ -98,29 +99,41 @@ ipcMain.handle('startPing', (e, ipListObj) => {
     return new Promise((resolve, reject) => {
       const start = performance.now?.() ?? Date.now();
 
-      warnId = setTimeout(() => {
+      const warnId = setTimeout(() => {
         const elapsed = Math.round((performance.now?.() ?? Date.now()) - start);
         console.warn(`Still running after ${elapsed}ms`);
       }, 6000);
-      
-      let ignoreFirstChunk = false
+
+      timoutArr.push(warnId)
       
       const ping = spawn('ping', [[arg], '1', ipList.ip]);
+      ping.stdout.setEncoding('utf8')
+      const rl = readline.createInterface({ input: ping.stdout });
 
-      //ON STD OUTPUT
-      ping.stdout.on('data', pingResp => {
-        if (!ignoreFirstChunk && os != "darwin") {
-          ignoreFirstChunk = true
-          return
-        }
+
+      rl.on('line', (line) => {
+
         
         const ipClass = ipMap.get(ipList.id)
 
-        ipClass.calculatePingStats(stdOS, pingResp)
+        ipClass.calculatePingStats(stdOS, line)
+
+        resolve(ipClass);
+        //rl.close();
+
+      });
+
+
+      //ON STD OUTPUT
+      // ping.stdout.on('data', pingResp => {
         
-        resolve(ipClass)
-        ping.kill()
-      })
+      //   const ipClass = ipMap.get(ipList.id)
+
+      //   ipClass.calculatePingStats(stdOS, pingResp)
+        
+      //   resolve(ipClass)
+      //   ping.kill()
+      // })
 
       //ON STD ERROR
       ping.stderr.on('data', pingResp => {
@@ -143,7 +156,9 @@ ipcMain.handle('startPing', (e, ipListObj) => {
           e.sender.send('ping-data', res);
           setTimeout(loop, 2000);
       }).finally(() =>{
-        console.log(warnId);
+        timoutArr.forEach(id => {
+          clearTimeout(id)
+        });
         
       } );
     }
