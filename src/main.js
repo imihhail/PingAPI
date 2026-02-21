@@ -71,9 +71,7 @@ ipcMain.handle('startPing', (e, ipListObj) => {
   const timoutArr = []
   const ipMap = new Map();
 
-  ipListObj.forEach((ip => {
-    ipMap.set(ip.id, new PingAttributes(ip.id, ip.ip))
-  }))  
+  ipListObj.forEach((ip => ipMap.set(ip.id, new PingAttributes(ip.id, ip.ip))))  
   
   //let connectionFound = false
   let isRunning = true
@@ -96,6 +94,9 @@ ipcMain.handle('startPing', (e, ipListObj) => {
   }
 
   function pingQueue(ipList) {
+    let lineCount = 0
+    const ipClass = ipMap.get(ipList.id)
+
     return new Promise((resolve, reject) => {
       const start = performance.now?.() ?? Date.now();
 
@@ -108,41 +109,26 @@ ipcMain.handle('startPing', (e, ipListObj) => {
       
       const ping = spawn('ping', [[arg], '1', ipList.ip]);
       ping.stdout.setEncoding('utf8')
-      const rl = readline.createInterface({ input: ping.stdout });
-
-
-      rl.on('line', (line) => {
-
-        
-        const ipClass = ipMap.get(ipList.id)
-
-        ipClass.calculatePingStats(stdOS, line)
-
-        resolve(ipClass);
-        //rl.close();
-
-      });
-
+      const rl    = readline.createInterface({ input: ping.stdout });
+      const rlErr = readline.createInterface({ input: ping.stderr });
 
       //ON STD OUTPUT
-      // ping.stdout.on('data', pingResp => {
-        
-      //   const ipClass = ipMap.get(ipList.id)
+      rl.on('line', (line) => {
+        lineCount += 1
 
-      //   ipClass.calculatePingStats(stdOS, pingResp)
-        
-      //   resolve(ipClass)
-      //   ping.kill()
-      // })
+        if (lineCount === 2) {
+          ipClass.calculatePingStats(line)
+          resolve(ipClass);
+          rl.close()
+          ping.kill()
+        }
+      });
 
       //ON STD ERROR
-      ping.stderr.on('data', pingResp => {
-        const pingOutput = regexPing(0, pingResp);
-       // if (connectionFound) totalErr++
-       console.log("FINALLY ERROR");
-       
-        
-        resolve({ id: ipList.id, log: pingOutput })
+      rlErr.on('line', (line) => {
+        ipClass.calculatePingStats(line)
+        resolve(ipClass);
+        rl.close()
         ping.kill()
       })
     })
