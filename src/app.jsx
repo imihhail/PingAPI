@@ -150,9 +150,9 @@ export default function App() {
                         </div>
                     </div>
                 ))}
-                {isPinging ? <button onClick={stopPing} className="stopBtn">Stop</button>
+                {/* {isPinging ? <button onClick={stopPing} className="stopBtn">Stop</button>
                              : <button onClick={ping} className="startBtn">Ping</button>
-                }  
+                }   */}
                 {selectedIpLog.isExpanded && (
                     <div onClick={resizeLog} className="pingLogExpanded">
                         {ipPartsList[selectedIpLog.id].pingLog.map((log, i) =>

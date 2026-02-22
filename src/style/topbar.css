@@ -9,7 +9,7 @@
   user-select: none;
   -webkit-user-select: none;
   -webkit-app-region: drag;
-  border-bottom: 1px solid var(--subtle);
+  /* border-bottom: 1px solid var(--subtle); */
 }
 
 .titlebar-left {
