@@ -1,6 +1,7 @@
 import React from 'react';
 import { useRef, useState, useEffect } from "react";
 import { PingAttributes } from "./ipCLass";
+import { startSpeedTest } from "./speedTest";
 
 
 
@@ -18,7 +19,6 @@ export default function App() {
     )
 
     useEffect(() => {
-        
         async function getData() { 
             const ipData = await window.storeAPI.get('pingList')
             ipData ? setIpPartsList(ipData) : console.error("JSON file missing!");
@@ -62,6 +62,8 @@ export default function App() {
     }
 
     async function ping() {
+        let isSpeedTestRunning = false
+
         await window.storeAPI.set('pingList', ipPartsList)
 
         const ipAddresses = ipPartsList
@@ -71,7 +73,12 @@ export default function App() {
         window.startPig.sendIP(ipAddresses)
         window.startPig.clearPingListeners();
 
-        window.startPig.onPing((pingResp) => { 
+        window.startPig.onPing((pingResp) => {
+            if (!isSpeedTestRunning && pingResp[0].connection) {
+                isSpeedTestRunning = true
+                startSpeedTest() 
+            }
+            
             setIpPartsList(prev => {
                 const copy = prev.slice()             
 
@@ -154,7 +161,7 @@ export default function App() {
                     </div>
                 ))}
                 {isPinging ? <button onClick={stopPing} className="stopBtn">Stop</button>
-                             : <button onClick={() => speedTest()} className="startBtn">Ping</button>
+                             : <button onClick={ping} className="startBtn">Ping</button>
                 }  
                 {selectedIpLog.isExpanded && (
                     <div onClick={resizeLog} className="pingLogExpanded">

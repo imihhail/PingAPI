@@ -1,22 +1,42 @@
-export async function speedTest() {
-    const url = 'https://speed.cloudflare.com/__down?bytes=50000000'; 
+export async function startSpeedTest() {
+    console.log("starting SpeedTest!");
+    
+    const url   = 'https://speed.cloudflare.com/__down?bytes=50000000'; 
     const start = performance.now();
 
-    const res = await fetch(url, { cache: 'no-store' });
-    const reader = res.body.getReader();
+    const res   = await fetch(url, { cache: 'no-store' });
+    if (!res.ok)   throw new Error('HTTP ' + res.status);
+    if (!res.body) throw new Error('ReadableStream not supported in this environment');
+    
+    const reader   = res.body.getReader();
+    let bytes      = 0;
+    let speed_Mbps = null
 
-    let bytes = 0;
+    const speedCheckInterval = setInterval(() => {
+        const endInterval = performance.now()
+        const secInterval  = (endInterval - start) / 1000;
+        const bitInterval  = bytes * 8
+        speed_Mbps         = (bitInterval / secInterval) / (1024 * 1024)
+        console.log(speed_Mbps);
+        
+    }, 250);
 
     while (true) {
         const { done, value } = await reader.read();
-        if (done) break;
-        bytes += value.length;
+        
+        if (done) {
+            clearInterval(speedCheckInterval)
+            break;
+        } 
+        bytes += value.byteLength 
     }
 
-    const end = performance.now();
-    const seconds = (end - start) / 1000;
-    const bits = bytes * 8;
-    const mbps = (bits / seconds) / (1024 * 1024);
 
-    console.log("Download Mbps:", mbps.toFixed(2));
+
+    const end  = performance.now();
+    const sec  = (end - start) / 1000;
+    const bits = bytes * 8
+    speed_Mbps = (bits / sec) / (1024 * 1024);
+    
+    console.log("Download Mbps:", speed_Mbps.toFixed(2));
 }
