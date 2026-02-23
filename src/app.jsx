@@ -3,6 +3,7 @@ import { useRef, useState, useEffect } from "react";
 import { PingAttributes } from "./ipCLass";
 
 
+
 const IP_LENGHT = 5
 
 export default function App() {
@@ -17,11 +18,13 @@ export default function App() {
     )
 
     useEffect(() => {
+        
         async function getData() { 
             const ipData = await window.storeAPI.get('pingList')
             ipData ? setIpPartsList(ipData) : console.error("JSON file missing!");
         }
         getData()
+        
     }, []);
 
     function changeIP(y, x, e) {
@@ -150,9 +153,9 @@ export default function App() {
                         </div>
                     </div>
                 ))}
-                {/* {isPinging ? <button onClick={stopPing} className="stopBtn">Stop</button>
-                             : <button onClick={ping} className="startBtn">Ping</button>
-                }   */}
+                {isPinging ? <button onClick={stopPing} className="stopBtn">Stop</button>
+                             : <button onClick={() => speedTest()} className="startBtn">Ping</button>
+                }  
                 {selectedIpLog.isExpanded && (
                     <div onClick={resizeLog} className="pingLogExpanded">
                         {ipPartsList[selectedIpLog.id].pingLog.map((log, i) =>
