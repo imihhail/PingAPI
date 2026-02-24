@@ -21,7 +21,7 @@ let win
 const createWindow = () => {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 800,
+    width: 1350,
     height: 600,
     frame: false,
     webPreferences: {
@@ -95,6 +95,7 @@ ipcMain.handle('startPing', (e, ipListObj) => {
   function pingQueue(ipList) {
     const ipClass = ipMap.get(ipList.id)
     let lineCount = 0
+    let canceled  = false
     
     return new Promise((resolve, reject) => {
       const ping  = spawn('ping', [[arg], '1', ipList.ip]);
@@ -105,14 +106,24 @@ ipcMain.handle('startPing', (e, ipListObj) => {
       const rl    = readline.createInterface({ input: ping.stdout });
       const rlErr = readline.createInterface({ input: ping.stderr });
 
+      setTimeout(() => {
+        if (canceled) {
+          resolve(ipClass)
+          cleanUp()
+        } else {
+          ipClass.calculatePingStats("Connection timed out.")
+          resolve(ipClass)
+          cleanUp()
+        }
+      }, 2000);
+
       //ON STD OUTPUT
-      rl.on('line', (line) => {
+      rl.on('line', (line) => {        
         lineCount += 1
 
         if (lineCount === stdOS) {
           ipClass.calculatePingStats(line)
-          resolve(ipClass);
-          cleanUp()
+          canceled = true
         }
       })
 
@@ -140,7 +151,7 @@ ipcMain.handle('startPing', (e, ipListObj) => {
      
       Promise.all(pingPromises).then(res => {
           e.sender.send('ping-data', res);
-          setTimeout(loop, 2000);
+          loop()
       })
     }
   })();

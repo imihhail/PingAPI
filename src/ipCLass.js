@@ -38,35 +38,17 @@ export class PingAttributes {
     }
 }
 
-export class GoogleClass extends PingAttributes {
-    id         = 0
-    ip         = ['8', '8', '8', '8']
-    speed_Mbps = null
-    
 
-    async speedTest() {
-        const url = 'https://speed.cloudflare.com/__down?bytes=50000000'; 
-        const start = performance.now();
 
-        const res = await fetch(url, { cache: 'no-store' });
-        const reader = res.body.getReader();
 
-        let bytes = 0;
-
-        while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-            bytes += value.length;
+function name1() {
+    name3()
+    function name2() {
+        function name3() {
+            console.log("name3");
+            
         }
-
-        const end = performance.now();
-        const seconds = (end - start) / 1000;
-        const bits = bytes * 8;
-        const mbps = (bits / seconds) / (1024 * 1024);
-
-        console.log("Download Mbps:", mbps.toFixed(2));
     }
 }
 
-
-
+name1()

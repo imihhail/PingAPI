@@ -60,8 +60,6 @@ body, #root, html {
   border-radius: 3px;
 }
 
-
-
 .IPinput input:focus {
   transform: translateY(-1px);
   border-color: rgba(255, 255, 255, 0.914);
@@ -96,15 +94,13 @@ input[type="number"]::-webkit-inner-spin-button {
 .IPinput input, .pingLog {
   border: none;
   border-bottom: 1px solid transparent;
-  background-image: linear-gradient(90deg, rgba(131, 90, 36, 0.705) 20% , hsla(46, 93%, 35%, 0.873) 100% );
+  background-image: linear-gradient(90deg, #00d1b2 20% , #00d1b2 100% );
   background-repeat: no-repeat;
   background-position: left bottom;
   background-size: 200% 1px;
   transition: background-position .5s linear, background-size .28s ease;
   background-position: 0% bottom;
 }
-
-
 
 /* ping stats container */
 .pingStats {
@@ -121,6 +117,10 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 .pingStats strong { color: var(--text); font-weight: 700; }
 
+.pingStats_ping, .pingStats_avg{
+  width: 75px;
+}
+.pingStats_pl {width: 62px;}
 
 .startBtn, .stopBtn {
   margin-top: 8px;
@@ -156,6 +156,7 @@ input[type="number"]::-webkit-inner-spin-button {
   overflow: auto;
   color: var(--muted);
 }
+
 .pingLogExpanded p {
   margin: 0 0 6px 0;
   padding: 6px 8px;
@@ -166,10 +167,6 @@ input[type="number"]::-webkit-inner-spin-button {
   color: #cbe7ff;
 }
 
-/* subtle loading line */
-
-
-/* responsive tweaks */
 @media (max-width: 720px) {
   .IPinput input { width: 44px; font-size: 13px; padding: 6px 8px; }
   .pingStats { font-size: 12px; gap: 8px; }

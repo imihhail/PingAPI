@@ -4,11 +4,12 @@ import { PingAttributes } from "./ipCLass";
 import { startSpeedTest } from "./speedTest";
 
 
-
 const IP_LENGHT = 5
 
 export default function App() {
-    const [isPinging, setIsPinging] = useState(false)
+    const controllerRef = useRef(null)
+    const [isPinging, setIsPinging]   = useState(false)
+    const [speed_Mbps, setSpeed_Mbps] = useState("")
     const [selectedIpLog, setSelectedIpLog] = useState({id: null, isExpanded: false});
     const [ipPartsList, setIpPartsList] = useState(
         Array.from({ length: IP_LENGHT }, (_, y) =>
@@ -23,8 +24,8 @@ export default function App() {
             const ipData = await window.storeAPI.get('pingList')
             ipData ? setIpPartsList(ipData) : console.error("JSON file missing!");
         }
+
         getData()
-        
     }, []);
 
     function changeIP(y, x, e) {
@@ -57,7 +58,7 @@ export default function App() {
     }
 
     async function saveAndExit() {
-        await window.storeAPI.set('pingList', ipPartsList)
+        await window.storeAPI.set('pingList', ipPartsList.map(({id, ip}) => ({ id, ip })));
         window.winapi.close()
     }
 
@@ -73,10 +74,13 @@ export default function App() {
         window.startPig.sendIP(ipAddresses)
         window.startPig.clearPingListeners();
 
-        window.startPig.onPing((pingResp) => {
+        window.startPig.onPing(pingResp => {
+            console.log(pingResp);
+            
             if (!isSpeedTestRunning && pingResp[0].connection) {
-                isSpeedTestRunning = true
-                startSpeedTest() 
+                isSpeedTestRunning    = true
+                //const controller      = startSpeedTest(setSpeed_Mbps)
+                //controllerRef.current = controller
             }
             
             setIpPartsList(prev => {
@@ -97,6 +101,7 @@ export default function App() {
     }
 
     function stopPing() {
+        controllerRef.current?.abort();
         setIsPinging(false)
         window.startPig.stopPing()
         window.startPig.clearPingListeners();
@@ -147,15 +152,16 @@ export default function App() {
                         </div>
                         <div onClick={() => resizeLog(y)} className='pingLog'>
                             <span className="pingStats">
-                            {ipPartsList[y].speed ? (
-                                <>
-                                <span className="pingStats_ping">Ping: <strong>{ipPartsList[y].speed}ms</strong></span>
-                                <span className="pingStats_avg">Avg: <strong>{ipPartsList[y].avg ?? '-'}ms</strong></span>
-                                <span className="pingStats_pl">PL: <strong>{ipPartsList[y].packetLoss ?? '-'}%</strong></span>
-                                </>
-                            ) : (
-                                ipPartsList[y].pingLog[ipPartsList[y].pingLog.length - 1]
-                            )}
+                                {ipPartsList[y].speed ? (
+                                    <>
+                                    <span className="pingStats_ping">Ping: <strong>{ipPartsList[y].speed}ms</strong></span>
+                                    <span className="pingStats_avg">Avg: <strong>{ipPartsList[y].avg ?? '-'}ms</strong></span>
+                                    <span className="pingStats_pl">PL: <strong>{ipPartsList[y].packetLoss ?? '-'}%</strong></span>
+                                    {ipPartsList[y] == ipPartsList[0] && (<span className="pingStats_pl">Download speed: <strong>{speed_Mbps}Mbps</strong></span>)}
+                                    </>
+                                ) : (
+                                    ipPartsList[y].pingLog ? ipPartsList[y].pingLog[ipPartsList[y].pingLog.length - 1] : ""
+                                )}
                             </span>
                         </div>
                     </div>
