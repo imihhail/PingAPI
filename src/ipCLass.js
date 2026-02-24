@@ -40,15 +40,3 @@ export class PingAttributes {
 
 
 
-
-function name1() {
-    name3()
-    function name2() {
-        function name3() {
-            console.log("name3");
-            
-        }
-    }
-}
-
-name1()
