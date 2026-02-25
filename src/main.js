@@ -70,17 +70,15 @@ ipcMain.handle('store-delete', (_, key) => store.delete(key));
 ipcMain.handle('startPing', (e, ipListObj) => {
   const ipMap      = new Map()
   let pingPromises = []
-  let pingDelayArr = []
   let isRunning    = true
 
-  ipListObj.forEach((ip => ipMap.set(ip.id, new PingAttributes(ip.id, ip.ip))))  
+  ipListObj.forEach((ip => ipMap.set(ip.id, new PingAttributes(ip.id, ip.ip)))) 
   
   //STOP PING
-  ipcMain.once('stopPing', (e) => {    
+  ipcMain.once('stopPing', (e) => {  
+    ipMap.clear()  
     isRunning = false
     e.sender.delete();    
-    //pingDelayArr.forEach(id => clearTimeout(id))
-    //pingDelayArr = []
   });
 
   //START PING
@@ -97,7 +95,7 @@ ipcMain.handle('startPing', (e, ipListObj) => {
   function pingQueue(ipList) {
     const ipClass = ipMap.get(ipList.id)
     let lineCount = 0
-    let canceled  = false
+    let stdResponded  = false
     
     return new Promise((resolve, reject) => {
       const ping  = spawn('ping', [[arg], '1', ipList.ip]);
@@ -108,27 +106,18 @@ ipcMain.handle('startPing', (e, ipListObj) => {
       const rl    = readline.createInterface({ input: ping.stdout });
       const rlErr = readline.createInterface({ input: ping.stderr });
 
-      const pingDelay = setTimeout(() => {
+      setTimeout(() => {
         if (!isRunning) {
-          console.log("stop is cleaning");
-          
           cleanUp()
-          reject()
-        } else if (canceled){
-          console.log("canceled");
-          
+        } else if (stdResponded){
           resolve(ipClass)
           cleanUp()
         } else {
-          console.log("bad ip canceled");
-          
           ipClass.calculatePingStats("Connection timed out.")
           resolve(ipClass)
           cleanUp()
         }
       }, 2000);
-      
-      //pingDelayArr.push(pingDelay)
 
       //ON STD OUTPUT
       rl.on('line', (line) => {
@@ -136,15 +125,14 @@ ipcMain.handle('startPing', (e, ipListObj) => {
 
         if (lineCount === stdOS) {
           ipClass.calculatePingStats(line)
-          canceled = true
+          stdResponded = true
         }
       })
 
       //ON STD ERROR
       rlErr.on('line', (line) => {
+        stdResponded = true
         ipClass.calculatePingStats(line)
-        resolve(ipClass);
-        cleanUp()
       })
 
       function cleanUp() {

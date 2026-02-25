@@ -65,7 +65,7 @@ export default function App() {
     async function ping() {
         let isSpeedTestRunning = false
 
-        await window.storeAPI.set('pingList', ipPartsList)
+        await window.storeAPI.set('pingList', ipPartsList.map(({id, ip}) => ({ id, ip })));
 
         const ipAddresses = ipPartsList
         .map(item => (item.ip.some(o => o === "") ? null : {...item, ip: item.ip.join(".") }))

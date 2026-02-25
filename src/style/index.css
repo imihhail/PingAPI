@@ -102,6 +102,24 @@ input[type="number"]::-webkit-inner-spin-button {
   background-position: 0% bottom;
 }
 
+
+#settingsForms > .field:first-child .pingLog {
+  border: none;
+  border-bottom: 2px solid transparent;
+  background-image: linear-gradient(90deg, #72ff7e 0%, #00d4ff 50%, #72ff7e 100%);
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: 200% 1px;
+  transition: background-position .5s linear, background-size .28s ease;
+  background-position: 0% bottom;
+}
+
+#settingsForms > .field:first-child .pingLog:hover {
+  outline: none;
+  background-position: 100% bottom; /* slide gradient */
+  background-size: 200% 2px;
+}
+
 /* ping stats container */
 .pingStats {
   display:flex;
@@ -124,8 +142,9 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .startBtn, .stopBtn {
   margin-top: 8px;
+  margin-left: 10px;
   padding: 8px 14px;
-  border-radius: 8px;
+  border-radius: 3px;
   border: none;
   cursor: pointer;
   font-weight: 600;
@@ -133,7 +152,8 @@ input[type="number"]::-webkit-inner-spin-button {
   transition: transform .08s ease, box-shadow .12s ease;
 }
 .startBtn {
-  color: #021020;
+  background-color: rgb(255, 255, 255);
+  color: #000000;
   box-shadow: 0 8px 30px rgba(11, 188, 168, 0.14);
 }
 
