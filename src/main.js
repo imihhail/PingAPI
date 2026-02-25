@@ -76,17 +76,11 @@ ipcMain.handle('startPing', (e, ipListObj) => {
   ipListObj.forEach((ip => ipMap.set(ip.id, new PingAttributes(ip.id, ip.ip))))  
   
   //STOP PING
-  ipcMain.once('stopPing', (e) => {
+  ipcMain.once('stopPing', (e) => {    
     isRunning = false
-    e.sender.delete();
-    console.log("STOPPING");
-    
-    pingDelayArr.forEach(id => {
-      console.log("id: ", id);
-      
-      clearTimeout(id)
-    } )
-    pingDelayArr = []
+    e.sender.delete();    
+    //pingDelayArr.forEach(id => clearTimeout(id))
+    //pingDelayArr = []
   });
 
   //START PING
@@ -114,21 +108,27 @@ ipcMain.handle('startPing', (e, ipListObj) => {
       const rl    = readline.createInterface({ input: ping.stdout });
       const rlErr = readline.createInterface({ input: ping.stderr });
 
-      let pingDelay = setTimeout(() => {
-        if (canceled) {
-          console.log("hold up");
+      const pingDelay = setTimeout(() => {
+        if (!isRunning) {
+          console.log("stop is cleaning");
+          
+          cleanUp()
+          reject()
+        } else if (canceled){
+          console.log("canceled");
           
           resolve(ipClass)
           cleanUp()
         } else {
-                    console.log("hold up2");
+          console.log("bad ip canceled");
+          
           ipClass.calculatePingStats("Connection timed out.")
           resolve(ipClass)
           cleanUp()
         }
       }, 2000);
-
-      pingDelayArr.push(pingDelay)
+      
+      //pingDelayArr.push(pingDelay)
 
       //ON STD OUTPUT
       rl.on('line', (line) => {
@@ -163,9 +163,10 @@ ipcMain.handle('startPing', (e, ipListObj) => {
       startPing();
      
       Promise.all(pingPromises).then(res => {
+          //pingDelayArr = []
           e.sender.send('ping-data', res);
           loop()
-      })
+      }).catch("Errpr from ping promises: ", e)
     }
   })();
 });
