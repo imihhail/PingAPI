@@ -71,6 +71,7 @@ export default function App() {
         .map(item => (item.ip.some(o => o === "") ? null : {...item, ip: item.ip.join(".") }))
         .filter(Boolean); // removes null/undefined/empty
 
+
         window.startPig.sendIP(ipAddresses)
         window.startPig.clearPingListeners();
 
@@ -108,21 +109,23 @@ export default function App() {
     }
 
     function resizeLog(y) {
-        setSelectedIpLog(prev => ({
-            id: y,
-            isExpanded: !prev.isExpanded
-        }));
+        if (ipPartsList[y].pingLog) {
+            setSelectedIpLog(prev => ({
+                id: y,
+                isExpanded: !prev.isExpanded
+            }));
+        }
     }
 
 
   return (
     <div>
         <header className="titlebar">
-<button id="menuBtn" className="hamburger-btn" aria-expanded="false" aria-label="Open menu">
-  <span className="line"></span>
-  <span className="line"></span>
-  <span className="line"></span>
-</button>
+            <button id="menuBtn" className="hamburger-btn" aria-expanded="false" aria-label="Open menu">
+            <span className="line"></span>
+            <span className="line"></span>
+            <span className="line"></span>
+            </button>
 
             <div className="titlebar-right">
                 <button onClick={() => window.winapi.minimize()} id="minBtn" className="win-btn" title="Minimize">—</button>
@@ -132,6 +135,10 @@ export default function App() {
         </header>
       
         <div className="content">
+            <div className='addIps'>
+                <span>+</span>
+                <span>-</span>
+            </div>
             <div id="settingsForm">
                 {Array.from({ length: IP_LENGHT }, (_, y) => (
                     <div key={y} className="field">
@@ -173,8 +180,8 @@ export default function App() {
                 }  
                 {selectedIpLog.isExpanded && (
                     <div onClick={resizeLog} className="pingLogExpanded">
-                        {ipPartsList[selectedIpLog.id].pingLog.map((log, i) =>
-                        <p key={i}>{log}</p>
+                        {ipPartsList[selectedIpLog.id].pingLog?.map((log, i) =>
+                            <p key={i}>{log}</p>
                         )}
                     </div>
                 )}  
