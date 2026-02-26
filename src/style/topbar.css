@@ -39,3 +39,50 @@
 
 .win-btn.close { color: #f84040; }
 .win-btn.close:hover { background: rgba(255, 107, 107, 0.397); }
+
+:root{
+  --size: 40px;          /* button size */
+  --thickness: 3px;      /* line thickness */
+  --gap: 8px;            /* gap between lines */
+  --color: #111;
+  --transition: 0.28s cubic-bezier(.4,.0,.2,1);
+}
+.hamburger-btn{
+  --size: 27px;
+  --thick: 1px;
+  --gap: 3px;
+  --color: #efe5e5;
+  width: var(--size);
+  height: var(--size);
+  display: inline-grid;
+  place-items: center;
+  padding: 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+.hamburger-btn:focus{ outline: 3px solid rgba(0,0,0,0.12); outline-offset: 3px; border-radius: 6px; }
+
+.line{
+  display: block;
+  width: calc(var(--size) * 0.55);
+  height: var(--thick);
+  background: var(--color);
+  border-radius: 99px;
+  transition: transform 240ms cubic-bezier(.4,0,.2,1), opacity 240ms;
+  position: relative;
+}
+.line + .line{ margin-top: var(--gap); }
+
+/* when the button has attribute data-open="true" -> morph to X */
+/* .hamburger-btn[data-open="true"] .line:nth-child(1){
+  transform: translateY(calc(var(--gap) + var(--thick))) rotate(45deg);
+}
+.hamburger-btn[data-open="true"] .line:nth-child(2){
+  opacity: 0;
+  transform: scaleX(0.8);
+}
+.hamburger-btn[data-open="true"] .line:nth-child(3){
+  transform: translateY(calc(-1 * (var(--gap) + var(--thick)))) rotate(-45deg);
+} */
+

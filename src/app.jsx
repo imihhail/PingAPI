@@ -118,9 +118,11 @@ export default function App() {
   return (
     <div>
         <header className="titlebar">
-            <div className="titlebar-left">
-                <div className="app-icon"></div>
-            </div>
+<button id="menuBtn" className="hamburger-btn" aria-expanded="false" aria-label="Open menu">
+  <span className="line"></span>
+  <span className="line"></span>
+  <span className="line"></span>
+</button>
 
             <div className="titlebar-right">
                 <button onClick={() => window.winapi.minimize()} id="minBtn" className="win-btn" title="Minimize">—</button>
