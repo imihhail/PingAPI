@@ -14,46 +14,75 @@
 
 body, #root, html {
   height: 100%;
-  background: linear-gradient(45deg,black 0%, rgba(0, 0, 0, 0.499) 50%);
+  background: radial-gradient(circle 700px at 0% 100%, #1c3138 0%, #050505 70%);
+  background-repeat: no-repeat;
+
   margin: 0;
   color: var(--text);
   overflow: hidden;
 }
 
 .content {
-  padding: 18px;
-  max-width: 980px;
+  padding: 0px;
   margin: 10px auto;
+  display: flex;
 }
 
-.addIps{
-  font-size: 20px;
+.sideBar {  
+  background-color: #272727;
+  width: 0px;
+  height: 100vh;
+  transition: 0.3s ease;
+}
+
+.topSection{
+  display: flex;
+  justify-content: space-between;
+  margin: 0px 10px;
+  color: rgb(255, 255, 255);
+}
+
+.addIP_buttons {
+  font-size: 17px;
   font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   font-weight: bolder;
   display: flex;
-  margin: 0px 10px;
-  gap: 15px;
-  color: rgb(255, 255, 255);
+  gap: 9px;
   width: fit-content;
 }
 
-.addIps span{
+.addIP_buttons span{
+  border: #7c7c7c solid 1px;
+  text-align: center;
   cursor: pointer;
+  background: #2a2a2a;
+  line-height:15px;
+  width: 15px;
+  padding: 7px;
+  border-radius: 3px;
+  margin-bottom: 10px;
 }
 
 #settingsForm {
+  flex: 1;                      /* occupy remaining width */
+  display: flex;
+  flex-direction: column;
   gap: 20px;
+  min-width: 0;
+  padding: 0px 40px;                 /* allow children to shrink properly */
 }
 
+/* Each row should fill the width of the settings area */
 .field {
   display: flex;
   align-items: center;
   gap: 52px;
-  padding: 10px;
+  padding: 10px 0px;
   margin-bottom: 10px;
+  width: 100%;                  /* make row use full width of #settingsForm */
+  min-width: 0;                 /* IMPORTANT to allow children to shrink */
 }
 
-/* IP input group */
 .IPinput {
   display: inline-flex;
   gap: 6px;
@@ -145,7 +174,6 @@ input[type="number"]::-webkit-inner-spin-button {
   text-overflow: ellipsis;
   font-size: 13px;
   color: var(--muted);
-  
 }
 .pingStats strong { color: var(--text); font-weight: 700; }
 
@@ -156,7 +184,6 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .startBtn, .stopBtn {
   margin-top: 20px;
-  margin-left: 10px;
   padding: 8px 14px;
   border-radius: 3px;
   width: 70px;
@@ -166,13 +193,15 @@ input[type="number"]::-webkit-inner-spin-button {
   letter-spacing: 0.2px;
   transition: transform .08s ease, box-shadow .12s ease;
 }
+
 .startBtn {
-  background-color: rgba(255, 255, 255, 0.965);
+  background-color: rgba(225, 225, 225, 0.965);
   color: #000000;
   box-shadow: 0 8px 30px rgba(11, 188, 168, 0.14);
 }
 
 .startBtn:hover { transform: translateY(-2px); }
+
 .stopBtn {
   background: transparent;
   border: 1px solid rgba(255,255,255,0.06);

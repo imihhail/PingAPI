@@ -68,6 +68,7 @@ ipcMain.handle('store-delete', (_, key) => store.delete(key));
 
 //RECIEVE INPUT
 ipcMain.handle('startPing', (e, ipListObj) => {
+  win.setSize(1350, 900)
   const ipMap      = new Map()
   let pingPromises = []
   let isRunning    = true

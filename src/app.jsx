@@ -2,6 +2,8 @@ import React from 'react';
 import { useRef, useState, useEffect } from "react";
 import { PingAttributes } from "./ipCLass";
 import { startSpeedTest } from "./speedTest";
+import PingLocation from "./location";
+
 
 
 export default function App() {
@@ -22,8 +24,12 @@ export default function App() {
         (async function getData() {
             const ipData = await window.storeAPI.get('pingList')
 
-            ipData && setIP_LENGHT(ipData.length)
-            ipData ? setIpPartsList(ipData) : console.error("JSON file missing!");
+            if (ipData) {
+                setIP_LENGHT(ipData.length)
+                setIpPartsList(ipData)
+            } else {
+                console.error("JSON file missing!")
+            }
         })()
     }, []);
 
@@ -117,22 +123,28 @@ export default function App() {
     }
 
     function addIP() {
-        setIP_LENGHT(prev => prev + 1)
-        ipPartsList.push(new PingAttributes(ipPartsList.length, ["", "", "", ""]))
-        console.log(ipPartsList);
-        
+        if (ipPartsList.length < 7) {
+            setIP_LENGHT(prev => prev + 1)
+            ipPartsList.push(new PingAttributes(ipPartsList.length, ["", "", "", ""]))
+        }
     }
 
     function removeIP() {
-        setIP_LENGHT(prev => prev - 1)
-        ipPartsList.pop()
+        if (ipPartsList.length > 1) {
+            setIP_LENGHT(prev => prev - 1)
+            ipPartsList.pop()
+        }
+    }
+
+    function openSideMenu(params) {
+        
     }
 
 
   return (
     <div>
         <header className="titlebar">
-            <button id="menuBtn" className="hamburger-btn" aria-expanded="false" aria-label="Open menu">
+            <button id="menuBtn" onClick={openSideMenu} className="hamburger-btn" aria-expanded="false" aria-label="Open menu">
                 <span className="line"></span>
                 <span className="line"></span>
                 <span className="line"></span>
@@ -146,10 +158,16 @@ export default function App() {
         </header>
       
         <div className="content">
-            <div className='addIps'>
-                <span onClick={addIP}>+</span>
-                <span onClick={removeIP} >-</span>
+            <div className='sideBar'>
+
             </div>
+            {/* <div className='topSection'>
+                <div className='addIP_buttons'>
+                    <span onClick={addIP}>+</span>
+                    <span onClick={removeIP} >-</span>
+                </div>
+                <PingLocation/>
+            </div> */}
             <div id="settingsForm">
                 {Array.from({ length: IP_LENGHT }, (_, y) => (
                     <div key={y} className="field">

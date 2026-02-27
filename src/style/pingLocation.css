@@ -1,0 +1,18 @@
+.dropdown-wrapper {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.dropdown {
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  background: #e4e4e4;
+  cursor: pointer;
+  outline: none;
+  transition: border 0.15s ease, box-shadow 0.15s ease;
+}
+
+.dropdown:focus {
+  border-color: #a7a7a7;
+  /* box-shadow: 0 0 0 3px rgba(224, 224, 224, 0.837); */
+}
