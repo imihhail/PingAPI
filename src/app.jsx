@@ -4,10 +4,9 @@ import { PingAttributes } from "./ipCLass";
 import { startSpeedTest } from "./speedTest";
 
 
-const IP_LENGHT = 5
-
 export default function App() {
     const controllerRef = useRef(null)
+    const [IP_LENGHT, setIP_LENGHT]   = useState(5)
     const [isPinging, setIsPinging]   = useState(false)
     const [speed_Mbps, setSpeed_Mbps] = useState("")
     const [selectedIpLog, setSelectedIpLog] = useState({id: null, isExpanded: false});
@@ -20,12 +19,12 @@ export default function App() {
     )
 
     useEffect(() => {
-        async function getData() { 
+        (async function getData() {
             const ipData = await window.storeAPI.get('pingList')
-            ipData ? setIpPartsList(ipData) : console.error("JSON file missing!");
-        }
 
-        getData()
+            ipData && setIP_LENGHT(ipData.length)
+            ipData ? setIpPartsList(ipData) : console.error("JSON file missing!");
+        })()
     }, []);
 
     function changeIP(y, x, e) {
@@ -117,14 +116,26 @@ export default function App() {
         }
     }
 
+    function addIP() {
+        setIP_LENGHT(prev => prev + 1)
+        ipPartsList.push(new PingAttributes(ipPartsList.length, ["", "", "", ""]))
+        console.log(ipPartsList);
+        
+    }
+
+    function removeIP() {
+        setIP_LENGHT(prev => prev - 1)
+        ipPartsList.pop()
+    }
+
 
   return (
     <div>
         <header className="titlebar">
             <button id="menuBtn" className="hamburger-btn" aria-expanded="false" aria-label="Open menu">
-            <span className="line"></span>
-            <span className="line"></span>
-            <span className="line"></span>
+                <span className="line"></span>
+                <span className="line"></span>
+                <span className="line"></span>
             </button>
 
             <div className="titlebar-right">
@@ -136,8 +147,8 @@ export default function App() {
       
         <div className="content">
             <div className='addIps'>
-                <span>+</span>
-                <span>-</span>
+                <span onClick={addIP}>+</span>
+                <span onClick={removeIP} >-</span>
             </div>
             <div id="settingsForm">
                 {Array.from({ length: IP_LENGHT }, (_, y) => (
