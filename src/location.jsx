@@ -2,20 +2,22 @@ import { useState } from "react";
 import React from 'react';
 
 function PingLocation() {
-  const [value, setValue] = useState("");
+  const locations = ["Location I", "Location II", "Location III"];
+  const [currentLoc, setCurrentLoc] = useState(locations[0]);
+
+  function scrollLeft() {
+    
+  }
+
+  function scrollRight() {
+    setCurrentLoc(locations[1])
+  }
 
   return (
     <div className="dropdown-wrapper">
-        <select
-            className="dropdown"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-        >
-            <option value="" disabled>Select location</option>
-            <option value="Loc1">Location 1</option>
-            <option value="Loc2">Location 2</option>
-            <option value="Loc3">Location 3</option>
-        </select>
+      <span onClick={scrollLeft}>&lt;</span>
+      <span>{currentLoc}</span>
+      <span onClick={scrollRight}>&gt;</span>
     </div>
   );
 }

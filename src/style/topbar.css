@@ -8,7 +8,12 @@
   user-select: none;
   -webkit-user-select: none;
   -webkit-app-region: drag;
+  align-items: center;
   border-bottom: 1px solid var(--subtle);
+}
+
+.pingLocation {
+  font-size: 12px;
 }
 
 .titlebar-right { display:flex; gap:6px; align-items:center; }

@@ -15,7 +15,7 @@
 
 body, #root, html {
   height: 100%;
-  background: radial-gradient(circle 700px at 0% 100%, #1c3138 0%, #050505 70%);
+  background: radial-gradient(circle 700px at 0% 100%, #151515 0%, rgb(19, 19, 19) 70%);
   background-repeat: no-repeat;
   margin: 0;
   color: var(--text);
@@ -87,16 +87,21 @@ body, #root, html {
   padding: 0px 30px;    
             
 }
-.test {
-  border: solid 1px green;
+.ipsBorder {
+  border: 1px solid var(--subtle);
+  border-radius: 7px;
+  padding: 22px 22px;
+  background-color: #000000;
+      box-shadow: -3px -3px 2px rgba(46, 46, 46, 0.311),
+    5px 5px 5px rgba(0, 0, 0, 0.211),
+    10px 10px 10px rgba(0, 0, 0, 0.211);
 }
 
 .field {
   display: flex;
   align-items: center;
   gap: 52px;
-  padding: 10px 0px;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
   width: 100%;                
   min-width: 0;               
 }
@@ -108,7 +113,6 @@ body, #root, html {
   flex: 0 0 auto;
 }
 
-/* each octet input */
 .IPinput input {
   width: 50px;
   padding: 6px 10px;
@@ -176,11 +180,11 @@ input[type="number"]::-webkit-inner-spin-button {
 
 #settingsForms > .field:first-child .pingLog:hover {
   outline: none;
-  background-position: 100% bottom; /* slide gradient */
+  background-position: 100% bottom; 
   background-size: 200% 2px;
 }
 
-/* ping stats container */
+
 .pingStats {
   display:flex;
   gap: 12px;
@@ -192,6 +196,7 @@ input[type="number"]::-webkit-inner-spin-button {
   font-size: 13px;
   color: var(--muted);
 }
+
 .pingStats strong { color: var(--text); font-weight: 700; }
 
 .pingStats_ping, .pingStats_avg{
@@ -209,22 +214,20 @@ input[type="number"]::-webkit-inner-spin-button {
   font-weight: 600;
   letter-spacing: 0.2px;
   transition: transform .08s ease, box-shadow .12s ease;
+  color: #ffffff;
 }
 
 .startBtn {
-  background-color: rgba(225, 225, 225, 0.965);
-  color: #000000;
-  box-shadow: 0 8px 30px rgba(11, 188, 168, 0.14);
+  background-color: hsl(135, 43%, 50%);
+  box-shadow: 0 0 6px hsla(135, 98%, 50%, 0.928);
 }
 
 .startBtn:hover { transform: translateY(-2px); }
 
 .stopBtn {
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.06);
-  color: var(--text);
+  background-color: #d15400;
 }
-.stopBtn:hover { background: rgba(255,255,255,0.02); }
+
 
 /* expanded log overlay */
 .pingLogExpanded {

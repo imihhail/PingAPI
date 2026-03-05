@@ -150,6 +150,8 @@ export default function App() {
                 <span className="line"></span>
             </button>
 
+            <span className='pingLocation'>Location I</span>
+
             <div className="titlebar-right">
                 <button onClick={() => window.winapi.minimize()} id="minBtn" className="win-btn" title="Minimize">—</button>
                 <button id="maxBtn" className="win-btn" title="Maximize" disabled>▢</button>
@@ -169,7 +171,7 @@ export default function App() {
             </div>
 
             <div id="settingsForm">
-                <div className='test'>
+                <div className='ipsBorder'>
                 {Array.from({ length: IP_LENGHT }, (_, y) => (
                     <div key={y} className="field">
                         <div className='IPinput'>
