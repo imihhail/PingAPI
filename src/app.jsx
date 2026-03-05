@@ -10,6 +10,7 @@ export default function App() {
     const controllerRef = useRef(null)
     const [IP_LENGHT, setIP_LENGHT]   = useState(5)
     const [isPinging, setIsPinging]   = useState(false)
+    const [sideBarOpened, setSideBarOpened]  = useState(false)
     const [speed_Mbps, setSpeed_Mbps] = useState("")
     const [selectedIpLog, setSelectedIpLog] = useState({id: null, isExpanded: false});
     const [ipPartsList, setIpPartsList] = useState(
@@ -76,7 +77,6 @@ export default function App() {
         .map(item => (item.ip.some(o => o === "") ? null : {...item, ip: item.ip.join(".") }))
         .filter(Boolean); // removes null/undefined/empty
 
-
         window.startPig.sendIP(ipAddresses)
         window.startPig.clearPingListeners();
 
@@ -85,8 +85,8 @@ export default function App() {
             
             if (!isSpeedTestRunning && pingResp[0].connection) {
                 isSpeedTestRunning    = true
-                //const controller      = startSpeedTest(setSpeed_Mbps)
-                //controllerRef.current = controller
+                const controller      = startSpeedTest(setSpeed_Mbps)
+                controllerRef.current = controller
             }
             
             setIpPartsList(prev => {
@@ -136,8 +136,8 @@ export default function App() {
         }
     }
 
-    function openSideMenu(params) {
-        
+    function openSideMenu() {
+        setSideBarOpened(prev => !prev);
     }
 
 
@@ -158,16 +158,16 @@ export default function App() {
         </header>
       
         <div className="content">
-            <div className='sideBar'>
-
-            </div>
-            {/* <div className='topSection'>
-                <div className='addIP_buttons'>
-                    <span onClick={addIP}>+</span>
-                    <span onClick={removeIP} >-</span>
+            <div className={`sideBar ${sideBarOpened ? 'opened' : ''}`}>
+                <div className='topSection'>
+                    <div className='addIP_buttons'>
+                        <span onClick={addIP}>+</span>
+                        <span onClick={removeIP} >-</span>
+                    </div>
+                    <PingLocation/>
                 </div>
-                <PingLocation/>
-            </div> */}
+            </div>
+
             <div id="settingsForm">
                 {Array.from({ length: IP_LENGHT }, (_, y) => (
                     <div key={y} className="field">

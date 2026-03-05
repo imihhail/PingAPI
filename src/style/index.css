@@ -1,8 +1,8 @@
 :root{
-  --bg: #0f172496;            /* dark background */
-  --panel: #0b122073;         /* inner panels */
+  --bg: #0f172496;           
+  --panel: #0b122073;     
   --muted: #9aa4b2;
-    --accent: #00d1b2;        /* teal accent for ping fast */
+  --accent: #00d1b2;       
   --danger: #ff6b6b;
   --glass: rgba(255, 255, 255, 0.244);
   --glass-2: rgba(255, 255, 255, 0.323);
@@ -10,34 +10,47 @@
   --subtle: rgba(230, 238, 246, 0.172);
   --radius: 8px;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  
 }
 
 body, #root, html {
   height: 100%;
   background: radial-gradient(circle 700px at 0% 100%, #1c3138 0%, #050505 70%);
   background-repeat: no-repeat;
-
   margin: 0;
   color: var(--text);
   overflow: hidden;
+  
 }
 
 .content {
   padding: 0px;
-  margin: 10px auto;
+  margin: 1px auto;
   display: flex;
 }
 
-.sideBar {  
-  background-color: #272727;
-  width: 0px;
+.sideBar {
+  background-color: rgb(17, 17, 17);
+  padding: 10px 0px;
+  width: 0;
   height: 100vh;
-  transition: 0.3s ease;
+  transition: width 0.3s ease;
+  overflow: hidden;     
+  box-sizing: border-box;
+  border-top-right-radius: 3px;
+  pointer-events: none;
+
+}
+
+.sideBar.opened {
+  width: 150px;
+  pointer-events: auto;
+  border-right: 1px solid var(--subtle);
+  border-top: 1px solid var(--subtle);
 }
 
 .topSection{
-  display: flex;
-  justify-content: space-between;
+  position: relative; 
   margin: 0px 10px;
   color: rgb(255, 255, 255);
 }
@@ -64,23 +77,25 @@ body, #root, html {
 }
 
 #settingsForm {
-  flex: 1;                      /* occupy remaining width */
+  margin-top: 20px;
+  flex: 1;          
   display: flex;
   flex-direction: column;
   gap: 20px;
   min-width: 0;
-  padding: 0px 40px;                 /* allow children to shrink properly */
+  width: 400px;
+  padding: 0px 30px;    
+            
 }
 
-/* Each row should fill the width of the settings area */
 .field {
   display: flex;
   align-items: center;
   gap: 52px;
   padding: 10px 0px;
   margin-bottom: 10px;
-  width: 100%;                  /* make row use full width of #settingsForm */
-  min-width: 0;                 /* IMPORTANT to allow children to shrink */
+  width: 100%;                
+  min-width: 0;               
 }
 
 .IPinput {
@@ -120,7 +135,6 @@ input[type="number"]::-webkit-inner-spin-button {
   margin: 0 4px;
 }
 
-/* Ping log preview area inside row */
 .pingLog {
   display:flex;
   align-items:center;
@@ -183,7 +197,7 @@ input[type="number"]::-webkit-inner-spin-button {
 .pingStats_pl {width: 62px;}
 
 .startBtn, .stopBtn {
-  margin-top: 20px;
+  margin-top: 5px;
   padding: 8px 14px;
   border-radius: 3px;
   width: 70px;
