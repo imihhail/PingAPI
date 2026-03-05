@@ -169,6 +169,7 @@ export default function App() {
             </div>
 
             <div id="settingsForm">
+                <div className='test'>
                 {Array.from({ length: IP_LENGHT }, (_, y) => (
                     <div key={y} className="field">
                         <div className='IPinput'>
@@ -213,7 +214,8 @@ export default function App() {
                             <p key={i}>{log}</p>
                         )}
                     </div>
-                )}  
+                )} 
+                </div> 
             </div>
         </div>
     </div>
