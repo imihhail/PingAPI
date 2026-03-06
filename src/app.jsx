@@ -2,7 +2,8 @@ import React from 'react';
 import { useRef, useState, useEffect } from "react";
 import { PingAttributes } from "./ipCLass";
 import { startSpeedTest } from "./speedTest";
-import PingLocation from "./location";
+import PingLocation from "./UIelements/location";
+import TitleBar from './UIelements/titlebar';
 
 
 
@@ -10,7 +11,6 @@ export default function App() {
     const controllerRef = useRef(null)
     const [IP_LENGHT, setIP_LENGHT]   = useState(5)
     const [isPinging, setIsPinging]   = useState(false)
-    const [sideBarOpened, setSideBarOpened]  = useState(false)
     const [speed_Mbps, setSpeed_Mbps] = useState("")
     const [selectedIpLog, setSelectedIpLog] = useState({id: null, isExpanded: false});
     const [ipPartsList, setIpPartsList] = useState(
@@ -61,11 +61,6 @@ export default function App() {
            target.previousSibling.previousSibling.focus()
            e.preventDefault()
         } 
-    }
-
-    async function saveAndExit() {
-        await window.storeAPI.set('pingList', ipPartsList.map(({id, ip}) => ({ id, ip })));
-        window.winapi.close()
     }
 
     async function ping() {
@@ -122,54 +117,11 @@ export default function App() {
         }
     }
 
-    function addIP() {
-        if (ipPartsList.length < 7) {
-            setIP_LENGHT(prev => prev + 1)
-            ipPartsList.push(new PingAttributes(ipPartsList.length, ["", "", "", ""]))
-        }
-    }
-
-    function removeIP() {
-        if (ipPartsList.length > 1) {
-            setIP_LENGHT(prev => prev - 1)
-            ipPartsList.pop()
-        }
-    }
-
-    function openSideMenu() {
-        setSideBarOpened(prev => !prev);
-    }
-
 
   return (
     <div>
-        <header className="titlebar">
-            <button id="menuBtn" onClick={openSideMenu} className="hamburger-btn" aria-expanded="false" aria-label="Open menu">
-                <span className="line"></span>
-                <span className="line"></span>
-                <span className="line"></span>
-            </button>
-
-            <span className='pingLocation'>Location I</span>
-
-            <div className="titlebar-right">
-                <button onClick={() => window.winapi.minimize()} id="minBtn" className="win-btn" title="Minimize">—</button>
-                <button id="maxBtn" className="win-btn" title="Maximize" disabled>▢</button>
-                <button onClick={() => saveAndExit()} id="closeWin" className="win-btn close" title="Close">✕</button>
-            </div>
-        </header>
-      
+        <TitleBar/>
         <div className="content">
-            <div className={`sideBar ${sideBarOpened ? 'opened' : ''}`}>
-                <div className='topSection'>
-                    <div className='addIP_buttons'>
-                        <span onClick={addIP}>+</span>
-                        <span onClick={removeIP} >-</span>
-                    </div>
-                    <PingLocation/>
-                </div>
-            </div>
-
             <div id="settingsForm">
                 <div className='ipsBorder'>
                 {Array.from({ length: IP_LENGHT }, (_, y) => (
