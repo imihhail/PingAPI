@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import React from 'react';
+import { LocationContext } from "../app";
 
-function TitleBar() {
-    const [loc, setLoc] = useState("loca")
+function TitleBar({ toggleSidePanel }) {
+    const { currentLoc, setCurrentLoc } = useContext(LocationContext)
 
 
     async function saveAndExit() {
@@ -13,13 +14,13 @@ function TitleBar() {
 
     return (
         <header className="titlebar">
-            <button id="menuBtn" onClick={openSidePanel} className="hamburger-btn" aria-expanded="false" aria-label="Open menu">
+            <button id="menuBtn" onClick={toggleSidePanel} className="hamburger-btn" aria-expanded="false" aria-label="Open menu">
                 <span className="line"></span>
                 <span className="line"></span>
                 <span className="line"></span>
             </button>
 
-            <span className='pingLocation'>{loc}</span>
+            <span className='pingLocation'>{currentLoc.location}</span>
 
             <div className="titlebar-right">
                 <button onClick={() => window.winapi.minimize()} id="minBtn" className="win-btn" title="Minimize">—</button>

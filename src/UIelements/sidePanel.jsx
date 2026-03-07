@@ -1,14 +1,8 @@
 import { useState } from "react";
 import React from 'react';
+import PingLocation from "./location";
 
-function SidePanel() {
-    const [sideBarOpened, setSideBarOpened] = useState(false)
-
-
-    function openSidePanel() {
-        setSideBarOpened(prev => !prev)
-    }
-
+function SidePanel({ sideBarOpened }) {
     function addIP() {
         if (ipPartsList.length < 7) {
             setIP_LENGHT(prev => prev + 1)
@@ -24,7 +18,6 @@ function SidePanel() {
     }
 
 
-
     return (
         <div className={`sideBar ${sideBarOpened ? 'opened' : ''}`}>
             <div className='topSection'>
@@ -32,7 +25,7 @@ function SidePanel() {
                     <span onClick={addIP}>+</span>
                     <span onClick={removeIP} >-</span>
                 </div>
-                <PingLocation changeLoc= {changL}/>
+                <PingLocation />
             </div>
         </div>
     );

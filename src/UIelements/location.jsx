@@ -1,17 +1,18 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import React from 'react';
+import { LocationContext } from "../app";
 
-function PingLocation({ changeLoc }) {
-  const locations = [{id: 1, location: "Location I"},
-                     {id: 2, location: "Location II"}, 
-                     {id: 3, location: "Location III"}];
-  const [currentLoc, setCurrentLoc] = useState(locations[0]);
+function PingLocation() {
+  const { currentLoc, setCurrentLoc } = useContext(LocationContext)
+  const locations  = [{id: 1, location: "Location I"},
+                      {id: 2, location: "Location II"}, 
+                      {id: 3, location: "Location III"}];
+  
 
   function scrollLeft() {
     if (currentLoc.id > 1) {
       const newLoc = locations[currentLoc.id - 2];
       setCurrentLoc(newLoc);
-      changeLoc(newLoc.location);
     }
   }
 
@@ -19,7 +20,6 @@ function PingLocation({ changeLoc }) {
     if (currentLoc.id < locations.length) {
       const newLoc = locations[currentLoc.id];
       setCurrentLoc(newLoc);
-      changeLoc(newLoc.location);
     }
   }
 

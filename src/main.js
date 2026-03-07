@@ -5,6 +5,9 @@ import { spawn } from 'child_process'
 import Store from 'electron-store';
 import { PingAttributes } from "./ipCLass";
 import readline from 'readline'
+import installExtension from 'electron-devtools-installer';
+import { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
+
 
 const store = new Store();
 const os    = process.platform
@@ -24,11 +27,15 @@ const createWindow = () => {
     width: 1350,
     height: 600,
     frame: false,
+    
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true,   // REQUIRED with contextBridge
+      nodeIntegration: false,   // keep false for security
+      enableRemoteModule: false // deprecated, keep disabled
     },
   });
-
+win.webContents.openDevTools({ mode: "detach" });
   // and load the index.html of the app.
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
     win.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
@@ -37,13 +44,22 @@ const createWindow = () => {
   }
 
   // Open the DevTools.
-  win.webContents.openDevTools();
+  
 };
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
+app.whenReady().then(async() => {
+  if (!app.isPackaged) {
+    try {
+      await installExtension(REACT_DEVELOPER_TOOLS);
+      console.log("React DevTools installed");
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   createWindow();
 
   // On OS X it's common to re-create a window in the app when the

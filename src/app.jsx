@@ -1,11 +1,13 @@
-import React from 'react';
-import { useRef, useState, useEffect } from "react";
+import React, { createContext } from 'react';
+import { useRef, useState, useEffect, useContext } from "react";
 import { PingAttributes } from "./ipCLass";
 import { startSpeedTest } from "./speedTest";
 import PingLocation from "./UIelements/location";
 import TitleBar from './UIelements/titlebar';
+import SidePanel from "./UIelements/sidePanel";
 
 
+export const LocationContext = createContext()
 
 export default function App() {
     const controllerRef = useRef(null)
@@ -13,6 +15,8 @@ export default function App() {
     const [isPinging, setIsPinging]   = useState(false)
     const [speed_Mbps, setSpeed_Mbps] = useState("")
     const [selectedIpLog, setSelectedIpLog] = useState({id: null, isExpanded: false});
+    const [sideBarOpened, setSideBarOpened] = useState(false)
+    const [currentLoc, setCurrentLoc] = useState({id: 1, location: "Location I"});
     const [ipPartsList, setIpPartsList] = useState(
         Array.from({ length: IP_LENGHT }, (_, y) =>
             y === 0
@@ -20,6 +24,10 @@ export default function App() {
             : new PingAttributes(y, ["", "", "", ""]) 
         )
     )
+
+    function toggleSidePanel() {
+        setSideBarOpened(prev => !prev)
+    }
 
     useEffect(() => {
         (async function getData() {
@@ -120,8 +128,10 @@ export default function App() {
 
   return (
     <div>
-        <TitleBar/>
+        <LocationContext.Provider value={{currentLoc, setCurrentLoc}}>
+            <TitleBar toggleSidePanel={toggleSidePanel}/>
         <div className="content">
+                <SidePanel sideBarOpened={sideBarOpened}/>
             <div id="settingsForm">
                 <div className='ipsBorder'>
                 {Array.from({ length: IP_LENGHT }, (_, y) => (
@@ -172,6 +182,7 @@ export default function App() {
                 </div> 
             </div>
         </div>
+        </LocationContext.Provider>
     </div>
   );
 }
