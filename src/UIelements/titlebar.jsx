@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import React from 'react';
-import { LocationContext } from "../app";
+import { LocationContext } from "../UIelements/LocationProvider";
 
 function TitleBar({ toggleSidePanel }) {
     const { currentLoc, setCurrentLoc } = useContext(LocationContext)

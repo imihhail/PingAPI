@@ -5,9 +5,10 @@ import { startSpeedTest } from "./speedTest";
 import PingLocation from "./UIelements/location";
 import TitleBar from './UIelements/titlebar';
 import SidePanel from "./UIelements/sidePanel";
+import { LocationProvider } from "./UIelements/LocationProvider";
 
 
-export const LocationContext = createContext()
+//export const LocationContext = createContext()
 
 export default function App() {
     const controllerRef = useRef(null)
@@ -16,7 +17,6 @@ export default function App() {
     const [speed_Mbps, setSpeed_Mbps] = useState("")
     const [selectedIpLog, setSelectedIpLog] = useState({id: null, isExpanded: false});
     const [sideBarOpened, setSideBarOpened] = useState(false)
-    const [currentLoc, setCurrentLoc] = useState({id: 1, location: "Location I"});
     const [ipPartsList, setIpPartsList] = useState(
         Array.from({ length: IP_LENGHT }, (_, y) =>
             y === 0
@@ -87,9 +87,9 @@ export default function App() {
             console.log(pingResp);
             
             if (!isSpeedTestRunning && pingResp[0].connection) {
-                isSpeedTestRunning    = true
-                const controller      = startSpeedTest(setSpeed_Mbps)
-                controllerRef.current = controller
+                // isSpeedTestRunning    = true
+                // const controller      = startSpeedTest(setSpeed_Mbps)
+                // controllerRef.current = controller
             }
             
             setIpPartsList(prev => {
@@ -128,7 +128,7 @@ export default function App() {
 
   return (
     <div>
-        <LocationContext.Provider value={{currentLoc, setCurrentLoc}}>
+        <LocationProvider>
             <TitleBar toggleSidePanel={toggleSidePanel}/>
         <div className="content">
                 <SidePanel sideBarOpened={sideBarOpened}/>
@@ -182,7 +182,7 @@ export default function App() {
                 </div> 
             </div>
         </div>
-        </LocationContext.Provider>
+        </LocationProvider>
     </div>
   );
 }
