@@ -1,4 +1,17 @@
-export class PingAttributes {
+export class IpLocation {
+  constructor(id, location) {
+    this.locationId = id;
+    this.location   = location;
+  }
+}
+
+export const IP_LOCATIONS = Object.freeze([
+  new IpLocation(1, "Location I"),
+  new IpLocation(2, "Location II"),
+  new IpLocation(3, "Location III"),
+]);
+
+export class PingAttributes extends IpLocation {
     pingLog    = []
     pingCount  = 0
     errorCount = 0
@@ -8,9 +21,10 @@ export class PingAttributes {
     speed      = null
     connection = false
 
-    constructor(id, ip = ['', '', '', '']) {
-        this.id = id
-        this.ip = ip
+    constructor(locationId, location, id, ip = ['', '', '', '']) {
+      super(locationId, location); 
+      this.id = id
+      this.ip = ip
     }
 
     calculatePingStats(str) {
@@ -37,6 +51,8 @@ export class PingAttributes {
         this.pingLog.push(str)
     }
 }
+
+
 
 
 

@@ -1,24 +1,24 @@
-import { useState, useContext, createContext } from "react";
+import { useContext } from "react";
 import React from 'react';
-import { LocationContext } from "../UIelements/LocationProvider";
+import { LocationContext} from "../UIelements/LocationProvider";
+import { IP_LOCATIONS as locations } from "./ipCLass";
+
+
 
 function PingLocation() {
   const { currentLoc, setCurrentLoc } = useContext(LocationContext)
-  const locations  = [{id: 1, location: "Location I"},
-                      {id: 2, location: "Location II"}, 
-                      {id: 3, location: "Location III"}];
   
 
   function scrollLeft() {
-    if (currentLoc.id > 1) {
-      const newLoc = locations[currentLoc.id - 2];
+    if (currentLoc.locationId > 1) {
+      const newLoc = locations[currentLoc.locationId - 2];
       setCurrentLoc(newLoc);
     }
   }
 
   function scrollRight() {
-    if (currentLoc.id < locations.length) {
-      const newLoc = locations[currentLoc.id];
+    if (currentLoc.locationId < locations.length) {
+      const newLoc = locations[currentLoc.locationId];
       setCurrentLoc(newLoc);
     }
   }

@@ -1,188 +1,29 @@
-import React, { createContext } from 'react';
-import { useRef, useState, useEffect, useContext } from "react";
-import { PingAttributes } from "./ipCLass";
-import { startSpeedTest } from "./speedTest";
-import PingLocation from "./UIelements/location";
+import React from 'react';
+import { useState } from "react";
 import TitleBar from './UIelements/titlebar';
 import SidePanel from "./UIelements/sidePanel";
+import IpList from './ipList';
 import { LocationProvider } from "./UIelements/LocationProvider";
 
 
-//export const LocationContext = createContext()
-
 export default function App() {
-    const controllerRef = useRef(null)
-    const [IP_LENGHT, setIP_LENGHT]   = useState(5)
-    const [isPinging, setIsPinging]   = useState(false)
-    const [speed_Mbps, setSpeed_Mbps] = useState("")
-    const [selectedIpLog, setSelectedIpLog] = useState({id: null, isExpanded: false});
     const [sideBarOpened, setSideBarOpened] = useState(false)
-    const [ipPartsList, setIpPartsList] = useState(
-        Array.from({ length: IP_LENGHT }, (_, y) =>
-            y === 0
-            ? new PingAttributes(y, ["8", "8", "8", "8"])
-            : new PingAttributes(y, ["", "", "", ""]) 
-        )
-    )
+
 
     function toggleSidePanel() {
         setSideBarOpened(prev => !prev)
     }
 
-    useEffect(() => {
-        (async function getData() {
-            const ipData = await window.storeAPI.get('pingList')
 
-            if (ipData) {
-                setIP_LENGHT(ipData.length)
-                setIpPartsList(ipData)
-            } else {
-                console.error("JSON file missing!")
-            }
-        })()
-    }, []);
-
-    function changeIP(y, x, e) {
-        const value = e.target.value
-        
-        if (value.length <= 3) {
-            const ipListCopy = [...ipPartsList];
-            ipListCopy[y].ip[x] = value;
-            setIpPartsList(ipListCopy)
-        }
-        
-        if (value.length == 3 && x != 3) {
-            e.target.nextSibling.nextSibling.focus()
-        }
-    }
-
-    function handleKeys(index, e) {
-        const notAllowedKeys = ['-', '+', ".", 'ArrowUp', 'ArrowDown']
-        const target = e.target
-
-        if (notAllowedKeys.some(num => num == e.key)) {
-            e.preventDefault()
-            return
-        }
-
-        if (e.key == 'Backspace' && target.value.length == 0 && index != 0) {           
-           target.previousSibling.previousSibling.focus()
-           e.preventDefault()
-        } 
-    }
-
-    async function ping() {
-        let isSpeedTestRunning = false
-
-        await window.storeAPI.set('pingList', ipPartsList.map(({id, ip}) => ({ id, ip })));
-
-        const ipAddresses = ipPartsList
-        .map(item => (item.ip.some(o => o === "") ? null : {...item, ip: item.ip.join(".") }))
-        .filter(Boolean); // removes null/undefined/empty
-
-        window.startPig.sendIP(ipAddresses)
-        window.startPig.clearPingListeners();
-
-        window.startPig.onPing(pingResp => {
-            console.log(pingResp);
-            
-            if (!isSpeedTestRunning && pingResp[0].connection) {
-                // isSpeedTestRunning    = true
-                // const controller      = startSpeedTest(setSpeed_Mbps)
-                // controllerRef.current = controller
-            }
-            
-            setIpPartsList(prev => {
-                const copy = prev.slice()             
-
-                pingResp.forEach(el => {
-                    copy[el.id].speed      = el.speed
-                    copy[el.id].avg        = el.avg
-                    copy[el.id].pingLog    = el.pingLog
-                    copy[el.id].packetLoss = el.packetLoss
-                })
-                
-                return copy
-            })
-        })
-
-        setIsPinging(true)
-    }
-
-    function stopPing() {
-        controllerRef.current?.abort();
-        setIsPinging(false)
-        window.startPig.stopPing()
-        window.startPig.clearPingListeners();
-    }
-
-    function resizeLog(y) {
-        if (ipPartsList[y].pingLog) {
-            setSelectedIpLog(prev => ({
-                id: y,
-                isExpanded: !prev.isExpanded
-            }));
-        }
-    }
-
-
-  return (
-    <div>
-        <LocationProvider>
-            <TitleBar toggleSidePanel={toggleSidePanel}/>
-        <div className="content">
-                <SidePanel sideBarOpened={sideBarOpened}/>
-            <div id="settingsForm">
-                <div className='ipsBorder'>
-                {Array.from({ length: IP_LENGHT }, (_, y) => (
-                    <div key={y} className="field">
-                        <div className='IPinput'>
-                            {Array.from({ length: 4 }, (_, x) => (
-                                <React.Fragment key={x}>
-                                    {y == 0 ? <input value={8} readOnly /> :
-                                        <input
-                                            id={`ipPart${y}-${x}`}
-                                            value={ipPartsList[y]?.ip?.[x] ?? ''}
-                                            onChange={(e) => changeIP(y, x, e)}
-                                            onKeyDown={(e) => handleKeys(x, e)}
-                                            type="number"
-                                        />
-                                    }
-
-                                    {x < 3 && <span className="dot">.</span>}
-                                </React.Fragment>
-                            ))}
-                        </div>
-                        <div onClick={() => resizeLog(y)} className='pingLog'>
-                            <span className="pingStats">
-                                {ipPartsList[y].speed ? (
-                                    <>
-                                    <span className="pingStats_ping">Ping: <strong>{ipPartsList[y].speed}ms</strong></span>
-                                    <span className="pingStats_avg">Avg: <strong>{ipPartsList[y].avg ?? '-'}ms</strong></span>
-                                    <span className="pingStats_pl">PL: <strong>{ipPartsList[y].packetLoss ?? '-'}%</strong></span>
-                                    {ipPartsList[y] == ipPartsList[0] && (<span className="pingStats_pl">Download speed: <strong>{speed_Mbps}Mbps</strong></span>)}
-                                    </>
-                                ) : (
-                                    ipPartsList[y].pingLog ? ipPartsList[y].pingLog[ipPartsList[y].pingLog.length - 1] : ""
-                                )}
-                            </span>
-                        </div>
-                    </div>
-                ))}
-                {isPinging ? <button onClick={stopPing} className="stopBtn">Stop</button>
-                             : <button onClick={ping} className="startBtn">Ping</button>
-                }  
-                {selectedIpLog.isExpanded && (
-                    <div onClick={resizeLog} className="pingLogExpanded">
-                        {ipPartsList[selectedIpLog.id].pingLog?.map((log, i) =>
-                            <p key={i}>{log}</p>
-                        )}
-                    </div>
-                )} 
-                </div> 
+    return (
+        <div>
+            <LocationProvider>
+                <TitleBar toggleSidePanel={toggleSidePanel}/>
+            <div className="content">
+                    <SidePanel sideBarOpened={sideBarOpened}/>
+                    <IpList/>
             </div>
+            </LocationProvider>
         </div>
-        </LocationProvider>
-    </div>
-  );
-}
+        );
+    }

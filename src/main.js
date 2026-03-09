@@ -3,7 +3,7 @@ import path from 'node:path';
 import started from 'electron-squirrel-startup';
 import { spawn } from 'child_process'
 import Store from 'electron-store';
-import { PingAttributes } from "./ipCLass";
+import { PingAttributes } from "./UIelements/ipCLass";
 import readline from 'readline'
 import installExtension from 'electron-devtools-installer';
 import { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
@@ -58,6 +58,7 @@ app.whenReady().then(async() => {
     } catch (err) {
       console.error(err);
     }
+    createWindow()
   }
 
   
