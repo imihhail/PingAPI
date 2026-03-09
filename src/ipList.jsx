@@ -1,9 +1,11 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import React from 'react';
 import { PingAttributes } from "./UIelements/ipCLass";
+import { LocationContext } from "./UIelements/LocationProvider";
 
 
 function IpList() {
+    const { currentLoc, setCurrentLoc } = useContext(LocationContext)
     const controllerRef = useRef(null)
     const [IP_LENGHT, setIP_LENGHT]   = useState(5)
     const [isPinging, setIsPinging]   = useState(false)
@@ -17,9 +19,9 @@ function IpList() {
         )
     )
 
-    useEffect(() => {
+    useEffect(() => {        
         (async function getData() {
-            const ipData = await window.storeAPI.get('pingList')
+            const ipData = await window.storeAPI.get(`${currentLoc.location}`)
 
             if (ipData) {
                 setIP_LENGHT(ipData.length)
@@ -28,7 +30,7 @@ function IpList() {
                 console.error("JSON file missing!")
             }
         })()
-    }, []);
+    }, [currentLoc]);
 
     function changeIP(y, x, e) {
         const value = e.target.value
@@ -61,14 +63,16 @@ function IpList() {
 
     async function ping() {
         let isSpeedTestRunning = false
-
-        await window.storeAPI.set('pingList', ipPartsList.map(({id, ip}) => ({ id, ip })));
+        console.log("partis", ipPartsList);
+        
+        await window.storeAPI.set(`${currentLoc.location}`, ipPartsList.map(({id, ip}) => ({ id, ip })));
 
         const ipAddresses = ipPartsList
         .map(item => (item.ip.some(o => o === "") ? null : {...item, ip: item.ip.join(".") }))
         .filter(Boolean); // removes null/undefined/empty
-
-        window.startPig.sendIP(ipAddresses)
+        console.log("adresses", ipAddresses);
+        
+       // window.startPig.sendIP(ipAddresses)
         window.startPig.clearPingListeners();
 
         window.startPig.onPing(pingResp => {

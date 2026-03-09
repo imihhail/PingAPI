@@ -1,8 +1,7 @@
-import { useContext } from "react";
-import React from 'react';
+import React, { useContext } from "react";
+
 import { LocationContext} from "../UIelements/LocationProvider";
 import { IP_LOCATIONS as locations } from "./ipCLass";
-
 
 
 function PingLocation() {

@@ -35,7 +35,7 @@ const createWindow = () => {
       enableRemoteModule: false // deprecated, keep disabled
     },
   });
-win.webContents.openDevTools({ mode: "detach" });
+win.webContents.openDevTools();
   // and load the index.html of the app.
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
     win.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
@@ -87,6 +87,8 @@ ipcMain.handle('store-delete', (_, key) => store.delete(key));
 
 //RECIEVE INPUT
 ipcMain.handle('startPing', (e, ipListObj) => {
+  console.log("list: ", ipListObj);
+  
   //win.setSize(1350, 900)
   const ipMap      = new Map()
   let pingPromises = []
@@ -171,7 +173,6 @@ ipcMain.handle('startPing', (e, ipListObj) => {
       startPing();
      
       Promise.all(pingPromises).then(res => {
-          //pingDelayArr = []
           e.sender.send('ping-data', res);
           loop()
       }).catch("Errpr from ping promises: ", e)
