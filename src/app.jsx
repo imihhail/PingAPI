@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TitleBar from './UIelements/titlebar';
 import SidePanel from "./UIelements/sidePanel";
 import IpList from './ipList';
@@ -9,6 +9,11 @@ import { LocationProvider } from "./UIelements/LocationProvider";
 export default function App() {
     const [sideBarOpened, setSideBarOpened] = useState(false)
 
+    useEffect(() => {    
+        console.log("Parent");
+            
+
+    }, []);
 
     function toggleSidePanel() {
         setSideBarOpened(prev => !prev)

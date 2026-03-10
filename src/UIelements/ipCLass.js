@@ -5,12 +5,6 @@ class IpLocation {
   }
 }
 
-const ipData = await window.storeAPI.get('Location I')
-
-if (!ipData) {
-  
-}
-
 export const IP_LOCATIONS = Object.freeze ([
   //await window.storeAPI.set(`${currentLoc.location}`, ipPartsList.map(({id, ip}) => ({ id, ip })));
   new IpLocation(1, "Location I"),

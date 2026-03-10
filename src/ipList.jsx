@@ -19,7 +19,9 @@ function IpList() {
         )
     )
 
-    useEffect(() => {        
+    useEffect(() => {    
+        console.log("Child");
+            
         (async function getData() {
             const ipData = await window.storeAPI.get(`${currentLoc.location}`)
 
