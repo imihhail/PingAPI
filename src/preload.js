@@ -21,4 +21,5 @@ contextBridge.exposeInMainWorld('storeAPI', {
   has: (key) => ipcRenderer.invoke('store-has', key),
   delete: (key) => ipcRenderer.invoke('store-delete', key),
   getStoreLocations: (data) => ipcRenderer.invoke('store-locations', data)
+
 });

@@ -7,11 +7,13 @@ export const LocationContext = createContext()
 export function LocationProvider({ children }) {
   const [currentLoc, setCurrentLoc] = useState(locations[0]);
 
-  console.log("lcoationproivder loadaed");
+
+(async () => {
+  const current = await window.storeAPI.getStoreLocations();
+  console.log('initial locations (fallback):', current);
+})();
   
-  window.storeAPI.getStoreLocations(loc => {
-    console.log('lcoations: ', loc)
-  })
+
   
 
   const value = useMemo(() => ({ currentLoc, setCurrentLoc }), [currentLoc]);
