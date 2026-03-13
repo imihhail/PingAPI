@@ -46,10 +46,7 @@ const createWindow = () => {
 };
 
 app.whenReady().then(async() => {
-  if (!store.has("Location I")) {
-    const data = CreateStorageData()
-    store.set(data)
-  }
+
 
   if (!app.isPackaged) {
     try {
@@ -60,7 +57,11 @@ app.whenReady().then(async() => {
   }
 
   createWindow()
-  
+    if (!store.has("Location I")) {
+    const data = CreateStorageData()
+    store.set(data)    
+    win.webContents.send('store-locations', data);
+  }
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();
@@ -72,7 +73,6 @@ app.whenReady().then(async() => {
 //RECIEVE INPUT
 ipcMain.handle('startPing', (e, ipListObj) => {
   console.log("list: ", ipListObj);
-  
   //win.setSize(1350, 900)
   const ipMap      = new Map()
   let pingPromises = []
@@ -169,6 +169,7 @@ ipcMain.handle('store-get', (_, key) => store.get(key));
 ipcMain.handle('store-set', (_, { key, value }) => store.set(key, value));
 ipcMain.handle('store-has', (_, key) => store.has(key));
 ipcMain.handle('store-delete', (_, key) => store.delete(key));
+ipcMain.handle('store-locations', (_, data) => send(data));
 
 
 ipcMain.handle('window-minimize', () => win.minimize());
