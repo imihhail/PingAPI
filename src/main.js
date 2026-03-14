@@ -49,8 +49,6 @@ const createWindow = () => {
 };
 
 app.whenReady().then(async() => {
-
-
   if (!app.isPackaged) {
     try {
       await installExtension(REACT_DEVELOPER_TOOLS);
@@ -60,12 +58,14 @@ app.whenReady().then(async() => {
   }
 
   createWindow()
-    //if (!store.has("Location I")) {
+
+  if (!store.has("Location I")) {
     lastCreatedData= CreateStorageData()
     store.set(lastCreatedData)    
     
     win.webContents.send('store-locations', data);
-  //}
+  }
+
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();

@@ -20,7 +20,7 @@ function TitleBar({ toggleSidePanel }) {
                 <span className="line"></span>
             </button>
 
-            <span className='pingLocation'>{currentLoc.location}</span>
+            <span className='pingLocation'>{'asd'}</span>
 
             <div className="titlebar-right">
                 <button onClick={() => window.winapi.minimize()} id="minBtn" className="win-btn" title="Minimize">—</button>

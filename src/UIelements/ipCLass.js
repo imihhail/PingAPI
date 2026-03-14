@@ -5,13 +5,6 @@ class IpLocation {
   }
 }
 
-export const IP_LOCATIONS = Object.freeze ([
-  //await window.storeAPI.set(`${currentLoc.location}`, ipPartsList.map(({id, ip}) => ({ id, ip })));
-  new IpLocation(1, "Location I"),
-  new IpLocation(2, "Location II"),
-  new IpLocation(3, "Location III"),
-]);
-
 export class PingAttributes extends IpLocation {
     pingLog    = []
     pingCount  = 0

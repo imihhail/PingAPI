@@ -20,11 +20,14 @@ function IpList() {
     )
 
     useEffect(() => {    
-        console.log("Child");
-            
+        console.log("useEffect running");
+                    
         (async function getData() {
-            const ipData = await window.storeAPI.get(`${currentLoc.location}`)
-
+            const ipData = await window.storeAPI.get(`${currentLoc}`)
+            console.log("IPDATA: ", ipData);
+            
+            const firstLocationArray = Object.values(ipData); // the array for "Location I"
+            console.log("first entry by values:", firstLocationArray);
             if (ipData) {
                 setIP_LENGHT(ipData.length)
                 setIpPartsList(ipData)

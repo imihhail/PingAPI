@@ -9,12 +9,6 @@ import { LocationProvider } from "./UIelements/LocationProvider";
 export default function App() {
     const [sideBarOpened, setSideBarOpened] = useState(false)
 
-    useEffect(() => {    
-        console.log("Parent");
-            
-
-    }, []);
-
     function toggleSidePanel() {
         setSideBarOpened(prev => !prev)
     }

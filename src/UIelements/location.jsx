@@ -1,11 +1,9 @@
 import React, { useContext } from "react";
-
 import { LocationContext} from "../UIelements/LocationProvider";
-import { IP_LOCATIONS as locations } from "./ipCLass";
 
 
 function PingLocation() {
-  const { currentLoc, setCurrentLoc } = useContext(LocationContext)
+ // const { currentLoc, setCurrentLoc } = useContext(LocationContext)
   
 
   function scrollLeft() {
@@ -25,7 +23,7 @@ function PingLocation() {
   return (
     <div className="dropdown-wrapper">
       <span onClick={scrollLeft}>&lt;</span>
-      <span>{currentLoc.location}</span>
+      {/* <span>{currentLoc}</span> */}
       <span onClick={scrollRight}>&gt;</span>
     </div>
   );

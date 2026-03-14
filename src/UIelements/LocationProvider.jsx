@@ -1,20 +1,20 @@
-import React, { useState, useMemo, createContext } from "react";
-import { IP_LOCATIONS as locations } from "./ipCLass";
+import React, { useState, useMemo, createContext,useEffect } from "react";
 
 
 export const LocationContext = createContext()
 
 export function LocationProvider({ children }) {
-  const [currentLoc, setCurrentLoc] = useState(locations[0]);
+  const [currentLoc, setCurrentLoc] = useState(null);
 
 
-(async () => {
-  const current = await window.storeAPI.getStoreLocations();
-  console.log('initial locations (fallback):', current);
-})();
-  
-
-  
+  useEffect(() => {    
+      (async function getData() {
+        const data = await window.storeAPI.getStoreLocations();
+        console.log("data: ", data);
+        
+        //setCurrentLoc(Object.keys(data)[0])
+      })()
+  }, []);
 
   const value = useMemo(() => ({ currentLoc, setCurrentLoc }), [currentLoc]);
 

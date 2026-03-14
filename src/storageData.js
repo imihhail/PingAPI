@@ -14,6 +14,6 @@ export function CreateStorageData() {
                                  {id: 2, ip: ["", "", "", ""]},
                                  {id: 3, ip: ["", "", "", ""]},
                                  {id: 4, ip: ["", "", "", ""]}]                              
-                 }
+                 }           
     return data             
 }
