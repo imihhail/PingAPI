@@ -1,21 +1,21 @@
 import React, { useContext } from "react";
-import { LocationContext} from "../UIelements/LocationProvider";
+import { LocationContext } from "../app";
 
 
 function PingLocation() {
- // const { currentLoc, setCurrentLoc } = useContext(LocationContext)
+  const { currentLoc, setCurrentLoc, ipLocations } = useContext(LocationContext)
   
-
+  
   function scrollLeft() {
-    if (currentLoc.locationId > 1) {
-      const newLoc = locations[currentLoc.locationId - 2];
+    if (currentLoc.locationId >= 1) {
+      const newLoc = ipLocations[currentLoc.locationId - 1];
       setCurrentLoc(newLoc);
     }
   }
 
   function scrollRight() {
-    if (currentLoc.locationId < locations.length) {
-      const newLoc = locations[currentLoc.locationId];
+    if (currentLoc.locationId < ipLocations.length - 1) {
+      const newLoc = ipLocations[currentLoc.locationId + 1];      
       setCurrentLoc(newLoc);
     }
   }
@@ -23,7 +23,7 @@ function PingLocation() {
   return (
     <div className="dropdown-wrapper">
       <span onClick={scrollLeft}>&lt;</span>
-      {/* <span>{currentLoc}</span> */}
+      <span>{currentLoc?.location}</span>
       <span onClick={scrollRight}>&gt;</span>
     </div>
   );

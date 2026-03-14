@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useContext } from "react";
 import React from 'react';
 import { PingAttributes } from "./UIelements/ipCLass";
-import { LocationContext } from "./UIelements/LocationProvider";
+import { LocationContext } from "./app";
 
 
 function IpList() {
@@ -19,21 +19,14 @@ function IpList() {
         )
     )
 
-    useEffect(() => {    
-        console.log("useEffect running");
-                    
+    useEffect(() => {
+        if (!currentLoc) return
+
         (async function getData() {
-            const ipData = await window.storeAPI.get(`${currentLoc}`)
-            console.log("IPDATA: ", ipData);
-            
-            const firstLocationArray = Object.values(ipData); // the array for "Location I"
-            console.log("first entry by values:", firstLocationArray);
-            if (ipData) {
-                setIP_LENGHT(ipData.length)
-                setIpPartsList(ipData)
-            } else {
-                console.error("JSON file missing!")
-            }
+            const ipData = await window.storeAPI.get(`${currentLoc.location}`)
+
+            setIP_LENGHT(ipData.length)
+            setIpPartsList(ipData)
         })()
     }, [currentLoc]);
 

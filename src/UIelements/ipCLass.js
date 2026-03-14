@@ -1,4 +1,4 @@
-class IpLocation {
+export class IpLocation {
   constructor(id, location) {
     this.locationId = id;
     this.location   = location;

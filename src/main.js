@@ -17,8 +17,6 @@ const stdOS = os == "darwin" ? 2 : 3
 let lastCreatedData =null
 
 
-
-
 if (started) {
   app.quit();
 }
@@ -60,10 +58,10 @@ app.whenReady().then(async() => {
   createWindow()
 
   if (!store.has("Location I")) {
-    lastCreatedData= CreateStorageData()
-    store.set(lastCreatedData)    
+    const data = CreateStorageData()
+    store.set(data)    
     
-    win.webContents.send('store-locations', data);
+    //win.webContents.send('store-locations', data);
   }
 
   app.on('activate', () => {
@@ -173,7 +171,9 @@ ipcMain.handle('store-get', (_, key) => store.get(key));
 ipcMain.handle('store-set', (_, { key, value }) => store.set(key, value));
 ipcMain.handle('store-has', (_, key) => store.has(key));
 ipcMain.handle('store-delete', (_, key) => store.delete(key));
-ipcMain.handle('store-locations', () => lastCreatedData);
+ipcMain.handle('store-get-all', () => {
+  return { ...store.store };
+});
 
 
 ipcMain.handle('window-minimize', () => win.minimize());

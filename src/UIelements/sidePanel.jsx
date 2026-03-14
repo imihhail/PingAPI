@@ -2,6 +2,7 @@ import { useState } from "react";
 import React from 'react';
 import PingLocation from "./location";
 
+
 function SidePanel({ sideBarOpened }) {
     function addIP() {
         if (ipPartsList.length < 7) {
@@ -17,6 +18,7 @@ function SidePanel({ sideBarOpened }) {
         }
     }
 
+console.log("sidepanel");
 
     return (
         <div className={`sideBar ${sideBarOpened ? 'opened' : ''}`}>

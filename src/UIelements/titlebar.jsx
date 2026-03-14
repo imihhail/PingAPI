@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import React from 'react';
-import { LocationContext } from "../UIelements/LocationProvider";
+import { LocationContext } from "../app";
 
 function TitleBar({ toggleSidePanel }) {
     const { currentLoc, setCurrentLoc } = useContext(LocationContext)
@@ -11,7 +11,8 @@ function TitleBar({ toggleSidePanel }) {
         window.winapi.close()
     }
 
-
+    console.log("titlebar");
+    
     return (
         <header className="titlebar">
             <button id="menuBtn" onClick={toggleSidePanel} className="hamburger-btn" aria-expanded="false" aria-label="Open menu">
@@ -20,7 +21,7 @@ function TitleBar({ toggleSidePanel }) {
                 <span className="line"></span>
             </button>
 
-            <span className='pingLocation'>{'asd'}</span>
+            <span className='pingLocation'>{currentLoc?.location}</span>
 
             <div className="titlebar-right">
                 <button onClick={() => window.winapi.minimize()} id="minBtn" className="win-btn" title="Minimize">—</button>
