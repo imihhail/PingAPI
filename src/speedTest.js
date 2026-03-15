@@ -1,4 +1,4 @@
-export  function startSpeedTest(setSpeed_Mbps) {    
+export function startSpeedTest(setSpeed_Mbps) {    
     const controller = new AbortController();
 
     (async () => {

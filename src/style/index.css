@@ -20,7 +20,6 @@ body, #root, html {
   margin: 0;
   color: var(--text);
   overflow: hidden;
-  
 }
 
 .content {
@@ -39,20 +38,14 @@ body, #root, html {
   box-sizing: border-box;
   border-top-right-radius: 3px;
   pointer-events: none;
-
 }
 
 .sideBar.opened {
-  width: 150px;
+  padding: 10px 2px;
+  width: 160px;
   pointer-events: auto;
   border-right: 1px solid var(--subtle);
   border-top: 1px solid var(--subtle);
-}
-
-.topSection{
-  position: relative; 
-  margin: 0px 10px;
-  color: rgb(255, 255, 255);
 }
 
 .addIP_buttons {
@@ -84,9 +77,9 @@ body, #root, html {
   gap: 20px;
   min-width: 0;
   width: 400px;
-  padding: 0px 30px;    
-            
+  padding: 0px 30px;        
 }
+
 .ipsBorder {
   border: 1px solid var(--subtle);
   border-radius: 7px;

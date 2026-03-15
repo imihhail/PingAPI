@@ -3,18 +3,20 @@ import { LocationContext } from "../app";
 
 
 function PingLocation() {
-  const { currentLoc, setCurrentLoc, ipLocations } = useContext(LocationContext)
+  const { currentLoc, setCurrentLoc, ipLocations, ipPartsList, setIpPartsList } = useContext(LocationContext)
   
   
-  function scrollLeft() {
+  async function scrollLeft() {
     if (currentLoc.locationId >= 1) {
+      await window.storeAPI.set(`${currentLoc.location}`, ipPartsList.map(({id, ip}) => ({ id, ip })));
       const newLoc = ipLocations[currentLoc.locationId - 1];
       setCurrentLoc(newLoc);
     }
   }
 
-  function scrollRight() {
+  async function scrollRight() {
     if (currentLoc.locationId < ipLocations.length - 1) {
+      await window.storeAPI.set(`${currentLoc.location}`, ipPartsList.map(({id, ip}) => ({ id, ip })));
       const newLoc = ipLocations[currentLoc.locationId + 1];      
       setCurrentLoc(newLoc);
     }
@@ -22,9 +24,9 @@ function PingLocation() {
 
   return (
     <div className="dropdown-wrapper">
-      <span onClick={scrollLeft}>&lt;</span>
-      <span>{currentLoc?.location}</span>
-      <span onClick={scrollRight}>&gt;</span>
+      <span data-testid="scrollLeft" onClick={scrollLeft}>&lt;</span>
+      <span data-testid="sidebarLocation">{currentLoc?.location}</span>
+      <span data-testid="scrollRight" onClick={scrollRight}>&gt;</span>
     </div>
   );
 }

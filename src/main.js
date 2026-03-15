@@ -43,7 +43,7 @@ const createWindow = () => {
     win.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
   }
 
-  win.webContents.openDevTools();
+  //win.webContents.openDevTools();
 };
 
 app.whenReady().then(async() => {

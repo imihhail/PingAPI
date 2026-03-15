@@ -1,31 +1,22 @@
 import { useState, useRef, useEffect, useContext } from "react";
 import React from 'react';
-import { PingAttributes } from "./UIelements/ipCLass";
 import { LocationContext } from "./app";
+import { startSpeedTest } from "./speedTest";
 
 
-function IpList() {
-    const { currentLoc, setCurrentLoc } = useContext(LocationContext)
+function IpList({ ipLength, setIpLength }) {
+    const { currentLoc, setCurrentLoc, ipPartsList, setIpPartsList } = useContext(LocationContext)
     const controllerRef = useRef(null)
-    const [IP_LENGHT, setIP_LENGHT]   = useState(5)
     const [isPinging, setIsPinging]   = useState(false)
     const [speed_Mbps, setSpeed_Mbps] = useState("")
     const [selectedIpLog, setSelectedIpLog] = useState({id: null, isExpanded: false});
-    const [ipPartsList, setIpPartsList] = useState(
-        Array.from({ length: IP_LENGHT }, (_, y) =>
-            y === 0
-            ? new PingAttributes(y, ["8", "8", "8", "8"])
-            : new PingAttributes(y, ["", "", "", ""]) 
-        )
-    )
+
 
     useEffect(() => {
-        if (!currentLoc) return
-
         (async function getData() {
             const ipData = await window.storeAPI.get(`${currentLoc.location}`)
 
-            setIP_LENGHT(ipData.length)
+            setIpLength(ipData.length)
             setIpPartsList(ipData)
         })()
     }, [currentLoc]);
@@ -68,19 +59,17 @@ function IpList() {
         const ipAddresses = ipPartsList
         .map(item => (item.ip.some(o => o === "") ? null : {...item, ip: item.ip.join(".") }))
         .filter(Boolean); // removes null/undefined/empty
-        console.log("adresses", ipAddresses);
         
-       // window.startPig.sendIP(ipAddresses)
+        window.startPig.sendIP(ipAddresses)
         window.startPig.clearPingListeners();
-
         window.startPig.onPing(pingResp => {
             console.log(pingResp);
             
-            if (!isSpeedTestRunning && pingResp[0].connection) {
-                // isSpeedTestRunning    = true
-                // const controller      = startSpeedTest(setSpeed_Mbps)
-                // controllerRef.current = controller
-            }
+            // if (!isSpeedTestRunning && pingResp[0].connection) {
+            //     isSpeedTestRunning    = true
+            //     const controller      = startSpeedTest(setSpeed_Mbps)
+            //     controllerRef.current = controller
+            // }
             
             setIpPartsList(prev => {
                 const copy = prev.slice()             
@@ -116,11 +105,10 @@ function IpList() {
     }    
 
 
-
     return (
         <div id="settingsForm">
             <div className='ipsBorder'>
-            {Array.from({ length: IP_LENGHT }, (_, y) => (
+            {ipPartsList && Array.from({ length: ipLength }, (_, y) => (
                 <div key={y} className="field">
                     <div className='IPinput'>
                         {Array.from({ length: 4 }, (_, x) => (

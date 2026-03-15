@@ -2,3 +2,61 @@
   display: flex;
 }
 
+.topSection {
+  font-size: 14px;
+  margin: 0px 10px;
+  position: relative; 
+  color: rgb(255, 255, 255);
+}
+
+/* styles.css */
+.ipLines {
+  display: flex;
+  gap: 2px;
+  justify-content: space-between;
+  width:auto;
+  margin-bottom: 15px;
+}
+
+
+
+.ipControl {
+  display: flex;
+}
+
+.ipLabel {
+  box-sizing: border-box;
+  padding: 5px 0px;
+}
+
+/* input takes available width in the column */
+.ipNumber {
+  text-align: center;
+  width: 30px;
+  box-sizing: border-box;
+  padding: 4px 8px;
+  border: 1px solid var(--subtle, #444);
+  border-radius: 3px;
+  background: #111;
+  color: #fff;
+  margin: 0px 3px; 
+}
+
+.ipBtn {
+  font-size: 12px;
+  border: 1px solid var(--subtle, #444);
+  background: rgba(255,255,255,0.03);
+  color: #fff;
+  cursor: pointer;
+  padding: 0 3px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  user-select: none;
+}
+
+.ipBtn:hover { filter: brightness(0.85); }
+.ipBtn:active { transform: translateY(1px); }
+
+
+

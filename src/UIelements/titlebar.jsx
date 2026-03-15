@@ -11,8 +11,7 @@ function TitleBar({ toggleSidePanel }) {
         window.winapi.close()
     }
 
-    console.log("titlebar");
-    
+
     return (
         <header className="titlebar">
             <button id="menuBtn" onClick={toggleSidePanel} className="hamburger-btn" aria-expanded="false" aria-label="Open menu">
