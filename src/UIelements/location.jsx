@@ -8,7 +8,7 @@ function PingLocation() {
   
   async function scrollLeft() {
     if (currentLoc.locationId >= 1) {
-      await window.storeAPI.set(`${currentLoc.location}`, ipPartsList.map(({id, ip}) => ({ id, ip })));
+      await window.storeAPI.set(`Locations.${currentLoc.location}`, ipPartsList.map(({id, ip}) => ({ id, ip })));
       const newLoc = ipLocations[currentLoc.locationId - 1];
       setCurrentLoc(newLoc);
     }
@@ -16,7 +16,7 @@ function PingLocation() {
 
   async function scrollRight() {
     if (currentLoc.locationId < ipLocations.length - 1) {
-      await window.storeAPI.set(`${currentLoc.location}`, ipPartsList.map(({id, ip}) => ({ id, ip })));
+      await window.storeAPI.set(`Locations.${currentLoc.location}`, ipPartsList.map(({id, ip}) => ({ id, ip })));
       const newLoc = ipLocations[currentLoc.locationId + 1];      
       setCurrentLoc(newLoc);
     }
@@ -24,9 +24,10 @@ function PingLocation() {
 
   return (
     <div className="dropdown-wrapper">
-      <span data-testid="scrollLeft" onClick={scrollLeft}>&lt;</span>
+      <span className="ipLabel">Server location</span>
+      {/* <button data-testid="scrollLeft" className="ipBtn" onClick={scrollLeft} >◄</button>
       <span data-testid="sidebarLocation">{currentLoc?.location}</span>
-      <span data-testid="scrollRight" onClick={scrollRight}>&gt;</span>
+      <button data-testid="scrollRight" className="ipBtn" onClick={scrollRight}>►</button> */}
     </div>
   );
 }

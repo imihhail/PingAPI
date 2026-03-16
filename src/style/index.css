@@ -28,47 +28,6 @@ body, #root, html {
   display: flex;
 }
 
-.sideBar {
-  background-color: rgb(17, 17, 17);
-  padding: 10px 0px;
-  width: 0;
-  height: 100vh;
-  transition: width 0.3s ease;
-  overflow: hidden;     
-  box-sizing: border-box;
-  border-top-right-radius: 3px;
-  pointer-events: none;
-}
-
-.sideBar.opened {
-  padding: 10px 2px;
-  width: 160px;
-  pointer-events: auto;
-  border-right: 1px solid var(--subtle);
-  border-top: 1px solid var(--subtle);
-}
-
-.addIP_buttons {
-  font-size: 17px;
-  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  font-weight: bolder;
-  display: flex;
-  gap: 9px;
-  width: fit-content;
-}
-
-.addIP_buttons span{
-  border: #7c7c7c solid 1px;
-  text-align: center;
-  cursor: pointer;
-  background: #2a2a2a;
-  line-height:15px;
-  width: 15px;
-  padding: 7px;
-  border-radius: 3px;
-  margin-bottom: 10px;
-}
-
 #settingsForm {
   margin-top: 20px;
   flex: 1;          

@@ -2,12 +2,14 @@ import React, { useContext } from "react";
 import { LocationContext } from "../app";
 import PingLocation from "./location";
 import { PingAttributes } from "./ipCLass";
+import { Server, CircleGauge, CloudDownload, MapPinHouse, MapPinned } from 'lucide-react';
 
 
 function SidePanel({ sideBarOpened, ipLength, setIpLength }) {
     const { currentLoc, setCurrentLoc, ipPartsList, setIpPartsList } = useContext(LocationContext)
-  const inc = () => setIpLength(prev => (typeof prev === "number" ? prev + 1 : 1));
-  const dec = () => setIpLength(prev => (typeof prev === "number" ? Math.max(0, prev - 1) : 0));
+    const strokeWith = 1.5
+
+    
     function addIP() {
         if (ipPartsList.length < 7) {
             setIpLength(prev => prev + 1)
@@ -27,39 +29,36 @@ function SidePanel({ sideBarOpened, ipLength, setIpLength }) {
         <div className={`sideBar ${sideBarOpened ? 'opened' : ''}`}>
             <div className='topSection'>
                 <div className="ipLines">
-                    <span>Locaton:</span>
+                    <MapPinHouse strokeWidth={strokeWith}/>
                     <PingLocation />
                 </div>
                 <div className="ipLines">
-                    <span className="ipLabel">IP lines:</span>
-
-                    <div className="ipControl" role="group" aria-label="IP lines control">
-                        <button
-                            type="button"
-                            className="ipBtn ipBtn-top"
-                            onClick={inc}
-                            aria-label="Increase IP lines"
-                        >
-                        ◄
-                        </button>
-
-                        <input
-                            className="ipNumber"
-                            type="number"
-                            value={ipLength}
-                            readOnly
-                            aria-live="polite"
-                        />
-
-                        <button
-                            type="button"
-                            className="ipBtn ipBtn-bottom"
-                            onClick={dec}
-                            aria-label="Decrease IP lines"
-                        >
-                        ►
-                        </button>
-                    </div>
+                    <Server strokeWidth={strokeWith}/>
+                    <span className="ipLabel">IP count</span>
+                    {/* <div className="ipControl" >
+                        <button className="ipBtn" onClick={removeIP}>◄</button>
+                        <input  className="ipNumber" type="number" value={ipLength} readOnly/>
+                        <button className="ipBtn" onClick={addIP}>►</button>
+                    </div> */}
+                </div>
+                <div className="ipLines">
+                    <CircleGauge strokeWidth={strokeWith}/>
+                    <span className="ipLabel">Ping frequency</span>
+                    {/* <button className="ipBtn" onClick={removeIP}>◄</button>
+                    <input className="ipNumber"  value={`${2000}ms`} readOnly/>
+                    <button className="ipBtn" onClick={addIP}>►</button> */}
+                </div>
+                <div className="ipLines">
+                    <CloudDownload strokeWidth={strokeWith}/>
+                    <span className="ipLabel">Download size</span>
+                    {/* <button className="ipBtn" onClick={removeIP}>◄</button>
+                    <input className="ipNumber"  value={`${50}MB`} readOnly/>
+                    <button className="ipBtn" onClick={addIP}>►</button> */}
+                </div>
+                <div className="ipLines">
+                    <MapPinned strokeWidth={strokeWith}/>
+                    <span className="ipLabel">Location</span>
+                    {/* <input className="ipNumber" value={`${50}MB`} readOnly/> */}
                 </div>
             </div>
         </div>

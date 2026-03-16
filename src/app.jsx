@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect, useContext, createContext } from "react";
+import { useState, useEffect, createContext } from "react";
 import TitleBar from './UIelements/titlebar';
 import SidePanel from "./UIelements/sidePanel";
 import IpList from './ipList';
@@ -9,7 +9,7 @@ import { IpLocation } from './UIelements/ipCLass';
 export const LocationContext = createContext()
 
 export default function App() {
-    const [sideBarOpened, setSideBarOpened] = useState(false)
+    const [sideBarOpened, setSideBarOpened] = useState(true)
     const [currentLoc, setCurrentLoc] = useState(null)
     const [ipLocations, setIpLocations] = useState([]);
     const [ipPartsList, setIpPartsList] = useState(null)
@@ -22,9 +22,9 @@ export default function App() {
 
     useEffect(() => {
         (async function getData() {
-            const allData = await window.storeAPI.getAll();
-            
-            const locations = Object.keys(allData).map((key, index) => {
+            const locationData = await window.storeAPI.get('Locations');
+
+            const locations = Object.keys(locationData).map((key, index) => {
                 return new IpLocation(index, key);
             });
 

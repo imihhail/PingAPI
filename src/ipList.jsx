@@ -14,7 +14,7 @@ function IpList({ ipLength, setIpLength }) {
 
     useEffect(() => {
         (async function getData() {
-            const ipData = await window.storeAPI.get(`${currentLoc.location}`)
+            const ipData = await window.storeAPI.get(`Locations.${currentLoc.location}`)
 
             setIpLength(ipData.length)
             setIpPartsList(ipData)
@@ -52,9 +52,8 @@ function IpList({ ipLength, setIpLength }) {
 
     async function ping() {
         let isSpeedTestRunning = false
-        console.log("partis", ipPartsList);
         
-        await window.storeAPI.set(`${currentLoc.location}`, ipPartsList.map(({id, ip}) => ({ id, ip })));
+        await window.storeAPI.set(`Locations.${currentLoc.location}`, ipPartsList.map(({id, ip}) => ({ id, ip })));
 
         const ipAddresses = ipPartsList
         .map(item => (item.ip.some(o => o === "") ? null : {...item, ip: item.ip.join(".") }))

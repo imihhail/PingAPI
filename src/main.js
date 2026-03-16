@@ -57,11 +57,9 @@ app.whenReady().then(async() => {
 
   createWindow()
 
-  if (!store.has("Location I")) {
+  if (!store.has("Locations")) {
     const data = CreateStorageData()
     store.set(data)    
-    
-    //win.webContents.send('store-locations', data);
   }
 
   app.on('activate', () => {

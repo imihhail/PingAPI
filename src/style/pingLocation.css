@@ -2,37 +2,60 @@
   display: flex;
 }
 
+.sideBar {
+  background-color: rgb(17, 17, 17);
+  padding: 10px 0px;
+  width: 0;
+  height: 100vh;
+  transition: width 0.3s ease;
+  overflow: hidden;     
+  box-sizing: border-box;
+  border-top-right-radius: 3px;
+  pointer-events: none;
+}
+
+.sideBar.opened {
+  padding: 10px 0px;
+  width: 160px;
+  pointer-events: auto;
+  border-right: 1px solid var(--subtle);
+  border-top: 1px solid var(--subtle);
+}
+
 .topSection {
+  display: flex;
+  flex-direction: column;
   font-size: 14px;
-  margin: 0px 10px;
+  padding: 10px 4px;
+  margin: 12px 0px;
   position: relative; 
   color: rgb(255, 255, 255);
+  gap: 5px;
 }
 
-/* styles.css */
 .ipLines {
   display: flex;
-  gap: 2px;
-  justify-content: space-between;
-  width:auto;
-  margin-bottom: 15px;
+  padding: 6px 10px;
+  gap: 13px;
+  cursor: pointer;
+  border-radius: 3px;
 }
 
+.ipLines:hover {
+  background-color: #1c3133;
+}
 
+.ipLabel {
+  padding: 5px 0px;
+}
 
 .ipControl {
   display: flex;
 }
 
-.ipLabel {
-  box-sizing: border-box;
-  padding: 5px 0px;
-}
-
-/* input takes available width in the column */
 .ipNumber {
   text-align: center;
-  width: 30px;
+  width: 4ch;
   box-sizing: border-box;
   padding: 4px 8px;
   border: 1px solid var(--subtle, #444);
