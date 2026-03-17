@@ -30,7 +30,10 @@ function SidePanel({ sideBarOpened, ipLength, setIpLength }) {
             <div className='topSection'>
                 <div className="ipLines">
                     <MapPinHouse strokeWidth={strokeWith}/>
-                    <PingLocation />
+                    <span className="ipLabel">Server location</span>
+                </div>
+                <div className="ipOption">
+                    <PingLocation />       
                 </div>
                 <div className="ipLines">
                     <Server strokeWidth={strokeWith}/>
@@ -41,6 +44,7 @@ function SidePanel({ sideBarOpened, ipLength, setIpLength }) {
                         <button className="ipBtn" onClick={addIP}>►</button>
                     </div> */}
                 </div>
+
                 <div className="ipLines">
                     <CircleGauge strokeWidth={strokeWith}/>
                     <span className="ipLabel">Ping frequency</span>

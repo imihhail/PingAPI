@@ -23,12 +23,11 @@ function PingLocation() {
   }
 
   return (
-    <div className="dropdown-wrapper">
-      <span className="ipLabel">Server location</span>
-      {/* <button data-testid="scrollLeft" className="ipBtn" onClick={scrollLeft} >◄</button>
-      <span data-testid="sidebarLocation">{currentLoc?.location}</span>
-      <button data-testid="scrollRight" className="ipBtn" onClick={scrollRight}>►</button> */}
-    </div>
+    <>
+      <button data-testid="scrollLeft" className="ipBtn" onClick={scrollLeft} >◄</button>
+      <input  className="ipNumber" value={currentLoc?.locationçç}/>
+      <button data-testid="scrollRight" className="ipBtn" onClick={scrollRight}>►</button>
+    </>
   );
 }
 
