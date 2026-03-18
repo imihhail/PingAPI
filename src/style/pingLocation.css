@@ -55,9 +55,9 @@
 }
 
 .ipNumber {
+  width: 100px;
   text-align: center;
   box-sizing: border-box;
-  width: fit-content;
   padding: 4px 8px;
   border: 1px solid var(--subtle, #444);
   border-radius: 3px;
@@ -83,8 +83,19 @@
 .ipBtn:hover { filter: brightness(0.85); }
 .ipBtn:active { transform: translateY(1px); }
 
-
 .ipOption {
+  max-height: 0;               /* collapsed */
+  overflow: hidden;            /* hide content when closed */
+  padding: 0 5px;              /* collapsed padding */
+  opacity: 0;
+  transition: max-height 320ms ease, padding 320ms ease, opacity 250ms ease;
+  /* keep box-sizing sane */
+  box-sizing: border-box;
+}
+
+/* open state — pick a max-height large enough for worst-case content */
+.ipOption.opened {
+  max-height: 200px;           /* make this bigger than your content's height */
   padding: 13px 5px;
-  text-align: center;
+  opacity: 1;
 }

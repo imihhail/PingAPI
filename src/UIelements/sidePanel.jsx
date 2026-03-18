@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { LocationContext } from "../app";
 import PingLocation from "./location";
 import { PingAttributes } from "./ipCLass";
@@ -7,6 +7,7 @@ import { Server, CircleGauge, CloudDownload, MapPinHouse, MapPinned } from 'luci
 
 function SidePanel({ sideBarOpened, ipLength, setIpLength }) {
     const { currentLoc, setCurrentLoc, ipPartsList, setIpPartsList } = useContext(LocationContext)
+    const [displayOptions, setDisplayOptions] = useState(false)
     const strokeWith = 1.5
 
     
@@ -23,16 +24,20 @@ function SidePanel({ sideBarOpened, ipLength, setIpLength }) {
             ipPartsList.pop()
         }
     }
+
+    function toggleOptions() {
+        setDisplayOptions(prev => !prev)
+    }
     
 
     return (
         <div className={`sideBar ${sideBarOpened ? 'opened' : ''}`}>
             <div className='topSection'>
-                <div className="ipLines">
+                <div className="ipLines" onClick={toggleOptions}>
                     <MapPinHouse strokeWidth={strokeWith}/>
                     <span className="ipLabel">Server location</span>
                 </div>
-                <div className="ipOption">
+                <div className={`ipOption ${displayOptions ? 'opened' : ''}`}>
                     <PingLocation />       
                 </div>
                 <div className="ipLines">

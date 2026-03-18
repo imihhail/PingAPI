@@ -25,7 +25,7 @@ function PingLocation() {
   return (
     <>
       <button data-testid="scrollLeft" className="ipBtn" onClick={scrollLeft} >◄</button>
-      <input  className="ipNumber" value={currentLoc?.locationçç}/>
+      <input  className="ipNumber" value={currentLoc?.location}/>
       <button data-testid="scrollRight" className="ipBtn" onClick={scrollRight}>►</button>
     </>
   );
