@@ -33,38 +33,40 @@ function SidePanel({ sideBarOpened, ipLength, setIpLength }) {
     return (
         <div className={`sideBar ${sideBarOpened ? 'opened' : ''}`}>
             <div className='topSection'>
-                <div className="ipLines" onClick={toggleOptions}>
+
+                <div id="1" className="ipLines" onClick={toggleOptions}>
                     <MapPinHouse strokeWidth={strokeWith}/>
                     <span className="ipLabel">Server location</span>
                 </div>
                 <div className={`ipOption ${displayOptions ? 'opened' : ''}`}>
                     <PingLocation />       
                 </div>
-                <div className="ipLines">
+
+                <div id="2" className="ipLines">
                     <Server strokeWidth={strokeWith}/>
                     <span className="ipLabel">IP count</span>
-                    {/* <div className="ipControl" >
-                        <button className="ipBtn" onClick={removeIP}>◄</button>
-                        <input  className="ipNumber" type="number" value={ipLength} readOnly/>
-                        <button className="ipBtn" onClick={addIP}>►</button>
-                    </div> */}
+                </div>
+                <div className={`ipOption ${displayOptions ? 'opened' : ''}`} >
+                    <button className="ipBtn" onClick={removeIP}>◄</button>
+                    <input  className="ipNumber" type="number" value={ipLength} readOnly/>
+                    <button className="ipBtn" onClick={addIP}>►</button>
                 </div>
 
-                <div className="ipLines">
+                <div id="3" className="ipLines">
                     <CircleGauge strokeWidth={strokeWith}/>
                     <span className="ipLabel">Ping frequency</span>
                     {/* <button className="ipBtn" onClick={removeIP}>◄</button>
                     <input className="ipNumber"  value={`${2000}ms`} readOnly/>
                     <button className="ipBtn" onClick={addIP}>►</button> */}
                 </div>
-                <div className="ipLines">
+                <div id="4" className="ipLines">
                     <CloudDownload strokeWidth={strokeWith}/>
                     <span className="ipLabel">Download size</span>
                     {/* <button className="ipBtn" onClick={removeIP}>◄</button>
                     <input className="ipNumber"  value={`${50}MB`} readOnly/>
                     <button className="ipBtn" onClick={addIP}>►</button> */}
                 </div>
-                <div className="ipLines">
+                <div id="5" className="ipLines">
                     <MapPinned strokeWidth={strokeWith}/>
                     <span className="ipLabel">Location</span>
                     {/* <input className="ipNumber" value={`${50}MB`} readOnly/> */}
