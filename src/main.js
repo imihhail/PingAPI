@@ -25,8 +25,8 @@ let win
 
 const createWindow = () => {
   win = new BrowserWindow({
-    width: 1350,
-    height: 600,
+    width: 1000,
+    height: 475,
     frame: false,
     
     webPreferences: {
@@ -73,7 +73,7 @@ app.whenReady().then(async() => {
 //RECIEVE INPUT
 ipcMain.handle('startPing', (e, ipListObj) => {
   console.log("list: ", ipListObj);
-  //win.setSize(1350, 900)
+  win.setSize(1000, 950)
   const ipMap      = new Map()
   let pingPromises = []
   let isRunning    = true

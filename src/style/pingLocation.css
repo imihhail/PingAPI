@@ -52,54 +52,57 @@
 
 .ipLabel {
   padding: 5px 0px;
+  user-select: none;
 }
 
-.ipControl {
-  display: flex;
-}
 
 .ipNumber {
-  width: 80px;
+  width: 95px;
+  user-select: none;
+  pointer-events: none;
   text-align: center;
   box-sizing: border-box;
-  padding: 4px 8px;
-  border: 1px solid var(--subtle, #444);
+  padding: 7px 2px;
+  border: none;
   border-radius: 3px;
-  background: #111;
+  background: rgba(255, 255, 255, 0.117);
   color: #fff;
   margin: 0px 3px; 
 }
 
 .ipBtn {
-  font-size: 12px;
-  padding: 10px;
-  border: 1px solid var(--subtle, #444);
-  background: rgba(255,255,255,0.03);
+  user-select: none;
+  box-sizing: border-box;
+  border: none;
   color: #fff;
   cursor: pointer;
-  padding: 0 3px;
+  padding: 7px 5px;
   align-items: center;
   justify-content: center;
+  background: rgba(255, 255, 255, 0.117);
   border-radius: 3px;
   user-select: none;
+}
+
+.ipOption {
+  align-self: center;
+  max-height: 0;                     
+  padding: 0 5px;             
+  opacity: 0;
+  transition: max-height 250ms ease, padding 250ms ease, opacity 200ms ease;
+}
+
+.ipOption.opened {
+  /* background-color: rgb(26, 105, 61); */
+  max-height: 100px;
+  padding: 13px 0px;
+  opacity: 1;
+  border-radius: 4px;
+
 }
 
 .ipBtn:hover { filter: brightness(0.85); }
 .ipBtn:active { transform: translateY(1px); }
 
-.ipOption {
-  max-height: 0;              
-  overflow: hidden;           
-  padding: 0 5px;             
-  opacity: 0;
-  transition: max-height 320ms ease, padding 320ms ease, opacity 250ms ease;
-  box-sizing: border-box;
-}
 
-.ipOption.opened {
-  max-height: 100px;
-  padding: 13px 5px;
-  opacity: 1;
-
-}
 

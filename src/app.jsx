@@ -9,7 +9,7 @@ import { IpLocation } from './UIelements/ipCLass';
 export const LocationContext = createContext()
 
 export default function App() {
-    const [sideBarOpened, setSideBarOpened] = useState(true)
+    const [sideBarOpened, setSideBarOpened] = useState(false)
     const [currentLoc, setCurrentLoc] = useState(null)
     const [ipLocations, setIpLocations] = useState([]);
     const [ipPartsList, setIpPartsList] = useState(null)

@@ -202,9 +202,3 @@ input[type="number"]::-webkit-inner-spin-button {
   font-size: 13px;
   color: #cbe7ff;
 }
-
-@media (max-width: 720px) {
-  .IPinput input { width: 44px; font-size: 13px; padding: 6px 8px; }
-  .pingStats { font-size: 12px; gap: 8px; }
-  .app-icon { width:20px; height:20px; }
-}
