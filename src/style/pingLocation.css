@@ -10,7 +10,7 @@
 }
 
 .sideBar.opened {
-  width:160px;
+  width:165px;
   pointer-events: auto;
   border-right: 1px solid var(--subtle);
   border-top: 1px solid var(--subtle);
@@ -20,7 +20,7 @@
   justify-self: center;
   left: -100%;
   display: flex;
-  width: 152px;
+  width: 157px;
   flex-direction: column;
   font-size: 14px;
   padding: 10px 4px;
@@ -41,11 +41,14 @@
   gap: 13px;
   cursor: pointer;
   border-radius: 3px;
+
 }
 
-.ipLines:hover {
+.ipLines:hover,
+.ipLines.opened {
   background-color: #1c3133;
 }
+
 
 .ipLabel {
   padding: 5px 0px;
@@ -97,4 +100,6 @@
   max-height: 100px;
   padding: 13px 5px;
   opacity: 1;
+
 }
+
