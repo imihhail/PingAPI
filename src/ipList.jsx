@@ -148,6 +148,7 @@ function IpList({ ipLength, setIpLength }) {
             </div> 
             {selectedIpLog.isExpanded && (
                 <div onClick={resizeLog} className="pingLogExpanded">
+                    <div className="pingLogSpacer" />
                     {ipPartsList[selectedIpLog.id].pingLog?.map((log, i) =>
                         <p key={i}>{log}</p>
                     )}
