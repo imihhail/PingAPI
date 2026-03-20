@@ -14,7 +14,6 @@ const store = new Store();
 const os    = process.platform
 const arg   = os == "darwin" ? "-c" : "-n"
 const stdOS = os == "darwin" ? 2 : 3
-let lastCreatedData =null
 
 
 if (started) {
@@ -73,7 +72,7 @@ app.whenReady().then(async() => {
 //RECIEVE INPUT
 ipcMain.handle('startPing', (e, ipListObj) => {
   console.log("list: ", ipListObj);
-  win.setSize(1000, 950)
+  win.setSize(1000, 800)
   const ipMap      = new Map()
   let pingPromises = []
   let isRunning    = true

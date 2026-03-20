@@ -145,6 +145,7 @@ function IpList({ ipLength, setIpLength }) {
             {isPinging ? <button onClick={stopPing} className="stopBtn">Stop</button>
                             : <button onClick={ping} className="startBtn">Ping</button>
             }  
+            </div> 
             {selectedIpLog.isExpanded && (
                 <div onClick={resizeLog} className="pingLogExpanded">
                     {ipPartsList[selectedIpLog.id].pingLog?.map((log, i) =>
@@ -152,7 +153,6 @@ function IpList({ ipLength, setIpLength }) {
                     )}
                 </div>
             )} 
-            </div> 
         </div>
     );
 }
