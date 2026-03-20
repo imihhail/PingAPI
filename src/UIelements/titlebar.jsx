@@ -14,7 +14,7 @@ function TitleBar({ toggleSidePanel }) {
 
     return (
         <header className="titlebar">
-            <button id="menuBtn" onClick={toggleSidePanel} className="hamburger-btn" aria-expanded="false" aria-label="Open menu">
+            <button id="menuBtn" onClick={toggleSidePanel} className="hamburger-btn" >
                 <span className="line"></span>
                 <span className="line"></span>
                 <span className="line"></span>

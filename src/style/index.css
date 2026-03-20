@@ -13,18 +13,23 @@
 }
 
 body, #root, html {
-  height: 100%;
   background: radial-gradient(circle 700px at 0% 100%, #151515 0%, rgb(19, 19, 19) 70%);
-  background-repeat: no-repeat;
+
   margin: 0;
   color: var(--text);
-  overflow: hidden;
+  height: 100%;
+}
+
+.page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .content {
-  padding: 0px;
-  margin: 1px auto;
+  flex: 1;
   display: flex;
+  min-height: 0; /* important for children with overflow */
 }
 
 #settingsForm {

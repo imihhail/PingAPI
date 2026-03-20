@@ -37,7 +37,7 @@ export default function App() {
     return (
         <LocationContext.Provider value={{ currentLoc, setCurrentLoc, ipLocations, ipPartsList, setIpPartsList }}>
             {currentLoc &&
-                <div>
+                <div className='page'>
                     <TitleBar toggleSidePanel={toggleSidePanel}/>
                     
                     <div className="content">

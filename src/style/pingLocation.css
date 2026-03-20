@@ -1,12 +1,14 @@
 .sideBar {
+  display: flex;
+  flex-direction: column;
   background-color: rgb(17, 17, 17);
   width: 0;
-  height: 100vh;
   transition: width 0.3s ease;
-  overflow: hidden;     
+  overflow: hidden;
   box-sizing: border-box;
   border-top-right-radius: 3px;
   pointer-events: none;
+  align-self: stretch;
 }
 
 .sideBar.opened {

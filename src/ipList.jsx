@@ -10,6 +10,11 @@ function IpList({ ipLength, setIpLength }) {
     const [isPinging, setIsPinging]   = useState(false)
     const [speed_Mbps, setSpeed_Mbps] = useState("")
     const [selectedIpLog, setSelectedIpLog] = useState({id: null, isExpanded: false});
+    const logRef = useRef(null);
+
+    useEffect(() => {
+
+    }, [ipPartsList]);
 
 
     useEffect(() => {
@@ -62,8 +67,6 @@ function IpList({ ipLength, setIpLength }) {
         window.startPig.sendIP(ipAddresses)
         window.startPig.clearPingListeners();
         window.startPig.onPing(pingResp => {
-            console.log(pingResp);
-            
             // if (!isSpeedTestRunning && pingResp[0].connection) {
             //     isSpeedTestRunning    = true
             //     const controller      = startSpeedTest(setSpeed_Mbps)
@@ -152,8 +155,9 @@ function IpList({ ipLength, setIpLength }) {
                     {ipPartsList[selectedIpLog.id].pingLog?.map((log, i) =>
                         <p key={i}>{log}</p>
                     )}
+                    <div ref={logRef} />
                 </div>
-            )} 
+            )}
         </div>
     );
 }
