@@ -71,7 +71,6 @@ app.whenReady().then(async() => {
 
 //RECIEVE INPUT
 ipcMain.handle('startPing', (e, ipListObj) => {
-  console.log("list: ", ipListObj);
   win.setSize(1000, 800)
   const ipMap      = new Map()
   let pingPromises = []

@@ -13,8 +13,8 @@ function IpList({ ipLength, setIpLength }) {
     const logRef = useRef(null);
 
     useEffect(() => {
-
-    }, [ipPartsList]);
+        logRef.current?.scrollIntoView({ behavior: "instant" });
+    }, [ipPartsList, selectedIpLog]);
 
 
     useEffect(() => {
@@ -72,7 +72,6 @@ function IpList({ ipLength, setIpLength }) {
             //     const controller      = startSpeedTest(setSpeed_Mbps)
             //     controllerRef.current = controller
             // }
-            
             setIpPartsList(prev => {
                 const copy = prev.slice()             
 
@@ -150,12 +149,12 @@ function IpList({ ipLength, setIpLength }) {
             }  
             </div> 
             {selectedIpLog.isExpanded && (
-                <div onClick={resizeLog} className="pingLogExpanded">
+                <div onClick={resizeLog} className="pingLogExpanded" >
                     <div className="pingLogSpacer" />
                     {ipPartsList[selectedIpLog.id].pingLog?.map((log, i) =>
                         <p key={i}>{log}</p>
                     )}
-                    <div ref={logRef} />
+                    <div ref={logRef}  />
                 </div>
             )}
         </div>
