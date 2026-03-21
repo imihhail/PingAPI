@@ -186,6 +186,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .pingLogExpanded {
   display: flex;
+  gap: 6px;
   flex-direction: column;
   height: 270px;
   padding: 22px 22px 16px 22px;
@@ -195,7 +196,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .pingLogExpanded::-webkit-scrollbar {
-  display: none;
+  /* display: none; */
   width: 12px;
 }
 
@@ -210,7 +211,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .pingLogExpanded p {
-  margin: 0 0 6px 0;
+  margin: 0px;
   padding: 6px 8px;
   border-radius: 3px;
   background: rgb(9, 20, 27);
