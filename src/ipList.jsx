@@ -10,26 +10,19 @@ function IpList({ ipLength, setIpLength }) {
     const [isPinging, setIsPinging]   = useState(false)
     const [speed_Mbps, setSpeed_Mbps] = useState("")
     const [selectedIpLog, setSelectedIpLog] = useState({id: null, isExpanded: false});
-    const boxRef = useRef(null);
+    const logBoxRef = useRef(null);
 
 
     useLayoutEffect(() => {        
-        const logBox = boxRef.current
+        const logBox = logBoxRef.current
         if (!logBox) return
         
         const scrollVal = logBox.clientHeight + logBox.scrollTop + 33
-        console.log("val", scrollVal);
-        console.log("hei",logBox.scrollHeight );
-        
 
         if (scrollVal == logBox.scrollHeight) {
             logBox.scrollTop = logBox.scrollHeight    
         }
 
-        
-
-        
-        
     }, [ipPartsList, selectedIpLog]);
 
 
@@ -165,7 +158,7 @@ function IpList({ ipLength, setIpLength }) {
             }  
             </div> 
             {selectedIpLog.isExpanded && (
-                <div onClick={resizeLog} className="pingLogExpanded" ref={boxRef}>
+                <div onClick={resizeLog} className="pingLogExpanded" ref={logBoxRef}>
                     <div className="pingLogSpacer" />
                     {ipPartsList[selectedIpLog.id].pingLog?.map((log, i) => (
                         <p key={i}>{log}</p>

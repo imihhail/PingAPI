@@ -71,7 +71,7 @@ app.whenReady().then(async() => {
 
 //RECIEVE INPUT
 ipcMain.handle('startPing', (e, ipListObj) => {
-  win.setSize(1000, 800)
+  win.setSize(1000, 823)
   const ipMap      = new Map()
   let pingPromises = []
   let isRunning    = true
@@ -96,10 +96,25 @@ ipcMain.handle('startPing', (e, ipListObj) => {
     });
   }
 
+  function getIpConfig() {
+    const ipConfig = spawn ('ipconfig', [])
+    const rl       = readline.createInterface({ input: ipConfig.stdout });
+
+    rl.on('line', (line) => {
+      console.log(line);
+      
+    })
+  }
+
   function pingQueue(ipList) {
-    const ipClass = ipMap.get(ipList.id)
-    let lineCount = 0
-    let stdResponded  = false
+    const ipClass    = ipMap.get(ipList.id)
+    let lineCount    = 0
+    let stdResponded = false
+    let ipConfigResp = null
+    
+    if (ipList.id == 0) {
+      getIpConfig()
+    }
     
     return new Promise((resolve, reject) => {
       const ping  = spawn('ping', [[arg], '1', ipList.ip]);
