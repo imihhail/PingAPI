@@ -79,9 +79,20 @@ function SidePanel({ sideBarOpened, ipLength, setIpLength }) {
                 <div className={`ipLines ${displayOptions === 5 ? 'opened' : ''}`}
                      onClick={() => toggleOptions(5)}>
                     <MapPinned strokeWidth={strokeWith}/>
-                    <span className="ipLabel">Location</span>
+                    <span className="ipLabel">Log memory</span>
                 </div>
                 <div className={`ipOption ${displayOptions == 5 ? 'opened' : ''}`} >
+                    <button className="ipBtn" onClick={removeIP}>◄</button>
+                    <input  className="ipNumber" type="number" value={ipLength} disabled/>
+                    <button className="ipBtn" onClick={addIP}>►</button>
+                </div>                
+
+                <div className={`ipLines ${displayOptions === 6 ? 'opened' : ''}`}
+                     onClick={() => toggleOptions(6)}>
+                    <MapPinned strokeWidth={strokeWith}/>
+                    <span className="ipLabel">Location</span>
+                </div>
+                <div className={`ipOption ${displayOptions == 6 ? 'opened' : ''}`} >
                     <button className="ipBtn" onClick={removeIP}>◄</button>
                     <input  className="ipNumber" type="number" value={ipLength} disabled/>
                     <button className="ipBtn" onClick={addIP}>►</button>

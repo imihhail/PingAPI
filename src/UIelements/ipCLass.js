@@ -6,7 +6,7 @@ export class IpLocation {
 }
 
 export class PingAttributes extends IpLocation {
-    pingLog    = []
+    ipLog      = []
     pingCount  = 0
     errorCount = 0
     pingSum    = 0
@@ -14,6 +14,7 @@ export class PingAttributes extends IpLocation {
     avg        = null
     speed      = null
     connection = false
+
 
     constructor(id, ip = ['', '', '', '']) {
       super()
@@ -47,11 +48,9 @@ export class PingAttributes extends IpLocation {
             if (this.connection) this.errorCount++
         }
 
-        this.pingLog.push(str + ipConfig)
+        this.ipLog.push({ pingLog: str, ipConfig: ipConfig })
     }
 }
-
-
 
 
 

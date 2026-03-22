@@ -76,6 +76,8 @@ function IpList({ ipLength, setIpLength }) {
         window.startPig.sendIP(ipAddresses)
         window.startPig.clearPingListeners();
         window.startPig.onPing(pingResp => {
+            console.log(pingResp);
+            
             // if (!isSpeedTestRunning && pingResp[0].connection) {
             //     isSpeedTestRunning    = true
             //     const controller      = startSpeedTest(setSpeed_Mbps)
@@ -87,7 +89,7 @@ function IpList({ ipLength, setIpLength }) {
                 pingResp.forEach(el => {
                     copy[el.id].speed      = el.speed
                     copy[el.id].avg        = el.avg
-                    copy[el.id].pingLog    = el.pingLog
+                    copy[el.id].ipLog      = el.ipLog
                     copy[el.id].packetLoss = el.packetLoss
                 })
                 
@@ -106,7 +108,7 @@ function IpList({ ipLength, setIpLength }) {
     }
 
     function resizeLog(y) {
-        if (ipPartsList[y].pingLog) {
+        if (ipPartsList[y].ipLog) {
             setSelectedIpLog(prev => ({
                 id: y,
                 isExpanded: !prev.isExpanded
@@ -147,7 +149,7 @@ function IpList({ ipLength, setIpLength }) {
                                 {ipPartsList[y] == ipPartsList[0] && (<span className="pingStats_pl">Download speed: <strong>{speed_Mbps}Mbps</strong></span>)}
                                 </>
                             ) : (
-                                ipPartsList[y].pingLog ? ipPartsList[y].pingLog[ipPartsList[y].pingLog.length - 1] : ""
+                                ipPartsList[y].ipLog ? ipPartsList[y].ipLog[ipPartsList[y].ipLog.length - 1] : ""
                             )}
                         </span>
                     </div>
@@ -160,8 +162,11 @@ function IpList({ ipLength, setIpLength }) {
             {selectedIpLog.isExpanded && (
                 <div onClick={resizeLog} className="pingLogExpanded" ref={logBoxRef}>
                     <div className="pingLogSpacer" />
-                    {ipPartsList[selectedIpLog.id].pingLog?.map((log, i) => (
-                        <p key={i}>{log}</p>
+                    {ipPartsList[selectedIpLog.id].ipLog?.map((log, i) => (
+                        <div className="pingOutput" key={i}>
+                            <p>{log.pingLog}</p>
+                            <p className="ipConfig">IPv4: {log.ipConfig}</p>
+                        </div>
                     ))}
                 </div>
             )}

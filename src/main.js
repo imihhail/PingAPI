@@ -74,7 +74,6 @@ app.whenReady().then(async() => {
 ipcMain.handle('startPing', (e, ipListObj) => {
   win.setSize(1000, 823)
   const ipMap      = new Map()
-  let pingPromises = []
   let isRunning    = true
 
   ipListObj.forEach((ip => ipMap.set(ip.id, new PingAttributes(ip.id, ip.ip)))) 
@@ -86,32 +85,28 @@ ipcMain.handle('startPing', (e, ipListObj) => {
     e.sender.delete();    
   });
 
-  //START PING
-  function startPing() {
-    console.log("pinging");
-    
-    pingPromises = []
-    
-    ipListObj.forEach(ipList=> {
-      pingPromises.push(pingQueue(ipList))
-    });
-  }
-
   function getIpConfig() {
+    console.log("Ipconfig running");
+    
     return new Promise((resolve, reject) => {
       const ipConfig = spawn('ipconfig', ipConfigCmd);
 
+      ipConfig.on('close', (code) => {
+        resolve("Not found")
+      })
+
       ipConfig.stdout.on('data', (data) => {
-        const ipConfigResp = data.toString().trim()
+        const ipConfigResp = data.toString().trim()   
         resolve(ipConfigResp)
       })
+
     })
   }
 
-  function pingQueue(ipList) {
-    const ipClass      = ipMap.get(ipList.id)
-    let lineCount      = 0
-    let stdResponded   = false
+  async function pingQueue(ipList, ipConfigResp) {
+    const ipClass    = ipMap.get(ipList.id)
+    let lineCount    = 0
+    let stdResponded = false
  
     return new Promise((resolve, reject) => {
       const ping  = spawn('ping', [[arg], '1', ipList.ip]);
@@ -129,7 +124,7 @@ ipcMain.handle('startPing', (e, ipListObj) => {
           resolve(ipClass)
           cleanUp()
         } else {
-          ipClass.calculatePingStats("Connection timed out.")
+          ipClass.calculatePingStats("Connection timed out.", ipConfigResp)
           resolve(ipClass)
           cleanUp()
         }
@@ -148,7 +143,7 @@ ipcMain.handle('startPing', (e, ipListObj) => {
       //ON STD ERROR
       rlErr.on('line', (line) => {
         stdResponded = true
-        ipClass.calculatePingStats(line)
+        ipClass.calculatePingStats(line, ipConfigResp)
       })
 
       function cleanUp() {
@@ -162,16 +157,18 @@ ipcMain.handle('startPing', (e, ipListObj) => {
     })
   }
 
-  (function loop() {
-    if (isRunning) {
-      startPing();
-     
-      Promise.all(pingPromises).then(res => {
-          e.sender.send('ping-data', res);
-          loop()
-      }).catch("Errpr from ping promises: ", e)
+  (async function loop() {
+    while (isRunning) {
+      const ipConfigResp = await getIpConfig();
+
+      const pingPromises = ipListObj.map(ipList => {
+        return pingQueue(ipList, ipConfigResp);
+      });
+
+      const res = await Promise.all(pingPromises);
+      e.sender.send('ping-data', res);
     }
-  })();
+  })()
 });
 
 
