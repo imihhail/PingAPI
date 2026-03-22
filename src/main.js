@@ -14,6 +14,7 @@ const store = new Store();
 const os    = process.platform
 const arg   = os == "darwin" ? "-c" : "-n"
 const stdOS = os == "darwin" ? 2 : 3
+const ipConfigCmd = os == "darwin" ? ['getifaddr', 'en0'] : []
 
 
 if (started) {
@@ -97,25 +98,21 @@ ipcMain.handle('startPing', (e, ipListObj) => {
   }
 
   function getIpConfig() {
-    const ipConfig = spawn ('ipconfig', [])
-    const rl       = readline.createInterface({ input: ipConfig.stdout });
+    return new Promise((resolve, reject) => {
+      const ipConfig = spawn('ipconfig', ipConfigCmd);
 
-    rl.on('line', (line) => {
-      console.log(line);
-      
+      ipConfig.stdout.on('data', (data) => {
+        const ipConfigResp = data.toString().trim()
+        resolve(ipConfigResp)
+      })
     })
   }
 
   function pingQueue(ipList) {
-    const ipClass    = ipMap.get(ipList.id)
-    let lineCount    = 0
-    let stdResponded = false
-    let ipConfigResp = null
-    
-    if (ipList.id == 0) {
-      getIpConfig()
-    }
-    
+    const ipClass      = ipMap.get(ipList.id)
+    let lineCount      = 0
+    let stdResponded   = false
+ 
     return new Promise((resolve, reject) => {
       const ping  = spawn('ping', [[arg], '1', ipList.ip]);
 
@@ -128,7 +125,7 @@ ipcMain.handle('startPing', (e, ipListObj) => {
       setTimeout(() => {
         if (!isRunning) {
           cleanUp()
-        } else if (stdResponded){
+        } else if (stdResponded){          
           resolve(ipClass)
           cleanUp()
         } else {
@@ -143,7 +140,7 @@ ipcMain.handle('startPing', (e, ipListObj) => {
         lineCount += 1
 
         if (lineCount === stdOS) {
-          ipClass.calculatePingStats(line)
+          ipClass.calculatePingStats(line, ipConfigResp)
           stdResponded = true
         }
       })

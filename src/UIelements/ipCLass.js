@@ -16,8 +16,9 @@ export class PingAttributes extends IpLocation {
     connection = false
 
     constructor(id, ip = ['', '', '', '']) {
-      super();
+      super()
       this.id = id
+
       if (id = 0) {
         this.ip = ['8', '8', '8', '8']
       } else {
@@ -25,8 +26,8 @@ export class PingAttributes extends IpLocation {
       }
     }
 
-    calculatePingStats(str) {
-        //EXTRACT PING RESPONSE AND PINGSPEED
+    calculatePingStats(str, ipConfig) {
+        // EXTRACT PING RESPONSE AND PINGSPEED
         const isPingFound   = str.match(/time(?:=|<)\s*([0-9]*\.?[0-9]+)/i);
 
         if (isPingFound) {
@@ -34,19 +35,19 @@ export class PingAttributes extends IpLocation {
             this.speed      = Math.round(pingSpeed)
             this.connection = true
 
-        //CALCULATE STATS
+        // CALCULATE STATS
             this.pingCount++
             this.pingSum    = this.pingSum + this.speed
             this.avg        = Math.round(this.pingSum / this.pingCount)
             this.packetLoss = Math.round((this.errorCount/(this.pingCount + this.errorCount))*100) 
 
-        //HANDLE STDERROR STATS
+        // HANDLE STDERROR STATS
         } else {
             this.speed = null
             if (this.connection) this.errorCount++
         }
 
-        this.pingLog.push(str)
+        this.pingLog.push(str + ipConfig)
     }
 }
 
