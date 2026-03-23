@@ -86,8 +86,6 @@ ipcMain.handle('startPing', (e, ipListObj) => {
   });
 
   function getIpConfig() {
-    console.log("Ipconfig running");
-    
     return new Promise((resolve, reject) => {
       const ipConfig = spawn('ipconfig', ipConfigCmd);
 

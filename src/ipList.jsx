@@ -13,7 +13,7 @@ function IpList({ ipLength, setIpLength }) {
     const logBoxRef = useRef(null);
 
 
-    useLayoutEffect(() => {        
+    useLayoutEffect(() => {     
         const logBox = logBoxRef.current
         if (!logBox) return
         
@@ -22,8 +22,14 @@ function IpList({ ipLength, setIpLength }) {
         if (scrollVal == logBox.scrollHeight) {
             logBox.scrollTop = logBox.scrollHeight    
         }
+    }, [ipPartsList]);
 
-    }, [ipPartsList, selectedIpLog]);
+    useLayoutEffect(() => {             
+        const logBox = logBoxRef.current
+        if (!logBox) return
+
+        logBox.scrollTop = logBox.scrollHeight    
+    }, [selectedIpLog]);
 
 
     useEffect(() => {
@@ -76,8 +82,6 @@ function IpList({ ipLength, setIpLength }) {
         window.startPig.sendIP(ipAddresses)
         window.startPig.clearPingListeners();
         window.startPig.onPing(pingResp => {
-            console.log(pingResp);
-            
             // if (!isSpeedTestRunning && pingResp[0].connection) {
             //     isSpeedTestRunning    = true
             //     const controller      = startSpeedTest(setSpeed_Mbps)
@@ -107,7 +111,7 @@ function IpList({ ipLength, setIpLength }) {
         window.startPig.clearPingListeners();
     }
 
-    function resizeLog(y) {
+    function resizeLog(y) {        
         if (ipPartsList[y].ipLog) {
             setSelectedIpLog(prev => ({
                 id: y,
@@ -149,14 +153,14 @@ function IpList({ ipLength, setIpLength }) {
                                 {ipPartsList[y] == ipPartsList[0] && (<span className="pingStats_pl">Download speed: <strong>{speed_Mbps}Mbps</strong></span>)}
                                 </>
                             ) : (
-                                ipPartsList[y].ipLog ? ipPartsList[y].ipLog[ipPartsList[y].ipLog.length - 1] : ""
+                                ipPartsList[y].ipLog ? ipPartsList[y].ipLog[ipPartsList[y].ipLog.length - 1].pingLog : ""
                             )}
                         </span>
                     </div>
                 </div>
             ))}
-            {isPinging ? <button onClick={stopPing} className="stopBtn">Stop</button>
-                            : <button onClick={ping} className="startBtn">Ping</button>
+            {isPinging ? <button onClick={stopPing} className="stopBtn">Stop</button>:
+                         <button onClick={ping} className="startBtn">Ping</button>
             }  
             </div> 
             {selectedIpLog.isExpanded && (
