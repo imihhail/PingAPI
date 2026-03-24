@@ -6,6 +6,7 @@ import { contextBridge, ipcRenderer } from 'electron';
 contextBridge.exposeInMainWorld('winapi', {
   minimize: () => ipcRenderer.invoke('window-minimize'),
   close:    () => ipcRenderer.invoke('window-close'),
+  resize:   (isOpened) => ipcRenderer.invoke('window-resize', isOpened),
 });
 
 contextBridge.exposeInMainWorld('startPig', {

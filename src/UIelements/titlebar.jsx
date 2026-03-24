@@ -3,7 +3,7 @@ import React from 'react';
 import { LocationContext } from "../app";
 
 function TitleBar({ toggleSidePanel }) {
-    const { currentLoc, setCurrentLoc } = useContext(LocationContext)
+    const { currentLoc, setCurrentLoc, ipPartsList } = useContext(LocationContext)
 
 
     async function saveAndExit() {

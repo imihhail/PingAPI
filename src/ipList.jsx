@@ -111,12 +111,14 @@ function IpList({ ipLength, setIpLength }) {
         window.startPig.clearPingListeners();
     }
 
-    function resizeLog(y) {        
+    function resizeLog(y) {      
         if (ipPartsList[y].ipLog) {
             setSelectedIpLog(prev => ({
                 id: y,
                 isExpanded: !prev.isExpanded
             }));
+
+            window.winapi.resize(selectedIpLog.isExpanded)
         }
     }    
 
