@@ -4,10 +4,9 @@ import { LocationContext } from "./app";
 import { startSpeedTest } from "./speedTest";
 
 
-function IpList({ ipLength, setIpLength }) {
+function IpList({ ipLength, setIpLength, isPinging, setIsPinging }) {
     const { currentLoc, setCurrentLoc, ipPartsList, setIpPartsList } = useContext(LocationContext)
     const controllerRef = useRef(null)
-    const [isPinging, setIsPinging]   = useState(false)
     const [speed_Mbps, setSpeed_Mbps] = useState("")
     const [selectedIpLog, setSelectedIpLog] = useState({id: null, isExpanded: false});
     const logBoxRef = useRef(null);
@@ -155,7 +154,7 @@ function IpList({ ipLength, setIpLength }) {
                                 {ipPartsList[y] == ipPartsList[0] && (<span className="pingStats_pl">Download speed: <strong>{speed_Mbps}Mbps</strong></span>)}
                                 </>
                             ) : (
-                                ipPartsList[y].ipLog ? ipPartsList[y].ipLog[ipPartsList[y].ipLog.length - 1].pingLog : ""
+                                ipPartsList[y].ipLog ? ipPartsList[y].ipLog[ipPartsList[y].ipLog.length - 1]?.pingLog : ""
                             )}
                         </span>
                     </div>
@@ -168,7 +167,7 @@ function IpList({ ipLength, setIpLength }) {
             {selectedIpLog.isExpanded && (
                 <div onClick={resizeLog} className="pingLogExpanded" ref={logBoxRef}>
                     <div className="pingLogSpacer" />
-                    {ipPartsList[selectedIpLog.id].ipLog?.map((log, i) => (
+                    {ipPartsList[selectedIpLog.id]?.ipLog?.map((log, i) => (
                         <div className="pingOutput" key={i}>
                             <p>{log.pingLog}</p>
                             <p className="ipConfig">IPv4: {log.ipConfig}</p>

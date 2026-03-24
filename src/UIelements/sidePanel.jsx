@@ -5,21 +5,21 @@ import { PingAttributes } from "./ipCLass";
 import { Server, CircleGauge, CloudDownload, MapPinHouse, MapPinned } from 'lucide-react';
 
 
-function SidePanel({ sideBarOpened, ipLength, setIpLength }) {
+function SidePanel({ sideBarOpened, ipLength, setIpLength, isPinging }) {
     const { currentLoc, setCurrentLoc, ipPartsList, setIpPartsList } = useContext(LocationContext)
     const [displayOptions, setDisplayOptions] = useState(null)
     const strokeWith = 1.5
 
     
     function addIP() {
-        if (ipPartsList.length < 7) {
+        if (ipPartsList.length < 7 && !isPinging) {
             setIpLength(prev => prev + 1)
             ipPartsList.push(new PingAttributes(ipPartsList.length, ["", "", "", ""]))
         }
     }
 
     function removeIP() {
-        if (ipPartsList.length > 1) {
+        if (ipPartsList.length > 1 && !isPinging) {
             setIpLength(prev => prev - 1)
             ipPartsList.pop()
         }

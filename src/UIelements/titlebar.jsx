@@ -7,7 +7,7 @@ function TitleBar({ toggleSidePanel }) {
 
 
     async function saveAndExit() {
-        await window.storeAPI.set('pingList', ipPartsList.map(({id, ip}) => ({ id, ip })));
+        await window.storeAPI.set(`Locations.${currentLoc.location}`, ipPartsList.map(({id, ip}) => ({ id, ip })));
         window.winapi.close()
     }
 

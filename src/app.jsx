@@ -14,6 +14,7 @@ export default function App() {
     const [ipLocations, setIpLocations] = useState([]);
     const [ipPartsList, setIpPartsList] = useState(null)
     const [ipLength, setIpLength] = useState(5)
+    const [isPinging, setIsPinging] = useState(false)
     
 
     function toggleSidePanel() {
@@ -42,11 +43,17 @@ export default function App() {
                     
                     <div className="content">
                         <SidePanel
-                            sideBarOpened={sideBarOpened}
-                            ipLength = {ipLength}
-                            setIpLength={setIpLength}
+                            sideBarOpened = {sideBarOpened}
+                            ipLength      = {ipLength}
+                            setIpLength   = {setIpLength}
+                            isPinging     = {isPinging}
                         />
-                        <IpList ipLength={ipLength} setIpLength={setIpLength} />
+                        <IpList
+                            ipLength     = {ipLength}
+                            setIpLength  = {setIpLength}
+                            isPinging    = {isPinging}
+                            setIsPinging = {setIsPinging}
+                        />
                     </div>
                 </div>
             }
