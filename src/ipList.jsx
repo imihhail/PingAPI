@@ -111,7 +111,9 @@ function IpList({ ipLength, setIpLength, isPinging, setIsPinging }) {
     }
 
     function resizeLog(y) {      
-        if (ipPartsList[y].ipLog) {
+        if (ipPartsList[y].ipLog && ipPartsList[y].ipLog.length > 0) {
+            console.log("iplog: ", ipPartsList[y].ipLog );
+            
             setSelectedIpLog(prev => ({
                 id: y,
                 isExpanded: !prev.isExpanded
