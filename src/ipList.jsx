@@ -10,6 +10,7 @@ function IpList({ ipLength, setIpLength, isPinging, setIsPinging }) {
     const [speed_Mbps, setSpeed_Mbps] = useState("")
     const [selectedIpLog, setSelectedIpLog] = useState({id: null, isExpanded: false});
     const logBoxRef = useRef(null);
+    const pingText  = useRef(null)
 
 
     useLayoutEffect(() => {     
@@ -70,15 +71,19 @@ function IpList({ ipLength, setIpLength, isPinging, setIsPinging }) {
     }
 
     async function ping() {
+        console.log(pingText);
+        
         let isSpeedTestRunning = false
         
         await window.storeAPI.set(`Locations.${currentLoc.location}`, ipPartsList.map(({id, ip}) => ({ id, ip })));
 
         const ipAddresses = ipPartsList
-        .map(item => (item.ip.some(o => o === "") ? null : {...item, ip: item.ip.join(".") }))
-        .filter(Boolean); // removes null/undefined/empty
+            .map(item => (item.ip.some(o => o === "") ? null :
+            {...item, ip: item.ip.join(".") })).filter(Boolean); // removes null/undefined/empty
         
         window.startPig.sendIP(ipAddresses)
+        console.log(ipAddresses);
+        
         window.startPig.clearPingListeners();
         window.startPig.onPing(pingResp => {
             // if (!isSpeedTestRunning && pingResp[0].connection) {
@@ -147,7 +152,7 @@ function IpList({ ipLength, setIpLength, isPinging, setIsPinging }) {
                         ))}
                     </div>
                     <div onClick={() => resizeLog(y)} className='pingLog'>
-                        <span className="pingStats">
+                        <span className="pingStats" id={y} ref = {pingText}>
                             {ipPartsList[y].speed ? (
                                 <>
                                 <span className="pingStats_ping">Ping: <strong>{ipPartsList[y].speed}ms</strong></span>
