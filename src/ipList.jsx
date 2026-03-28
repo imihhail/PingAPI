@@ -1,44 +1,26 @@
-import { useState, useRef, useEffect, useContext, useLayoutEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import React from 'react';
 import { LocationContext } from "./app";
 import { startSpeedTest } from "./speedTest";
+import PingLog from "./pingLog";
 
 
 function IpList({ ipLength, setIpLength, isPinging, setIsPinging }) {
-    const { currentLoc, setCurrentLoc, ipPartsList, setIpPartsList } = useContext(LocationContext)
+    const { ipLocations, ipPartsList, setIpPartsList } = useContext(LocationContext)
     const controllerRef = useRef(null)
     const [speed_Mbps, setSpeed_Mbps] = useState("")
     const [selectedIpLog, setSelectedIpLog] = useState({id: null, isExpanded: false});
-    const logBoxRef = useRef(null);
 
-
-    useLayoutEffect(() => {     
-        const logBox = logBoxRef.current
-        if (!logBox) return
-        
-        const scrollVal = logBox.clientHeight + logBox.scrollTop + 33
-
-        if (scrollVal == logBox.scrollHeight) {
-            logBox.scrollTop = logBox.scrollHeight    
-        }
-    }, [ipPartsList]);
-
-    useLayoutEffect(() => {             
-        const logBox = logBoxRef.current
-        if (!logBox) return
-
-        logBox.scrollTop = logBox.scrollHeight    
-    }, [selectedIpLog]);
-
-
+console.log("iplist: ");
     useEffect(() => {
-        (async function getData() {
-            const ipData = await window.storeAPI.get(`Locations.${currentLoc.location}`)
-
-            setIpLength(ipData.length)
-            setIpPartsList(ipData)
+        (async function getData() {            
+            const ipData = await window.storeAPI.get(`Locations.${ipLocations.currentLoc.location}`)
+            console.log("asd: ", ipData);
+            
+           // setIpLength(ipData.length)
+            //setIpPartsList(ipData)
         })()
-    }, [currentLoc]);
+    }, [ipLocations.currentLoc]);
 
     function changeIP(y, x, e) {
         const value = e.target.value
@@ -72,7 +54,7 @@ function IpList({ ipLength, setIpLength, isPinging, setIsPinging }) {
     async function ping() {        
         let isSpeedTestRunning = false
         
-        await window.storeAPI.set(`Locations.${currentLoc.location}`, ipPartsList);
+        await window.storeAPI.set(`Locations.${ipLocations.currentLoc.location}`, ipPartsList);
 
         const ipAddresses = ipPartsList
             .map(item => (item.ip.some(o => o === "") ? null :
@@ -109,7 +91,7 @@ function IpList({ ipLength, setIpLength, isPinging, setIsPinging }) {
         window.startPig.stopPing()
         window.startPig.clearPingListeners();
     }
-
+   
     function resizeLog(y) {      
         if (ipPartsList[y].ipLog && ipPartsList[y].ipLog.length > 0) {            
             setSelectedIpLog(prev => ({
@@ -119,13 +101,12 @@ function IpList({ ipLength, setIpLength, isPinging, setIsPinging }) {
 
             window.winapi.resize(selectedIpLog.isExpanded)
         }
-    }    
-
+    }  
 
     return (
         <div id="settingsForm">
             <div className='ipsBorder'>
-            {ipPartsList && Array.from({ length: ipLength }, (_, y) => (
+            {ipPartsList && Array.from({ length: ipPartsList.length }, (_, y) => (
                 <div key={y} className="field">
                     <div className='IPinput'>
                         {Array.from({ length: 4 }, (_, x) => (
@@ -163,17 +144,9 @@ function IpList({ ipLength, setIpLength, isPinging, setIsPinging }) {
             {isPinging ? <button onClick={stopPing} className="stopBtn">Stop</button>:
                          <button onClick={ping} className="startBtn">Ping</button>
             }  
-            </div> 
+            </div>
             {selectedIpLog.isExpanded && (
-                <div onClick={resizeLog} className="pingLogExpanded" ref={logBoxRef}>
-                    <div className="pingLogSpacer" />
-                    {ipPartsList[selectedIpLog.id]?.ipLog?.map((log, i) => (
-                        <div className="pingOutput" key={i}>
-                            <p>{log.pingLog}</p>
-                            <p className="ipConfig">IPv4: {log.ipConfig}</p>
-                        </div>
-                    ))}
-                </div>
+                <PingLog selectedIpLog = {selectedIpLog}/>
             )}
         </div>
     );

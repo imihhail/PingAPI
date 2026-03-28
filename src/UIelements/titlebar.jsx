@@ -1,13 +1,17 @@
-import { useState, useContext } from "react";
-import React from 'react';
+import React, { useContext } from "react";
 import { LocationContext } from "../app";
 
 function TitleBar({ toggleSidePanel }) {
-    const { currentLoc, setCurrentLoc, ipPartsList } = useContext(LocationContext)
+    const { ipData } = useContext(LocationContext) ?? {};
+    const currentLoc = ipData
 
-
+    console.log("titlebar: ", currentLoc);
+    
     async function saveAndExit() {
-        await window.storeAPI.set(`Locations.${currentLoc.location}`, ipPartsList.map(({id, ip}) => ({ id, ip })));
+        if (!currentLoc) window.winapi.close()
+
+        await window.storeAPI.set(`Locations.${ipLocations.currentLoc.location}`,
+                                  ipPartsList.map(({id, ip}) => ({ id, ip })));
         window.winapi.close()
     }
 
@@ -20,12 +24,12 @@ function TitleBar({ toggleSidePanel }) {
                 <span className="line"></span>
             </button>
 
-            <span className='pingLocation'>{currentLoc?.location}</span>
+            <span className='pingLocation'>{currentLoc?.location ?? ''}</span>
 
             <div className="titlebar-right">
-                <button onClick={() => window.winapi.minimize()} id="minBtn" className="win-btn" title="Minimize">—</button>
-                <button id="maxBtn" className="win-btn" title="Maximize" disabled>▢</button>
-                <button onClick={() => saveAndExit()} id="closeWin" className="win-btn close" title="Close">✕</button>
+                <button onClick={() => window.winapi.minimize()} id="minBtn" className="win-btn">—</button>
+                <button id="maxBtn" className="win-btn" disabled>▢</button>
+                <button onClick={() => saveAndExit()} id="closeWin" className="win-btn close">✕</button>
             </div>
         </header>
     );

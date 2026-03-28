@@ -1,0 +1,62 @@
+.pingLogExpanded {
+  display: flex;
+  gap: 6px;
+  flex-direction: column;
+  height: 297px;
+  padding: 22px 22px 20px 22px;
+  overflow-y: scroll;
+  scrollbar-width:auto;
+  scrollbar-color: rgba(255,255,255,0.05);
+}
+
+.pingLogExpanded::-webkit-scrollbar {
+  width: 12px;
+}
+
+.pingLogExpanded::-webkit-scrollbar-thumb {
+  background: rgb(177, 177, 177);
+  border-radius: 5px;
+  border: 2px solid #111;
+}
+
+.pingLogExpanded::-webkit-scrollbar-thumb:hover {
+  background: rgb(201, 201, 201);
+}
+
+.pingLogExpanded p {
+  margin: 0px;
+  padding: 6px 8px;
+  border-radius: 3px;
+  background: rgb(9, 20, 27);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
+  font-size: 13px;
+  color: #cbe7ff;
+}
+
+.pingOutput {
+  display: flex;
+  gap: 10px;
+}
+
+.pingLogSpacer {
+  margin-top: auto;
+}
+
+
+/* TEST */
+#settingsForms > .field:first-child .pingLog {
+  border: none;
+  border-bottom: 2px solid transparent;
+  background-image: linear-gradient(90deg, #72ff7e 0%, #00d4ff 50%, #72ff7e 100%);
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: 200% 1px;
+  transition: background-position .5s linear, background-size .28s ease;
+  background-position: 0% bottom;
+}
+
+#settingsForms > .field:first-child .pingLog:hover {
+  outline: none;
+  background-position: 100% bottom; 
+  background-size: 200% 2px;
+}

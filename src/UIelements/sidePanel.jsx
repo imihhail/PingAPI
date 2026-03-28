@@ -6,14 +6,14 @@ import { Server, CircleGauge, CloudDownload, MapPinHouse, MapPinned } from 'luci
 
 
 function SidePanel({ sideBarOpened, ipLength, setIpLength, isPinging }) {
-    const { currentLoc, setCurrentLoc, ipPartsList, setIpPartsList } = useContext(LocationContext)
+    const { ipPartsList } = useContext(LocationContext)
+    const strokeWith = 1.5    
     const [displayOptions, setDisplayOptions] = useState(null)
-    const strokeWith = 1.5
 
-    
+
     function addIP() {
         if (ipPartsList.length < 7 && !isPinging) {
-            setIpLength(prev => prev + 1)
+            //setIpLength(prev => prev + 1)
             ipPartsList.push(new PingAttributes(ipPartsList.length, ["", "", "", ""]))
         }
     }
@@ -34,7 +34,7 @@ function SidePanel({ sideBarOpened, ipLength, setIpLength, isPinging }) {
         <div className={`sideBar ${sideBarOpened ? 'opened' : ''}`}>
             <div className='topSection'>
 
-                <div className={`ipLines ${displayOptions === 1 ? 'opened' : ''}`}
+                <div data-testid="sideBarline-1" className={`ipLines ${displayOptions === 1 ? 'opened' : ''}`}
                     onClick={() => toggleOptions(1)}>
                     <MapPinHouse strokeWidth={strokeWith}/>
                     <span className="ipLabel">Server location</span>

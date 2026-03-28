@@ -47,12 +47,15 @@ test('titlebar and location display correctly and ', async () => {
   const burgerBtn = page.locator('.hamburger-btn');
   const sidePanel = page.locator('.sideBar.opened');
   const sidePanelLocation = page.getByTestId('sidebarLocation');
+  const locationBtn =  page.getByTestId('sideBarline-1');
   const scrollRight = page.getByTestId('scrollRight');
   const scrollLeft = page.getByTestId('scrollLeft');
 
   await expect(titlebar).toBeVisible();
   await burgerBtn.click();
   await expect(sidePanel).toBeVisible();
+  await expect(locationBtn).toBeVisible();
+  await locationBtn.click();
 
   const ipInputs = page.locator('input[id*="ipPart1"]');
   const ipInputs2 = page.locator('input[id*="ipPart2"]');
@@ -80,7 +83,7 @@ test('titlebar and location display correctly and ', async () => {
     }
 
     await expect(location).toHaveText(expected);
-    await expect(sidePanelLocation).toHaveText(expected);
+    await expect(sidePanelLocation).toHaveValue(expected);
     await scrollRight.click();
   }
 
@@ -104,6 +107,6 @@ test('titlebar and location display correctly and ', async () => {
     }
 
     await expect(location).toHaveText(expected);
-    await expect(sidePanelLocation).toHaveText(expected);
+    await expect(sidePanelLocation).toHaveValue(expected);
   }
 });

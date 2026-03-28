@@ -3,29 +3,37 @@ import { LocationContext } from "../app";
 
 
 function PingLocation() {
-  const { currentLoc, setCurrentLoc, ipLocations, ipPartsList, setIpPartsList } = useContext(LocationContext)
+  const { storeData } = useContext(LocationContext)
   
   
   async function scrollLeft() {
-    if (currentLoc.locationId >= 1) {
-      await window.storeAPI.set(`Locations.${currentLoc.location}`, ipPartsList.map(({id, ip}) => ({ id, ip })));
-      const newLoc = ipLocations[currentLoc.locationId - 1];
-      setCurrentLoc(newLoc);
+    if (ipLocations.currentLoc.locationId >= 1) {
+      await window.storeAPI.set(`Locations.${ipLocations.currentLoc.location}`, ipPartsList.map(({id, ip}) => ({ id, ip })));
+      const newLoc = ipLocations.locations[ipLocations.currentLoc.locationId - 1];
+
+      setIpLocations(prev => ({
+          ...prev,
+          currentLoc: newLoc
+      }));
     }
   }
 
   async function scrollRight() {
-    if (currentLoc.locationId < ipLocations.length - 1) {
-      await window.storeAPI.set(`Locations.${currentLoc.location}`, ipPartsList.map(({id, ip}) => ({ id, ip })));
-      const newLoc = ipLocations[currentLoc.locationId + 1];      
-      setCurrentLoc(newLoc);
+    if (ipLocations.currentLoc.locationId < ipLocations.locations.length - 1) {
+      await window.storeAPI.set(`Locations.${ipLocations.currentLoc.location}`, ipPartsList.map(({id, ip}) => ({ id, ip })));
+      const newLoc = ipLocations.locations[ipLocations.currentLoc.locationId + 1];
+           
+      setIpLocations(prev => ({
+          ...prev,
+          currentLoc: newLoc
+      }));
     }
   }
 
   return (
     <>
       <button data-testid="scrollLeft" className="ipBtn" onClick={scrollLeft}>◄</button>
-      <input  className="ipNumber" value={currentLoc?.location} disabled/>
+      <input data-testid="sidebarLocation" className="ipNumber" value={ipLocations.currentLoc?.location} disabled/>
       <button data-testid="scrollRight" className="ipBtn" onClick={scrollRight}>►</button>
     </>
   );
