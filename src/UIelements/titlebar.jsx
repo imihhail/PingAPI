@@ -3,14 +3,13 @@ import { LocationContext } from "../app";
 
 function TitleBar({ toggleSidePanel }) {
     const { ipData } = useContext(LocationContext) ?? {};
-    const currentLoc = ipData
-
-    console.log("titlebar: ", currentLoc);
+    const currentLoc = ipData?.pingLocations[0].key
     
+
     async function saveAndExit() {
         if (!currentLoc) window.winapi.close()
 
-        await window.storeAPI.set(`Locations.${ipLocations.currentLoc.location}`,
+        await window.storeAPI.set(`Locations.${currentLoc}`,
                                   ipPartsList.map(({id, ip}) => ({ id, ip })));
         window.winapi.close()
     }
@@ -24,7 +23,7 @@ function TitleBar({ toggleSidePanel }) {
                 <span className="line"></span>
             </button>
 
-            <span className='pingLocation'>{currentLoc?.location ?? ''}</span>
+            <span className='pingLocation'>{currentLoc ?? ''}</span>
 
             <div className="titlebar-right">
                 <button onClick={() => window.winapi.minimize()} id="minBtn" className="win-btn">—</button>

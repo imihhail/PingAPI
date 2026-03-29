@@ -5,30 +5,30 @@ import { startSpeedTest } from "./speedTest";
 import PingLog from "./pingLog";
 
 
-function IpList({ ipLength, setIpLength, isPinging, setIsPinging }) {
-    const { ipLocations, ipPartsList, setIpPartsList } = useContext(LocationContext)
+function IpList({ isPinging, setIsPinging }) {
+    const { ipData } = useContext(LocationContext)
+    const [ipList, setIpList] = useState(ipData.ipList)
     const controllerRef = useRef(null)
     const [speed_Mbps, setSpeed_Mbps] = useState("")
     const [selectedIpLog, setSelectedIpLog] = useState({id: null, isExpanded: false});
 
-console.log("iplist: ");
+
     useEffect(() => {
-        (async function getData() {            
-            const ipData = await window.storeAPI.get(`Locations.${ipLocations.currentLoc.location}`)
-            console.log("asd: ", ipData);
+        (async function getData() {     
+            const ipLoc = await window.storeAPI.get(`Locations.${ipData.pingLocations[0].key}`)
+            console.log("ipLoc: ", ipLoc);
             
-           // setIpLength(ipData.length)
             //setIpPartsList(ipData)
         })()
-    }, [ipLocations.currentLoc]);
+    }, [speed_Mbps]);
 
     function changeIP(y, x, e) {
         const value = e.target.value
         
         if (value.length <= 3) {
-            const ipListCopy = [...ipPartsList];
+            const ipListCopy = [...ipList];
             ipListCopy[y].ip[x] = value;
-            setIpPartsList(ipListCopy)
+            setIpList(ipListCopy)
         }
         
         if (value.length == 3 && x != 3) {
@@ -68,7 +68,7 @@ console.log("iplist: ");
             //     const controller      = startSpeedTest(setSpeed_Mbps)
             //     controllerRef.current = controller
             // }
-            setIpPartsList(prev => {
+            setIpList(prev => {
                 const copy = prev.slice()             
 
                 pingResp.forEach(el => {
@@ -77,11 +77,9 @@ console.log("iplist: ");
                     copy[el.id].ipLog      = el.ipLog
                     copy[el.id].packetLoss = el.packetLoss
                 })
-                
                 return copy
             })
         })
-
         setIsPinging(true)
     }
 
@@ -93,7 +91,7 @@ console.log("iplist: ");
     }
    
     function resizeLog(y) {      
-        if (ipPartsList[y].ipLog && ipPartsList[y].ipLog.length > 0) {            
+        if (ipList[y].ipLog && ipList[y].ipLog.length > 0) {            
             setSelectedIpLog(prev => ({
                 id: y,
                 isExpanded: !prev.isExpanded
@@ -106,7 +104,8 @@ console.log("iplist: ");
     return (
         <div id="settingsForm">
             <div className='ipsBorder'>
-            {ipPartsList && Array.from({ length: ipPartsList.length }, (_, y) => (
+
+            {ipList?.map((_, y) => (
                 <div key={y} className="field">
                     <div className='IPinput'>
                         {Array.from({ length: 4 }, (_, x) => (
@@ -114,7 +113,7 @@ console.log("iplist: ");
                                 {y == 0 ? <input value={8} readOnly /> :
                                     <input
                                         id={`ipPart${y}-${x}`}
-                                        value={ipPartsList[y]?.ip?.[x] ?? ''}
+                                        value={ipList[y]?.ip?.[x] ?? ''}
                                         onChange={(e) => changeIP(y, x, e)}
                                         onKeyDown={(e) => handleKeys(x, e)}
                                         type="number"
@@ -127,15 +126,15 @@ console.log("iplist: ");
                     </div>
                     <div onClick={() => resizeLog(y)} className='pingLog'>
                         <span className="pingStats" id={y}>
-                            {ipPartsList[y].speed ? (
+                            {ipList[y].speed ? (
                                 <>
-                                <span className="pingStats_ping">Ping: <strong>{ipPartsList[y].speed}ms</strong></span>
-                                <span className="pingStats_avg">Avg: <strong>{ipPartsList[y].avg ?? '-'}ms</strong></span>
-                                <span className="pingStats_pl">PL: <strong>{ipPartsList[y].packetLoss ?? '-'}%</strong></span>
-                                {ipPartsList[y] == ipPartsList[0] && (<span className="pingStats_pl">Download speed: <strong>{speed_Mbps}Mbps</strong></span>)}
+                                <span className="pingStats_ping">Ping: <strong>{ipList[y].speed}ms</strong></span>
+                                <span className="pingStats_avg">Avg: <strong>{ipList[y].avg ?? '-'}ms</strong></span>
+                                <span className="pingStats_pl">PL: <strong>{ipList[y].packetLoss ?? '-'}%</strong></span>
+                                {ipList[y] == ipList[0] && (<span className="pingStats_pl">Download speed: <strong>{speed_Mbps}Mbps</strong></span>)}
                                 </>
                             ) : (
-                                ipPartsList[y].ipLog ? ipPartsList[y].ipLog[ipPartsList[y].ipLog.length - 1]?.pingLog : ""
+                                ipList[y].ipLog ? ipList[y].ipLog[ipList[y].ipLog.length - 1]?.pingLog : ""
                             )}
                         </span>
                     </div>

@@ -3,8 +3,9 @@ import { LocationContext } from "../app";
 
 
 function PingLocation() {
-  const { storeData } = useContext(LocationContext)
-  
+  const { ipData } = useContext(LocationContext)
+  const currentLoc = ipData.pingLocations[0].key
+
   
   async function scrollLeft() {
     if (ipLocations.currentLoc.locationId >= 1) {
@@ -33,7 +34,7 @@ function PingLocation() {
   return (
     <>
       <button data-testid="scrollLeft" className="ipBtn" onClick={scrollLeft}>◄</button>
-      <input data-testid="sidebarLocation" className="ipNumber" value={ipLocations.currentLoc?.location} disabled/>
+      <input data-testid="sidebarLocation" className="ipNumber" value={currentLoc} disabled/>
       <button data-testid="scrollRight" className="ipBtn" onClick={scrollRight}>►</button>
     </>
   );

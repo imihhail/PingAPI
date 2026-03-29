@@ -10,18 +10,21 @@ export const LocationContext = createContext()
 export default function App() {
     const [sideBarOpened, setSideBarOpened] = useState(false)
     const [ipData, setIpData] = useState({});
+    const [ipDatas, setIpDatas] = useState();
     const [isLoading, setIsLoading] = useState(true);
     const [isPinging, setIsPinging] = useState(false)
     const dataRef = useRef(null);
-    
+
 
     useEffect(() => {
         (async function getData() {
-            dataRef.current = await window.storeAPI.getAll()
+            dataRef.current          = await window.storeAPI.getAll()
+            const storePingLocations = dataRef.current.Locations
 
-            const [firstKey, firstValue] = Object.entries(dataRef.current.Locations)[0] ?? [];
+            const pingLocations = Object.keys(storePingLocations).map((key, i) => ({ i, key }));
+            const ipList        = Object.values(storePingLocations)[0] ?? [];
 
-            setIpData(dataRef.current.Locations)
+            setIpData({ pingLocations: pingLocations, ipList: ipList })
             setIsLoading(false)                
         })()
     }, []);
@@ -29,7 +32,6 @@ export default function App() {
     function toggleSidePanel() {
         setSideBarOpened(prev => !prev)
     }    
-
 
     if (isLoading) return (
         <div className="page">
@@ -44,7 +46,7 @@ export default function App() {
     
     return (
         <LocationContext.Provider value={{ ipData }}>
-            <div className='page'>
+            <div className='app'>
                 <TitleBar toggleSidePanel={toggleSidePanel}/>
                 
                 <div className='content'>
