@@ -1,5 +1,5 @@
 import React, { useState, useRef, useContext, useLayoutEffect } from "react";
-import { LocationContext } from "../../app";
+//import { LocationContext } from "../../app";
 
 
 function PingLog({ selectedIpLog }) {

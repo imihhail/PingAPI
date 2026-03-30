@@ -1,13 +1,10 @@
-import React, { useState, useEffect, createContext, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import TitleBar from './titlebar';
 import Layout from "./layout";
 
 
-export const LocationContext = createContext()
-
 export default function App() {
     const [ipData, setIpData] = useState({});
-    const [currentLoc, setCurrentLoc] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const dataRef = useRef(null);
 
@@ -20,14 +17,14 @@ export default function App() {
 
             const pingLocations = Object.keys(storePingLocations).map((key, i) => ({ i, key }));
             const ipList        = Object.values(storePingLocations)[0] ?? [];
-
-            setCurrentLoc(pingLocations[0])
-            setIpData({ pingLocations: pingLocations, ipList: ipList })
+            const currentLoc    = pingLocations[0]
+            
+            setIpData({ pingLocations: pingLocations, currentLoc: currentLoc,  ipList: ipList })
             setIsLoading(false)                
         })()
     }, []);
         
-    const contextValue = useMemo(() => ({ ipData }), [ipData]);
+    //const contextValue = useMemo(() => ({ ipData }), [ipData]);
     
     
     if (isLoading) return (
@@ -42,8 +39,6 @@ export default function App() {
 
     
     return (
-        <LocationContext.Provider value = { contextValue }>
-            <Layout/>
-        </LocationContext.Provider>
-        )
-    }
+        <Layout ipData = {ipData}/>
+    )
+}

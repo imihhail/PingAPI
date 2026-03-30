@@ -1,11 +1,11 @@
 import React, { useContext, useState } from "react";
-import { LocationContext } from "../../app";
+import { LocationContext } from "../../layout";
 import PingLocation from "./sidePanelContent/location";
 import { PingAttributes } from "../../ipCLass";
 import { Server, CircleGauge, CloudDownload, MapPinHouse, MapPinned } from 'lucide-react';
 
 
-function SidePanel({ sideBarOpened, ipLength, setIpLength, isPinging }) {
+function SidePanel({ ipLength, setIpLength, isPinging }) {
     console.log("sidepanel is loading");
     
     const { ipPartsList } = useContext(LocationContext)

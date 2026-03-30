@@ -1,18 +1,16 @@
 import React, { useContext } from "react";
-import { LocationContext } from "./app";
+import { LocationContext } from "./layout";
 
 function TitleBar({ setSideBarOpened }) {
-    console.log("titlebar is rendering");
-    
-    const { contextValue } = useContext(LocationContext) ?? {};
-    const currentLoc = contextValue?.ipData?.pingLocations[0].key
-    
+    const { currentLoc } = useContext(LocationContext) ?? '';
+
 
     async function saveAndExit() {
         if (!currentLoc) window.winapi.close()
 
-        await window.storeAPI.set(`Locations.${currentLoc}`,
-                                  ipPartsList.map(({id, ip}) => ({ id, ip })));
+        const mapped = ipPartsList.map(({id, ip}) => ({ id, ip }));
+        await window.storeAPI.set(`Locations.${currentLoc}`, mapped);
+        
         window.winapi.close()
     }
 
@@ -29,7 +27,7 @@ function TitleBar({ setSideBarOpened }) {
                 <span className="line"></span>
             </button>
 
-            <span className='pingLocation'>{currentLoc ?? ''}</span>
+            <span className='pingLocation'>{currentLoc?.key}</span>
 
             <div className="titlebar-right">
                 <button onClick={() => window.winapi.minimize()} id="minBtn" className="win-btn">—</button>

@@ -1,17 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, createContext, useMemo } from "react";
 import TitleBar from './titlebar';
 import Content from "./content/content";
 
 
-export default function Layout() {
-    const [sideBarOpened, setSideBarOpened] = useState(false)
+export const LocationContext = createContext()
 
-    console.log("Layout is rendering");
+export default function Layout({ ipData } ) {
+    const [sideBarOpened, setSideBarOpened] = useState(false)
+    const [currentLoc, setCurrentLoc] = useState(ipData.currentLoc)
+    
+    const contextValue = useMemo(
+        () => ({ currentLoc, setCurrentLoc, ipData }),
+        [currentLoc, ipData]  
+    )
     
     return (
-        <div className='app'>
-            <TitleBar setSideBarOpened = { setSideBarOpened }/> 
-            <Content sideBarOpened     = { sideBarOpened }/>
-        </div>
-        )
-    }
+        <LocationContext.Provider value={contextValue}>
+
+            <div className='app'>
+                <TitleBar setSideBarOpened = { setSideBarOpened }/> 
+                <Content sideBarOpened     = { sideBarOpened }/>
+            </div>
+
+        </LocationContext.Provider>
+    )
+}

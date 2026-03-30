@@ -1,13 +1,13 @@
 import { useState, useRef, useEffect, useContext } from "react";
 import React from 'react';
-import { LocationContext } from "../../app";
+import { LocationContext } from "../../layout";
 import { startSpeedTest } from "./speedTest";
 import PingLog from "./pingLog";
 
 
-function IpList({ isPinging, setIsPinging }) {
-    const { ipData } = useContext(LocationContext)
-    const [ipList, setIpList] = useState(ipData.ipList)
+function IpList({ isPinging, setIsPinging, ipData }) {
+    const { currentLoc } = useContext(LocationContext)
+    const [ipList, setIpList] = useState(null)
     const controllerRef = useRef(null)
     const [speed_Mbps, setSpeed_Mbps] = useState("")
     const [selectedIpLog, setSelectedIpLog] = useState({id: null, isExpanded: false});
@@ -16,12 +16,11 @@ console.log("iplist");
 
     useEffect(() => {
         (async function getData() {     
-            const ipLoc = await window.storeAPI.get(`Locations.${ipData.pingLocations[0].key}`)
-           // console.log("ipLoc: ", ipLoc);
-            
-            //setIpPartsList(ipData)
+            const ipLoc = await window.storeAPI.get(`Locations.${currentLoc.key}`)
+
+            setIpList(ipLoc)
         })()
-    }, [speed_Mbps]);
+    }, [currentLoc]);
 
     function changeIP(y, x, e) {
         const value = e.target.value
@@ -106,48 +105,52 @@ console.log("iplist");
         <div id="settingsForm">
             <div className='ipsBorder'>
 
-            {ipList?.map((_, y) => (
-                <div key={y} className="field">
-                    <div className='IPinput'>
-                        {Array.from({ length: 4 }, (_, x) => (
-                            <React.Fragment key={x}>
-                                {y == 0 ? <input value={8} readOnly /> :
-                                    <input
-                                        id={`ipPart${y}-${x}`}
-                                        value={ipList[y]?.ip?.[x] ?? ''}
-                                        onChange={(e) => changeIP(y, x, e)}
-                                        onKeyDown={(e) => handleKeys(x, e)}
-                                        type="number"
-                                    />
-                                }
+                {ipList?.map((_, y) => (
+                    <div key={y} className="field">
+                        <div className='IPinput'>
+                            {Array.from({ length: 4 }, (_, x) => (
+                                <React.Fragment key={x}>
+                                    {y == 0 ? <input value={8} readOnly /> :
+                                        <input
+                                            id={`ipPart${y}-${x}`}
+                                            value={ipList[y]?.ip?.[x] ?? ''}
+                                            onChange={(e) => changeIP(y, x, e)}
+                                            onKeyDown={(e) => handleKeys(x, e)}
+                                            type="number"
+                                        />
+                                    }
 
-                                {x < 3 && <span className="dot">.</span>}
-                            </React.Fragment>
-                        ))}
+                                    {x < 3 && <span className="dot">.</span>}
+                                </React.Fragment>
+                            ))}
+                        </div>
+                        <div onClick={() => resizeLog(y)} className='pingLog'>
+                            <span className="pingStats" id={y}>
+                                {ipList[y].speed ? (
+                                    <>
+                                    <span className="pingStats_ping">Ping: <strong>{ipList[y].speed}ms</strong></span>
+                                    <span className="pingStats_avg">Avg: <strong>{ipList[y].avg ?? '-'}ms</strong></span>
+                                    <span className="pingStats_pl">PL: <strong>{ipList[y].packetLoss ?? '-'}%</strong></span>
+                                    {ipList[y] == ipList[0] && (<span className="pingStats_pl">Download speed: <strong>{speed_Mbps}Mbps</strong></span>)}
+                                    </>
+                                ) : (
+                                    ipList[y].ipLog ? ipList[y].ipLog[ipList[y].ipLog.length - 1]?.pingLog : ""
+                                )}
+                            </span>
+                        </div>
                     </div>
-                    <div onClick={() => resizeLog(y)} className='pingLog'>
-                        <span className="pingStats" id={y}>
-                            {ipList[y].speed ? (
-                                <>
-                                <span className="pingStats_ping">Ping: <strong>{ipList[y].speed}ms</strong></span>
-                                <span className="pingStats_avg">Avg: <strong>{ipList[y].avg ?? '-'}ms</strong></span>
-                                <span className="pingStats_pl">PL: <strong>{ipList[y].packetLoss ?? '-'}%</strong></span>
-                                {ipList[y] == ipList[0] && (<span className="pingStats_pl">Download speed: <strong>{speed_Mbps}Mbps</strong></span>)}
-                                </>
-                            ) : (
-                                ipList[y].ipLog ? ipList[y].ipLog[ipList[y].ipLog.length - 1]?.pingLog : ""
-                            )}
-                        </span>
-                    </div>
-                </div>
-            ))}
-            {isPinging ? <button onClick={stopPing} className="stopBtn">Stop</button>:
-                         <button onClick={ping} className="startBtn">Ping</button>
-            }  
+                ))}
+
+                {isPinging ? <button onClick={stopPing} className="stopBtn">Stop</button>:
+                            <button onClick={ping} className="startBtn">Ping</button>
+                }  
+
             </div>
+
             {selectedIpLog.isExpanded && (
                 <PingLog selectedIpLog = {selectedIpLog}/>
             )}
+            
         </div>
     );
 }
