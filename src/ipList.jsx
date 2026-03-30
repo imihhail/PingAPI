@@ -16,7 +16,7 @@ function IpList({ isPinging, setIsPinging }) {
     useEffect(() => {
         (async function getData() {     
             const ipLoc = await window.storeAPI.get(`Locations.${ipData.pingLocations[0].key}`)
-            console.log("ipLoc: ", ipLoc);
+           // console.log("ipLoc: ", ipLoc);
             
             //setIpPartsList(ipData)
         })()
@@ -54,32 +54,32 @@ function IpList({ isPinging, setIsPinging }) {
     async function ping() {        
         let isSpeedTestRunning = false
         
-        await window.storeAPI.set(`Locations.${ipLocations.currentLoc.location}`, ipPartsList);
+        //await window.storeAPI.set(`Locations.${ipLocations.currentLoc.location}`, ipPartsList);
 
-        const ipAddresses = ipPartsList
-            .map(item => (item.ip.some(o => o === "") ? null :
-            {...item, ip: item.ip.join(".") })).filter(Boolean); // removes null/undefined/empty
+        // const ipAddresses = ipPartsList
+        //     .map(item => (item.ip.some(o => o === "") ? null :
+        //     {...item, ip: item.ip.join(".") })).filter(Boolean); // removes null/undefined/empty
         
-        window.startPig.sendIP(ipAddresses)
-        window.startPig.clearPingListeners();
-        window.startPig.onPing(pingResp => {
-            // if (!isSpeedTestRunning && pingResp[0].connection) {
-            //     isSpeedTestRunning    = true
-            //     const controller      = startSpeedTest(setSpeed_Mbps)
-            //     controllerRef.current = controller
-            // }
-            setIpList(prev => {
-                const copy = prev.slice()             
+        // window.startPig.sendIP(ipAddresses)
+        // window.startPig.clearPingListeners();
+        // window.startPig.onPing(pingResp => {
+        //     // if (!isSpeedTestRunning && pingResp[0].connection) {
+        //     //     isSpeedTestRunning    = true
+        //     //     const controller      = startSpeedTest(setSpeed_Mbps)
+        //     //     controllerRef.current = controller
+        //     // }
+        //     setIpList(prev => {
+        //         const copy = prev.slice()             
 
-                pingResp.forEach(el => {
-                    copy[el.id].speed      = el.speed
-                    copy[el.id].avg        = el.avg
-                    copy[el.id].ipLog      = el.ipLog
-                    copy[el.id].packetLoss = el.packetLoss
-                })
-                return copy
-            })
-        })
+        //         pingResp.forEach(el => {
+        //             copy[el.id].speed      = el.speed
+        //             copy[el.id].avg        = el.avg
+        //             copy[el.id].ipLog      = el.ipLog
+        //             copy[el.id].packetLoss = el.packetLoss
+        //         })
+        //         return copy
+        //     })
+        // })
         setIsPinging(true)
     }
 

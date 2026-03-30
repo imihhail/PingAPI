@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext, useRef } from "react";
+import React, { useState, useEffect, createContext, useRef, useMemo } from "react";
 import TitleBar from './UIelements/titlebar';
 import SidePanel from "./UIelements/sidePanel";
 import IpList from './ipList';
@@ -10,14 +10,15 @@ export const LocationContext = createContext()
 export default function App() {
     const [sideBarOpened, setSideBarOpened] = useState(false)
     const [ipData, setIpData] = useState({});
-    const [ipDatas, setIpDatas] = useState();
     const [isLoading, setIsLoading] = useState(true);
     const [isPinging, setIsPinging] = useState(false)
     const dataRef = useRef(null);
 
-
+    console.log("app");
+    
     useEffect(() => {
         (async function getData() {
+            console.log("app useffect");
             dataRef.current          = await window.storeAPI.getAll()
             const storePingLocations = dataRef.current.Locations
 
@@ -28,14 +29,13 @@ export default function App() {
             setIsLoading(false)                
         })()
     }, []);
-
-    function toggleSidePanel() {
-        setSideBarOpened(prev => !prev)
-    }    
-
+        
+    const contextValue = useMemo(() => ({ ipData }), [ipData]);
+    
+    
     if (isLoading) return (
         <div className="page">
-            <TitleBar toggleSidePanel={ toggleSidePanel }/>
+            <TitleBar setSideBarOpened={ setSideBarOpened }/>
 
             <div className="spinner-container">
                 <div className="spinner" />
@@ -45,12 +45,12 @@ export default function App() {
 
     
     return (
-        <LocationContext.Provider value={{ ipData }}>
+        <LocationContext.Provider value={contextValue}>
             <div className='app'>
-                <TitleBar toggleSidePanel={toggleSidePanel}/>
+                <TitleBar setSideBarOpened={ setSideBarOpened /* setSideBarOpened, currentLoc */}/> 
                 
                 <div className='content'>
-                    <SidePanel
+                    <SidePanel /* sideBarOpened, isPinging */
                         sideBarOpened = {sideBarOpened}
                         isPinging     = {isPinging}
                     />
@@ -60,6 +60,6 @@ export default function App() {
                     />
                 </div>
             </div>
-         </LocationContext.Provider>
+        </LocationContext.Provider>
         )
     }

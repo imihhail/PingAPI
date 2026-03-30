@@ -6,6 +6,8 @@ import { Server, CircleGauge, CloudDownload, MapPinHouse, MapPinned } from 'luci
 
 
 function SidePanel({ sideBarOpened, ipLength, setIpLength, isPinging }) {
+    console.log("sidepanel is loading");
+    
     const { ipPartsList } = useContext(LocationContext)
     const strokeWith = 1.5    
     const [displayOptions, setDisplayOptions] = useState(null)

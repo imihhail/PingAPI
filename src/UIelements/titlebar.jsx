@@ -1,9 +1,11 @@
 import React, { useContext } from "react";
 import { LocationContext } from "../app";
 
-function TitleBar({ toggleSidePanel }) {
-    const { ipData } = useContext(LocationContext) ?? {};
-    const currentLoc = ipData?.pingLocations[0].key
+function TitleBar({ setSideBarOpened }) {
+    console.log("titlebar is loading");
+    
+    const { contextValue } = useContext(LocationContext) ?? {};
+    const currentLoc = contextValue?.ipData?.pingLocations[0].key
     
 
     async function saveAndExit() {
@@ -12,6 +14,10 @@ function TitleBar({ toggleSidePanel }) {
         await window.storeAPI.set(`Locations.${currentLoc}`,
                                   ipPartsList.map(({id, ip}) => ({ id, ip })));
         window.winapi.close()
+    }
+
+    function toggleSidePanel() {
+        setSideBarOpened(prev => !prev)
     }
 
 

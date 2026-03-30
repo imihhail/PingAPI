@@ -3,7 +3,10 @@ import { LocationContext } from "../app";
 
 
 function PingLocation() {
-  const { ipData } = useContext(LocationContext)
+  const {ipData} = useContext(LocationContext)
+  console.log("loc");
+  
+  
   const currentLoc = ipData.pingLocations[0].key
 
   
