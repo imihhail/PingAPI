@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { LocationContext } from "../app";
+import { LocationContext } from "../../../app";
 
 
 function PingLocation() {

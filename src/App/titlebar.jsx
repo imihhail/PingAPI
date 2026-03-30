@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { LocationContext } from "../app";
+import { LocationContext } from "./app";
 
 function TitleBar({ setSideBarOpened }) {
-    console.log("titlebar is loading");
+    console.log("titlebar is rendering");
     
     const { contextValue } = useContext(LocationContext) ?? {};
     const currentLoc = contextValue?.ipData?.pingLocations[0].key

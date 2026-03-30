@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useContext } from "react";
 import React from 'react';
-import { LocationContext } from "./app";
+import { LocationContext } from "../../app";
 import { startSpeedTest } from "./speedTest";
 import PingLog from "./pingLog";
 
@@ -12,6 +12,7 @@ function IpList({ isPinging, setIsPinging }) {
     const [speed_Mbps, setSpeed_Mbps] = useState("")
     const [selectedIpLog, setSelectedIpLog] = useState({id: null, isExpanded: false});
 
+console.log("iplist");
 
     useEffect(() => {
         (async function getData() {     
