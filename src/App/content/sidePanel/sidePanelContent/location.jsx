@@ -2,23 +2,20 @@ import React, { useContext } from "react";
 import { LocationContext } from "../../../layout";
 
 
-function PingLocation() {
-  const { currentLoc, setCurrentLoc, ipData } = useContext(LocationContext)
-  const locations = ipData.pingLocations
+function PingLocation({ pingLocations }) {
+  const { currentLoc, setCurrentLoc } = useContext(LocationContext)
 
-  
+
   async function scrollLeft() {
     if (currentLoc.i >= 1) {
-      //await window.storeAPI.set(`Locations.${ipLocations.currentLoc.location}`, ipPartsList.map(({id, ip}) => ({ id, ip })));
-      const newLoc = locations[currentLoc.i - 1];
+      const newLoc = pingLocations[currentLoc.i - 1];
       setCurrentLoc(newLoc);
     }
   }
 
   async function scrollRight() {
-    if (currentLoc.i < locations.length - 1) {
-      //await window.storeAPI.set(`Locations.${currentLoc.key}`, ipPartsList.map(({id, ip}) => ({ id, ip })));
-      const newLoc = locations[currentLoc.i + 1];     
+    if (currentLoc.i < pingLocations.length - 1) {
+      const newLoc = pingLocations[currentLoc.i + 1];     
       setCurrentLoc(newLoc);
     }
   }

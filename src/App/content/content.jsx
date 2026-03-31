@@ -7,7 +7,7 @@ export default function Content({ sideBarOpened, pingLocations, ipData }) {
     const [isPinging, setIsPinging] = useState(false)
     const [ipLists, setIplists] = useState(ipData)
 
-    console.log("content is rendering");
+   // console.log("content is rendering");
     
     return (
         <div className="content">

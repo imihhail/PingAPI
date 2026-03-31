@@ -1,17 +1,8 @@
-import React, { useContext } from "react";
-import { LocationContext } from "./layout";
+import React from "react";
 
-function TitleBar({ setSideBarOpened }) {
-    const { currentLoc } = useContext(LocationContext) ?? '';
 
-    console.log("TitleBar rendering");
-
-    async function saveAndExit() {
-        if (!currentLoc) window.winapi.close()
-
-        const mapped = ipPartsList.map(({id, ip}) => ({ id, ip }));
-        await window.storeAPI.set(`Locations.${currentLoc}`, mapped);
-        
+function TitleBar({ setSideBarOpened, currentLoc }) {
+    function exitApp() {        
         window.winapi.close()
     }
 
@@ -28,15 +19,15 @@ function TitleBar({ setSideBarOpened }) {
                 <span className="line"></span>
             </button>
 
-            <span className='pingLocation'>{currentLoc?.key}</span>
+            <span className='pingLocation'>{currentLoc}</span>
 
             <div className="titlebar-right">
                 <button onClick={() => window.winapi.minimize()} id="minBtn" className="win-btn">—</button>
                 <button id="maxBtn" className="win-btn" disabled>▢</button>
-                <button onClick={() => saveAndExit()} id="closeWin" className="win-btn close">✕</button>
+                <button onClick={() => exitApp()} id="closeWin" className="win-btn close">✕</button>
             </div>
         </header>
     );
 }
 
-export default TitleBar;
+export default React.memo(TitleBar);

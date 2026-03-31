@@ -5,7 +5,7 @@ import { PingAttributes } from "../../ipCLass";
 import { Server, CircleGauge, CloudDownload, MapPinHouse, MapPinned } from 'lucide-react';
 
 
-function SidePanel({ ipLength, setIpLength, isPinging }) {
+function SidePanel({ ipLength, setIpLength, isPinging, pingLocations }) {
     console.log("sidepanel is loading");
     
     const { ipPartsList } = useContext(LocationContext)
@@ -40,7 +40,7 @@ function SidePanel({ ipLength, setIpLength, isPinging }) {
                 <span className="ipLabel">Server location</span>
             </div>
             <div className={`ipOption ${displayOptions == 1 ? 'opened' : ''}`}>
-                <PingLocation />       
+                <PingLocation pingLocations = { pingLocations } />       
             </div>
 
             <div className={`ipLines ${displayOptions === 2 ? 'opened' : ''}`}

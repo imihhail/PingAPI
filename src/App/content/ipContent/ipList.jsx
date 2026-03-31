@@ -7,10 +7,12 @@ import PingLog from "./pingLog";
 function IpList({ isPinging, setIsPinging, ipLists, setIplists }) {
     const { currentLoc } = useContext(LocationContext)
     const ipList = ipLists[currentLoc.i]
+    const saveTimer = useRef(null)
     const controllerRef = useRef(null)
     const [speed_Mbps, setSpeed_Mbps] = useState("")
     const [selectedIpLog, setSelectedIpLog] = useState({id: null, isExpanded: false});
 
+console.log("iplist");
 
     function changeIP(y, x, e) {
         const value = e.target.value
@@ -24,6 +26,20 @@ function IpList({ isPinging, setIsPinging, ipLists, setIplists }) {
         if (value.length == 3 && x != 3) {
             e.target.nextSibling.nextSibling.focus()
         }
+
+        saveData()
+    }
+
+    function saveData() {
+        if (saveTimer.current) {
+            clearTimeout(saveTimer.current)
+            saveTimer.current = null
+        }
+
+        saveTimer.current = setTimeout(() => {
+            console.log("Saving");
+            window.storeAPI.set(`Locations.${currentLoc.key}`, ipList.map(({id, ip}) => ({ id, ip })));
+        }, 2000);  
     }
 
     function handleKeys(index, e) {
@@ -43,34 +59,33 @@ function IpList({ isPinging, setIsPinging, ipLists, setIplists }) {
 
     async function ping() {        
         let isSpeedTestRunning = false
-        //setIpLists(ipList)
         
-        //await window.storeAPI.set(`Locations.${ipLocations.currentLoc.location}`, ipPartsList);
+        window.storeAPI.set(`Locations.${currentLoc.key}`, ipList.map(({id, ip}) => ({ id, ip })));
 
-        // const ipAddresses = ipPartsList
-        //     .map(item => (item.ip.some(o => o === "") ? null :
-        //     {...item, ip: item.ip.join(".") })).filter(Boolean); // removes null/undefined/empty
+        const ipAddresses = ipPartsList
+            .map(item => (item.ip.some(o => o === "") ? null :
+            {...item, ip: item.ip.join(".") })).filter(Boolean); // removes null/undefined/empty
         
-        // window.startPig.sendIP(ipAddresses)
-        // window.startPig.clearPingListeners();
-        // window.startPig.onPing(pingResp => {
-        //     // if (!isSpeedTestRunning && pingResp[0].connection) {
-        //     //     isSpeedTestRunning    = true
-        //     //     const controller      = startSpeedTest(setSpeed_Mbps)
-        //     //     controllerRef.current = controller
-        //     // }
-        //     setIpList(prev => {
-        //         const copy = prev.slice()             
+        window.startPig.sendIP(ipAddresses)
+        window.startPig.clearPingListeners();
+        window.startPig.onPing(pingResp => {
+            // if (!isSpeedTestRunning && pingResp[0].connection) {
+            //     isSpeedTestRunning    = true
+            //     const controller      = startSpeedTest(setSpeed_Mbps)
+            //     controllerRef.current = controller
+            // }
+            setIplists(prev => {
+                const copy = prev.slice()             
 
-        //         pingResp.forEach(el => {
-        //             copy[el.id].speed      = el.speed
-        //             copy[el.id].avg        = el.avg
-        //             copy[el.id].ipLog      = el.ipLog
-        //             copy[el.id].packetLoss = el.packetLoss
-        //         })
-        //         return copy
-        //     })
-        // })
+                pingResp.forEach(el => {
+                    copy[el.id].speed      = el.speed
+                    copy[el.id].avg        = el.avg
+                    copy[el.id].ipLog      = el.ipLog
+                    copy[el.id].packetLoss = el.packetLoss
+                })
+                return copy
+            })
+        })
         setIsPinging(true)
     }
 
