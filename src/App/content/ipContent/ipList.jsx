@@ -1,35 +1,25 @@
-import { useState, useRef, useEffect, useContext } from "react";
-import React from 'react';
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { LocationContext } from "../../layout";
 import { startSpeedTest } from "./speedTest";
 import PingLog from "./pingLog";
 
 
-function IpList({ isPinging, setIsPinging, ipData }) {
+function IpList({ isPinging, setIsPinging, ipLists, setIplists }) {
     const { currentLoc } = useContext(LocationContext)
-    const [ipList, setIpList] = useState(null)
+    const ipList = ipLists[currentLoc.i]
     const controllerRef = useRef(null)
     const [speed_Mbps, setSpeed_Mbps] = useState("")
     const [selectedIpLog, setSelectedIpLog] = useState({id: null, isExpanded: false});
 
-console.log("iplist");
-
-    useEffect(() => {
-        (async function getData() {     
-            const ipLoc = await window.storeAPI.get(`Locations.${currentLoc.key}`)
-
-            setIpList(ipLoc)
-        })()
-    }, [currentLoc]);
 
     function changeIP(y, x, e) {
         const value = e.target.value
         
-        if (value.length <= 3) {
-            const ipListCopy = [...ipList];
-            ipListCopy[y].ip[x] = value;
-            setIpList(ipListCopy)
-        }
+        if (value.length > 3) return
+
+        const ipListCopy = [...ipLists]
+        ipListCopy[currentLoc.i][y].ip[x] = value
+        setIplists(ipListCopy)
         
         if (value.length == 3 && x != 3) {
             e.target.nextSibling.nextSibling.focus()
@@ -53,6 +43,7 @@ console.log("iplist");
 
     async function ping() {        
         let isSpeedTestRunning = false
+        //setIpLists(ipList)
         
         //await window.storeAPI.set(`Locations.${ipLocations.currentLoc.location}`, ipPartsList);
 
@@ -155,4 +146,4 @@ console.log("iplist");
     );
 }
 
-export default IpList;
+export default React.memo(IpList);

@@ -101,4 +101,4 @@ function SidePanel({ ipLength, setIpLength, isPinging }) {
     );
 }
 
-export default SidePanel;
+export default React.memo(SidePanel);

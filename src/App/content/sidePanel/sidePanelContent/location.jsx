@@ -7,8 +7,6 @@ function PingLocation() {
   const locations = ipData.pingLocations
 
   
-
-  
   async function scrollLeft() {
     if (currentLoc.i >= 1) {
       //await window.storeAPI.set(`Locations.${ipLocations.currentLoc.location}`, ipPartsList.map(({id, ip}) => ({ id, ip })));

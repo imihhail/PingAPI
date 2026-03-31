@@ -8,7 +8,6 @@ export default function App() {
     const [isLoading, setIsLoading] = useState(true);
     const dataRef = useRef(null);
 
-    console.log("app is rendering");
     
     useEffect(() => {
         (async function getData() {
@@ -16,15 +15,13 @@ export default function App() {
             const storePingLocations = dataRef.current.Locations
 
             const pingLocations = Object.keys(storePingLocations).map((key, i) => ({ i, key }));
-            const ipList        = Object.values(storePingLocations)[0] ?? [];
+            const ipLists       = Object.values(storePingLocations) ?? [[]];
             const currentLoc    = pingLocations[0]
             
-            setIpData({ pingLocations: pingLocations, currentLoc: currentLoc,  ipList: ipList })
+            setIpData({ pingLocations: pingLocations, currentLoc: currentLoc, ipLists: ipLists })
             setIsLoading(false)                
         })()
-    }, []);
-        
-    //const contextValue = useMemo(() => ({ ipData }), [ipData]);
+    }, []);        
     
     
     if (isLoading) return (
@@ -39,6 +36,6 @@ export default function App() {
 
     
     return (
-        <Layout ipData = {ipData}/>
+        <Layout ipData = { ipData }/>
     )
 }

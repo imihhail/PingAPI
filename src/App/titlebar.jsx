@@ -4,6 +4,7 @@ import { LocationContext } from "./layout";
 function TitleBar({ setSideBarOpened }) {
     const { currentLoc } = useContext(LocationContext) ?? '';
 
+    console.log("TitleBar rendering");
 
     async function saveAndExit() {
         if (!currentLoc) window.winapi.close()
