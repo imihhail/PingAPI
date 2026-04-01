@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { LocationContext } from "../../layout";
-import PingLocation from "./sidePanelContent/location";
+import PingLocation from "./settings/location";
 import { PingAttributes } from "../../ipCLass";
 import { Server, CircleGauge, CloudDownload, MapPinHouse, MapPinned } from 'lucide-react';
 

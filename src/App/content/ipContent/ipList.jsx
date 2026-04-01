@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from "react";
+import React, { useState, useRef, useContext, useEffect } from "react";
 import { LocationContext } from "../../layout";
 import { startSpeedTest } from "./speedTest";
 import PingLog from "./pingLog";
@@ -7,12 +7,20 @@ import PingLog from "./pingLog";
 function IpList({ isPinging, setIsPinging, ipLists, setIplists }) {
     const { currentLoc } = useContext(LocationContext)
     const locInd = currentLoc.i
-    const ipList = ipLists[locInd]
+    //const ipList = ipLists[locInd]
     const deBounceTimer = useRef(null)
     const controllerRef = useRef(null)
     const [speed_Mbps, setSpeed_Mbps] = useState("")
+    const [ipList, setIpList] = useState(ipLists[currentLoc.i])
     const [selectedIpLog, setSelectedIpLog] = useState({id: null, isExpanded: false});
 
+    console.log("iplist loading");
+    
+
+    useEffect(() => {
+        setIpList(ipLists[currentLoc.i])
+    }, [currentLoc])
+    
 
     function changeIP(y, x, e) {
         const value = e.target.value
@@ -20,13 +28,12 @@ function IpList({ isPinging, setIsPinging, ipLists, setIplists }) {
         if (value.length > 3) return
 
         const ipListCopy = [...ipLists]
-        ipListCopy[currentLoc.i][y].ip[x] = value
+        ipListCopy[locInd][y].ip[x] = value
         setIplists(ipListCopy)
         
         if (value.length == 3 && x != 3) {
             e.target.nextSibling.nextSibling.focus()
         }
-
         saveData()
     }
 
@@ -75,14 +82,14 @@ function IpList({ isPinging, setIsPinging, ipLists, setIplists }) {
             //     const controller      = startSpeedTest(setSpeed_Mbps)
             //     controllerRef.current = controller
             // }
-            setIplists(prev => {
+            setIpList(prev => {
                 const copy = prev.slice()             
 
                 pingResp.forEach(el => {
-                    copy[locInd][el.id].speed      = el.speed
-                    copy[locInd][el.id].avg        = el.avg
-                    copy[locInd][el.id].ipLog      = el.ipLog
-                    copy[locInd][el.id].packetLoss = el.packetLoss
+                    copy[el.id].speed      = el.speed
+                    copy[el.id].avg        = el.avg
+                    copy[el.id].ipLog      = el.ipLog
+                    copy[el.id].packetLoss = el.packetLoss
                 })
                 return copy
             })
