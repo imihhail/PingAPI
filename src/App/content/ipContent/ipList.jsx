@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { LocationContext } from "../../layout";
 import { startSpeedTest } from "./speedTest";
 import PingLog from "./pingLog";
@@ -6,13 +6,13 @@ import PingLog from "./pingLog";
 
 function IpList({ isPinging, setIsPinging, ipLists, setIplists }) {
     const { currentLoc } = useContext(LocationContext)
-    const ipList = ipLists[currentLoc.i]
-    const saveTimer = useRef(null)
+    const locInd = currentLoc.i
+    const ipList = ipLists[locInd]
+    const deBounceTimer = useRef(null)
     const controllerRef = useRef(null)
     const [speed_Mbps, setSpeed_Mbps] = useState("")
     const [selectedIpLog, setSelectedIpLog] = useState({id: null, isExpanded: false});
 
-console.log("iplist");
 
     function changeIP(y, x, e) {
         const value = e.target.value
@@ -31,13 +31,12 @@ console.log("iplist");
     }
 
     function saveData() {
-        if (saveTimer.current) {
-            clearTimeout(saveTimer.current)
-            saveTimer.current = null
+        if (deBounceTimer.current) {
+            clearTimeout(deBounceTimer.current)
+            deBounceTimer.current = null
         }
 
-        saveTimer.current = setTimeout(() => {
-            console.log("Saving");
+        deBounceTimer.current = setTimeout(() => {
             window.storeAPI.set(`Locations.${currentLoc.key}`, ipList.map(({id, ip}) => ({ id, ip })));
         }, 2000);  
     }
@@ -62,13 +61,15 @@ console.log("iplist");
         
         window.storeAPI.set(`Locations.${currentLoc.key}`, ipList.map(({id, ip}) => ({ id, ip })));
 
-        const ipAddresses = ipPartsList
+        const ipAddresses = ipList
             .map(item => (item.ip.some(o => o === "") ? null :
             {...item, ip: item.ip.join(".") })).filter(Boolean); // removes null/undefined/empty
         
         window.startPig.sendIP(ipAddresses)
         window.startPig.clearPingListeners();
         window.startPig.onPing(pingResp => {
+            console.log(pingResp);
+            
             // if (!isSpeedTestRunning && pingResp[0].connection) {
             //     isSpeedTestRunning    = true
             //     const controller      = startSpeedTest(setSpeed_Mbps)
@@ -78,10 +79,10 @@ console.log("iplist");
                 const copy = prev.slice()             
 
                 pingResp.forEach(el => {
-                    copy[el.id].speed      = el.speed
-                    copy[el.id].avg        = el.avg
-                    copy[el.id].ipLog      = el.ipLog
-                    copy[el.id].packetLoss = el.packetLoss
+                    copy[locInd][el.id].speed      = el.speed
+                    copy[locInd][el.id].avg        = el.avg
+                    copy[locInd][el.id].ipLog      = el.ipLog
+                    copy[locInd][el.id].packetLoss = el.packetLoss
                 })
                 return copy
             })
@@ -148,7 +149,7 @@ console.log("iplist");
                 ))}
 
                 {isPinging ? <button onClick={stopPing} className="stopBtn">Stop</button>:
-                            <button onClick={ping} className="startBtn">Ping</button>
+                             <button onClick={ping} className="startBtn">Ping</button>
                 }  
 
             </div>

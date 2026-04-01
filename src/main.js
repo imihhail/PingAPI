@@ -158,6 +158,8 @@ ipcMain.handle('startPing', (e, ipListObj) => {
 
   (async function loop() {
     while (isRunning) {
+      console.log("pining");
+      
       const ipConfigResp = await getIpConfig();
 
       const pingPromises = ipListObj.map(ipList => {
