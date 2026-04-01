@@ -1,13 +1,11 @@
-import React, { useState, useRef, useContext, useLayoutEffect } from "react";
-//import { LocationContext } from "../../app";
+import React, { useRef, useLayoutEffect } from "react";
 
 
-function PingLog({ selectedIpLog }) {
-    const { ipPartsList } = useContext(LocationContext)
+function PingLog({ selectedIpLog, ipList }) {
     const logBoxRef = useRef(null)
 
     
-    useLayoutEffect(() => {     
+    useLayoutEffect(() => {  
         const logBox = logBoxRef.current
         if (!logBox) return
         
@@ -16,7 +14,7 @@ function PingLog({ selectedIpLog }) {
         if (scrollVal == logBox.scrollHeight) {
             logBox.scrollTop = logBox.scrollHeight    
         }
-    }, [ipPartsList]);
+    }, );
 
     useLayoutEffect(() => {             
         const logBox = logBoxRef.current
@@ -30,7 +28,7 @@ function PingLog({ selectedIpLog }) {
         <div className="pingLogExpanded" ref={logBoxRef}>
             <div className="pingLogSpacer" />
 
-            {ipPartsList[selectedIpLog.id]?.ipLog?.map((log, i) => (
+            {ipList[selectedIpLog.id]?.ipLog?.map((log, i) => (
                 <div className="pingOutput" key={i}>
                     <p>{log.pingLog}</p>
                     <p className="ipConfig">IPv4: {log.ipConfig}</p>

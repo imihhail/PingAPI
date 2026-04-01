@@ -7,19 +7,11 @@ import PingLog from "./pingLog";
 function IpList({ isPinging, setIsPinging, ipLists, setIplists }) {
     const { currentLoc } = useContext(LocationContext)
     const locInd = currentLoc.i
-    //const ipList = ipLists[locInd]
+    const ipList = ipLists[locInd]
     const deBounceTimer = useRef(null)
     const controllerRef = useRef(null)
     const [speed_Mbps, setSpeed_Mbps] = useState("")
-    const [ipList, setIpList] = useState(ipLists[currentLoc.i])
     const [selectedIpLog, setSelectedIpLog] = useState({id: null, isExpanded: false});
-
-    console.log("iplist loading");
-    
-
-    useEffect(() => {
-        setIpList(ipLists[currentLoc.i])
-    }, [currentLoc])
     
 
     function changeIP(y, x, e) {
@@ -75,21 +67,20 @@ function IpList({ isPinging, setIsPinging, ipLists, setIplists }) {
         window.startPig.sendIP(ipAddresses)
         window.startPig.clearPingListeners();
         window.startPig.onPing(pingResp => {
-            console.log(pingResp);
             
             // if (!isSpeedTestRunning && pingResp[0].connection) {
             //     isSpeedTestRunning    = true
             //     const controller      = startSpeedTest(setSpeed_Mbps)
             //     controllerRef.current = controller
             // }
-            setIpList(prev => {
+            setIplists(prev => {
                 const copy = prev.slice()             
 
                 pingResp.forEach(el => {
-                    copy[el.id].speed      = el.speed
-                    copy[el.id].avg        = el.avg
-                    copy[el.id].ipLog      = el.ipLog
-                    copy[el.id].packetLoss = el.packetLoss
+                    copy[locInd][el.id].speed      = el.speed
+                    copy[locInd][el.id].avg        = el.avg
+                    copy[locInd][el.id].ipLog      = el.ipLog
+                    copy[locInd][el.id].packetLoss = el.packetLoss
                 })
                 return copy
             })
@@ -162,7 +153,7 @@ function IpList({ isPinging, setIsPinging, ipLists, setIplists }) {
             </div>
 
             {selectedIpLog.isExpanded && (
-                <PingLog selectedIpLog = {selectedIpLog}/>
+                <PingLog selectedIpLog = {selectedIpLog} ipList = { ipList }/>
             )}
             
         </div>

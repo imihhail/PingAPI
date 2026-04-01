@@ -5,18 +5,27 @@ import { PingAttributes } from "../../ipCLass";
 import { Server, CircleGauge, CloudDownload, MapPinHouse, MapPinned } from 'lucide-react';
 
 
-function SidePanel({ ipLength, setIpLength, isPinging, pingLocations }) {
-    console.log("sidepanel is loading");
-    
-    const { ipPartsList } = useContext(LocationContext)
-    const strokeWith = 1.5    
+function SidePanel({ ipLength, setIpLength, isPinging, pingLocations, setIplists, ipLists }) {
+    const { currentLoc } = useContext(LocationContext)
+    const strokeWith = 1.5
+    const locInd = currentLoc.i
     const [displayOptions, setDisplayOptions] = useState(null)
 
 
+console.log("sidepanel rendering: ", ipLists);
+
     function addIP() {
-        if (ipPartsList.length < 7 && !isPinging) {
-            //setIpLength(prev => prev + 1)
-            ipPartsList.push(new PingAttributes(ipPartsList.length, ["", "", "", ""]))
+        
+        if (!isPinging) {
+            setIplists(prev => {
+                console.log("rendering");
+                
+                const copy = [...prev]
+                copy[0] = [...copy[0], new PingAttributes(ipLists.length, ["", "", "", ""])];
+                //copy[locInd].push(new PingAttributes(ipLists.length, ["", "", "", ""]))
+                return copy
+            })
+
         }
     }
 

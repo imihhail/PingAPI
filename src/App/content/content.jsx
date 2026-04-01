@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import SidePanel from "./sidePanel/sidePanel"
 import IpList from './ipContent/ipList'
 
@@ -7,7 +7,10 @@ export default function Content({ sideBarOpened, pingLocations, ipData }) {
     const [isPinging, setIsPinging] = useState(false)
     const [ipLists, setIplists] = useState(ipData)
 
-   // console.log("content is rendering");
+    const ipList = useMemo (
+        () => ({ ipLists }),
+        [ipLists[0].lenght]  
+    )
     
     return (
         <div className="content">
@@ -17,6 +20,7 @@ export default function Content({ sideBarOpened, pingLocations, ipData }) {
                     isPinging     = { isPinging }
                     setIplists    = { setIplists }
                     pingLocations = { pingLocations }
+                    ipLists       = { ipList }
                 />
             </div>
 
