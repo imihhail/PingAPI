@@ -5,35 +5,33 @@ import { PingAttributes } from "../../ipCLass";
 import { Server, CircleGauge, CloudDownload, MapPinHouse, MapPinned } from 'lucide-react';
 
 
-function SidePanel({ ipLength, setIpLength, isPinging, pingLocations, setIplists, ipLists }) {
+function SidePanel({ isPinging, pingLocations, setIplists, ipList }) {
     const { currentLoc } = useContext(LocationContext)
-    const strokeWith = 1.5
-    const locInd = currentLoc.i
     const [displayOptions, setDisplayOptions] = useState(null)
-
-
-console.log("sidepanel rendering: ", ipLists);
+    const strokeWith = 1.5
+    const locInd     = currentLoc.i
+    const ipListLen  = ipList[locInd].length
+    
 
     function addIP() {
-        
-        if (!isPinging) {
-            setIplists(prev => {
-                console.log("rendering");
-                
-                const copy = [...prev]
-                copy[0] = [...copy[0], new PingAttributes(ipLists.length, ["", "", "", ""])];
-                //copy[locInd].push(new PingAttributes(ipLists.length, ["", "", "", ""]))
-                return copy
-            })
+        if (ipList[locInd].length > 6 || isPinging) return 
 
-        }
+        setIplists(prev => {
+            const copy   = [...prev]
+            copy[locInd] = [...copy[locInd],
+                new PingAttributes(ipListLen, ["", "", "", ""])];
+            return copy
+        })
     }
 
     function removeIP() {
-        if (ipPartsList.length > 1 && !isPinging) {
-            setIpLength(prev => prev - 1)
-            ipPartsList.pop()
-        }
+        if (ipList[locInd].length < 2 || isPinging) return 
+
+        setIplists(prev => {
+            const copy   = [...prev]
+            copy[locInd] = copy[locInd].slice(0, -1)
+            return copy
+        })                
     }
 
     function toggleOptions(id) {
@@ -59,7 +57,7 @@ console.log("sidepanel rendering: ", ipLists);
             </div>
             <div className={`ipOption ${displayOptions == 2 ? 'opened' : ''}`} >
                 <button className="ipBtn" onClick={removeIP}>◄</button>
-                <input  className="ipNumber" type="number" value={ipLength} disabled/>
+                <input  className="ipNumber" type="number" value={ipListLen} disabled/>
                 <button className="ipBtn" onClick={addIP}>►</button>
             </div>
 
@@ -70,7 +68,7 @@ console.log("sidepanel rendering: ", ipLists);
             </div>
             <div className={`ipOption ${displayOptions == 3 ? 'opened' : ''}`} >
                 <button className="ipBtn" onClick={removeIP}>◄</button>
-                <input  className="ipNumber" type="number" value={ipLength} disabled/>
+                <input  className="ipNumber" type="number" value={ipListLen} disabled/>
                 <button className="ipBtn" onClick={addIP}>►</button>
             </div>
 
@@ -81,7 +79,7 @@ console.log("sidepanel rendering: ", ipLists);
             </div>
             <div className={`ipOption ${displayOptions == 4 ? 'opened' : ''}`} >
                 <button className="ipBtn" onClick={removeIP}>◄</button>
-                <input  className="ipNumber" type="number" value={ipLength} disabled/>
+                <input  className="ipNumber" type="number" value={ipListLen} disabled/>
                 <button className="ipBtn" onClick={addIP}>►</button>
             </div>
 
@@ -92,7 +90,7 @@ console.log("sidepanel rendering: ", ipLists);
             </div>
             <div className={`ipOption ${displayOptions == 5 ? 'opened' : ''}`} >
                 <button className="ipBtn" onClick={removeIP}>◄</button>
-                <input  className="ipNumber" type="number" value={ipLength} disabled/>
+                <input  className="ipNumber" type="number" value={ipListLen} disabled/>
                 <button className="ipBtn" onClick={addIP}>►</button>
             </div>                
 
@@ -103,7 +101,7 @@ console.log("sidepanel rendering: ", ipLists);
             </div>
             <div className={`ipOption ${displayOptions == 6 ? 'opened' : ''}`} >
                 <button className="ipBtn" onClick={removeIP}>◄</button>
-                <input  className="ipNumber" type="number" value={ipLength} disabled/>
+                <input  className="ipNumber" type="number" value={ipListLen} disabled/>
                 <button className="ipBtn" onClick={addIP}>►</button>
             </div>
         </div>

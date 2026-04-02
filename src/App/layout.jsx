@@ -9,6 +9,7 @@ export default function Layout({ ipData }) {
     const [sideBarOpened, setSideBarOpened] = useState(false)
     const [currentLoc, setCurrentLoc] = useState(ipData.currentLoc)
     
+    console.log("layout rendering");
     
     const contextValue = useMemo (
         () => ({ currentLoc, setCurrentLoc }),

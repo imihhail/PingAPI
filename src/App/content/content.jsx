@@ -1,16 +1,19 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useContext } from "react";
+import { LocationContext } from "../layout";
 import SidePanel from "./sidePanel/sidePanel"
 import IpList from './ipContent/ipList'
 
 
 export default function Content({ sideBarOpened, pingLocations, ipData }) {
+    const { currentLoc } = useContext(LocationContext)
     const [isPinging, setIsPinging] = useState(false)
     const [ipLists, setIplists] = useState(ipData)
 
     const ipList = useMemo (
-        () => ({ ipLists }),
-        [ipLists[0].lenght]  
+        () => (ipLists),
+        [ipLists[currentLoc.i].length]  
     )
+
     
     return (
         <div className="content">
@@ -20,7 +23,7 @@ export default function Content({ sideBarOpened, pingLocations, ipData }) {
                     isPinging     = { isPinging }
                     setIplists    = { setIplists }
                     pingLocations = { pingLocations }
-                    ipLists       = { ipList }
+                    ipList        = { ipList }
                 />
             </div>
 
