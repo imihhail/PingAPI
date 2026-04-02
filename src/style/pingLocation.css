@@ -37,7 +37,7 @@
   left: 0;
 }
 
-.ipLines {
+.settingBtn {
   display: flex;
   padding: 6px 9px;
   gap: 13px;
@@ -46,19 +46,19 @@
 
 }
 
-.ipLines:hover,
-.ipLines.opened {
+.settingBtn:hover,
+.settingBtn.opened {
   background-color: #1c3133;
 }
 
 
-.ipLabel {
+.settingTxt {
   padding: 5px 0px;
   user-select: none;
 }
 
 
-.ipNumber {
+.settingOutput {
   width: 95px;
   user-select: none;
   pointer-events: none;
@@ -72,7 +72,7 @@
   margin: 0px 3px; 
 }
 
-.ipBtn {
+.navBtn {
   user-select: none;
   box-sizing: border-box;
   border: none;
@@ -86,7 +86,7 @@
   user-select: none;
 }
 
-.ipOption {
+.toggleSetting {
   align-self: center;
   max-height: 0;                     
   padding: 0 5px;             
@@ -94,7 +94,7 @@
   transition: max-height 250ms ease, padding 250ms ease, opacity 200ms ease;
 }
 
-.ipOption.opened {
+.toggleSetting.opened {
   /* background-color: rgb(26, 105, 61); */
   max-height: 100px;
   padding: 13px 0px;
@@ -103,8 +103,8 @@
 
 }
 
-.ipBtn:hover { filter: brightness(0.85); }
-.ipBtn:active { transform: translateY(1px); }
+.navBtn:hover { filter: brightness(0.85); }
+.navBtn:active { transform: translateY(1px); }
 
 
 

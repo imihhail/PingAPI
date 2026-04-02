@@ -9,6 +9,7 @@ export default function Content({ sideBarOpened, pingLocations, ipData }) {
     const [isPinging, setIsPinging] = useState(false)
     const [ipLists, setIplists] = useState(ipData)
 
+    
     const ipList = useMemo (
         () => (ipLists),
         [ipLists[currentLoc.i].length]  

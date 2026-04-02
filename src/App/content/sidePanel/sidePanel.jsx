@@ -1,67 +1,20 @@
-import React, { useContext, useState } from "react";
-import { LocationContext } from "../../layout";
+import React from "react";
 import PingLocation from "./settings/location";
-import { PingAttributes } from "../../ipCLass";
-import { Server, CircleGauge, CloudDownload, MapPinHouse, MapPinned } from 'lucide-react';
+import IpLines from "./settings/ipLines";
+
 
 
 function SidePanel({ isPinging, pingLocations, setIplists, ipList }) {
-    const { currentLoc } = useContext(LocationContext)
-    const [displayOptions, setDisplayOptions] = useState(null)
-    const strokeWith = 1.5
-    const locInd     = currentLoc.i
-    const ipListLen  = ipList[locInd].length
+
     
-
-    function addIP() {
-        if (ipList[locInd].length > 6 || isPinging) return 
-
-        setIplists(prev => {
-            const copy   = [...prev]
-            copy[locInd] = [...copy[locInd],
-                new PingAttributes(ipListLen, ["", "", "", ""])];
-            return copy
-        })
-    }
-
-    function removeIP() {
-        if (ipList[locInd].length < 2 || isPinging) return 
-
-        setIplists(prev => {
-            const copy   = [...prev]
-            copy[locInd] = copy[locInd].slice(0, -1)
-            return copy
-        })                
-    }
-
-    function toggleOptions(id) {
-        setDisplayOptions(prev => prev == id ? null: id)
-    }
-    
-
     return (
         <div className='topSection'>
-            <div data-testid="sideBarline-1" className={`ipLines ${displayOptions === 1 ? 'opened' : ''}`}
-                onClick={() => toggleOptions(1)}>
-                <MapPinHouse strokeWidth={strokeWith}/>
-                <span className="ipLabel">Server location</span>
-            </div>
-            <div className={`ipOption ${displayOptions == 1 ? 'opened' : ''}`}>
-                <PingLocation pingLocations = { pingLocations } />       
-            </div>
+            <PingLocation pingLocations = { pingLocations } /> 
 
-            <div className={`ipLines ${displayOptions === 2 ? 'opened' : ''}`}
-                    onClick={() => toggleOptions(2)}>
-                <Server strokeWidth={strokeWith}/>
-                <span className="ipLabel">IP count</span>
-            </div>
-            <div className={`ipOption ${displayOptions == 2 ? 'opened' : ''}`} >
-                <button className="ipBtn" onClick={removeIP}>◄</button>
-                <input  className="ipNumber" type="number" value={ipListLen} disabled/>
-                <button className="ipBtn" onClick={addIP}>►</button>
-            </div>
+            <IpLines ipList = { ipList } setIplists = { setIplists } isPinging = { isPinging }/>
+            
 
-            <div className={`ipLines ${displayOptions === 3 ? 'opened' : ''}`}
+            {/* <div className={`ipLines ${displayOptions === 3 ? 'opened' : ''}`}
                     onClick={() => toggleOptions(3)}>
                 <CircleGauge strokeWidth={strokeWith}/>
                 <span className="ipLabel">Ping frequency</span>
@@ -103,7 +56,7 @@ function SidePanel({ isPinging, pingLocations, setIplists, ipList }) {
                 <button className="ipBtn" onClick={removeIP}>◄</button>
                 <input  className="ipNumber" type="number" value={ipListLen} disabled/>
                 <button className="ipBtn" onClick={addIP}>►</button>
-            </div>
+            </div> */}
         </div>
     );
 }
