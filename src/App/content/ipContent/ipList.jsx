@@ -74,6 +74,7 @@ function IpList({ isPinging, setIsPinging, ipLists, setIplists }) {
             //     const controller      = startSpeedTest(setSpeed_Mbps)
             //     controllerRef.current = controller
             // }
+
             setIplists(prev => {
                 const copy = prev.slice()             
 
@@ -132,7 +133,7 @@ function IpList({ isPinging, setIsPinging, ipLists, setIplists }) {
                                 </React.Fragment>
                             ))}
                         </div>
-                        <PingOutput ipList = { ipList[y] } onClick={() => resizeLog(y)}/>
+                        <PingOutput ipList = { ipList[y] } speed_Mbps = {speed_Mbps} onClick={() => resizeLog(y)}/>
                     </div>
                 ))}
 
