@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import TitleBar from './titlebar';
 import Layout from "./layout";
 
@@ -8,7 +8,6 @@ export default function App() {
     const [isLoading, setIsLoading] = useState(true);
     const dataRef = useRef(null);
 
-    console.log("app");
     
     useEffect(() => {
         (async function getData() {
@@ -18,16 +17,14 @@ export default function App() {
 
             const pingLocations = Object.keys(storePingLocations).map((key, i) => ({ i, key }));
             const ipLists       = Object.values(storePingLocations) ?? [[]];  
-            const currentLoc    = pingLocations[storeSettings.LastLocationId]
             
             setIpData({
                 pingLocations: pingLocations,
-                currentLoc: currentLoc,
                 ipLists: ipLists,
                 settings: storeSettings
             })
 
-            setIsLoading(false)                
+            setIsLoading(false)                 
         })()
     }, []);        
     

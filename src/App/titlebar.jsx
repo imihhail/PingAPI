@@ -1,8 +1,13 @@
 import React from "react";
 
 
-function TitleBar({ setSideBarOpened, currentLoc }) {
-    function exitApp() {        
+function TitleBar({ setSideBarOpened, currentLoc, settingsData }) {
+    async function exitApp() {
+        try {
+await window.storeAPI.set("Settings", { ...settingsData, LocationId: currentLoc.i });
+        } catch (error) {
+            console.error("Failed to save:", error)
+        }
         window.winapi.close()
     }
 
@@ -19,7 +24,7 @@ function TitleBar({ setSideBarOpened, currentLoc }) {
                 <span className="line"></span>
             </button>
 
-            <span className='pingLocation'>{currentLoc}</span>
+            <span className='pingLocation'>{currentLoc?.key}</span>
 
             <div className="titlebar-right">
                 <button onClick={() => window.winapi.minimize()} id="minBtn" className="win-btn">—</button>

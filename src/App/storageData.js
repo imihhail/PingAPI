@@ -18,9 +18,10 @@ export function CreateStorageData() {
                             {id: 4, ip: ["", "", "", ""]}]                              
         },
         Settings: {
-            "LastLocationId": 0,
-            "ipCount": 5,
-            "PingFrequency": 2000
+            "LocationId": 0,
+            "PingInterval": 2000,
+            "DownloadSize": 50,
+            "LogMemory": 30
         }
     }       
 

@@ -7,21 +7,22 @@ export const LocationContext = createContext()
 
 export default function Layout({ ipData }) {
     const [sideBarOpened, setSideBarOpened] = useState(false)
-    const [currentLoc, setCurrentLoc] = useState(ipData.currentLoc)
+    const [currentLoc, setCurrentLoc] = useState(ipData.pingLocations[ipData.settings.LocationId])
     const [settingsData, setSettingsData] = useState(ipData.settings) 
     
-    console.log("layout rendering", settingsData);
     
     const contextValue = useMemo (
-        () => ({ currentLoc, setCurrentLoc,  }),
-        [currentLoc]  
+        () => ({ currentLoc, setCurrentLoc, settingsData, setSettingsData }),
+        [currentLoc, settingsData]  
     )
+
     
     return (
         <div className='app'>
             <TitleBar
                 setSideBarOpened = { setSideBarOpened }
-                currentLoc       = { currentLoc.key }
+                currentLoc       = { currentLoc }
+                settingsData     = { settingsData }
             />
 
             <LocationContext.Provider value = { contextValue }>
