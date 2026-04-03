@@ -2,6 +2,7 @@ import React, { useState, useRef, useContext, useEffect } from "react";
 import { LocationContext } from "../../layout";
 import { startSpeedTest } from "./speedTest";
 import PingLog from "./pingLog";
+import PingOutput from "./pingOutput";
 
 
 function IpList({ isPinging, setIsPinging, ipLists, setIplists }) {
@@ -96,6 +97,8 @@ function IpList({ isPinging, setIsPinging, ipLists, setIplists }) {
     }
    
     function resizeLog(y) {      
+        console.log("rezising");
+        
         if (ipList[y].ipLog && ipList[y].ipLog.length > 0) {            
             setSelectedIpLog(prev => ({
                 id: y,
@@ -129,20 +132,7 @@ function IpList({ isPinging, setIsPinging, ipLists, setIplists }) {
                                 </React.Fragment>
                             ))}
                         </div>
-                        <div onClick={() => resizeLog(y)} className='pingLog'>
-                            <span className="pingStats" id={y}>
-                                {ipList[y].speed ? (
-                                    <>
-                                    <span className="pingStats_ping">Ping: <strong>{ipList[y].speed}ms</strong></span>
-                                    <span className="pingStats_avg">Avg: <strong>{ipList[y].avg ?? '-'}ms</strong></span>
-                                    <span className="pingStats_pl">PL: <strong>{ipList[y].packetLoss ?? '-'}%</strong></span>
-                                    {ipList[y] == ipList[0] && (<span className="pingStats_pl">Download speed: <strong>{speed_Mbps}Mbps</strong></span>)}
-                                    </>
-                                ) : (
-                                    ipList[y].ipLog ? ipList[y].ipLog[ipList[y].ipLog.length - 1]?.pingLog : ""
-                                )}
-                            </span>
-                        </div>
+                        <PingOutput ipList = { ipList[y] } onClick={() => resizeLog(y)}/>
                     </div>
                 ))}
 
