@@ -1,40 +1,55 @@
 .sideBar {
+  z-index: 5;
+  opacity: 0;
+  position: absolute;
   display: flex;
   flex-direction: column;
-  background-color: rgb(17, 17, 17);
-  width: 0;
-  transition: width 0.3s ease;
+  /* background-color: rgb(17, 17, 17); */
+  width: 0px;
+  height:100vh;
+  transition: opacity width 0.3s ease;
   overflow: hidden;
   box-sizing: border-box;
   border-top-right-radius: 3px;
   pointer-events: none;
-  align-self: stretch;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.95),
+    rgba(0, 0, 0, 0.95),
+    rgba(0, 0, 0, 0.8),
+    rgba(0, 0, 0, 0)
+  );
 }
 
 .sideBar.opened {
-  width:165px;
+  opacity: 1;
+  width:270px;
   pointer-events: auto;
-  border-right: 1px solid var(--subtle);
-  border-top: 1px solid var(--subtle);
+  /* border-right: 1px solid var(--subtle);
+  border-top: 1px solid var(--subtle); */
+
 }
 
 .topSection {
+  opacity: 0;
   justify-self: center;
-  left: -100%;
+  /* left: -100%; */
   display: flex;
-  width: 157px;
+  /* width: 157px; */
   flex-direction: column;
   font-size: 14px;
   padding: 10px 4px;
   margin: 12px 0px;
+  margin-left: 15px;
   position: absolute;
   color: rgb(255, 255, 255);
-  gap: 5px;
+  gap: 8px;
   transition: 0.4s ease;
 }
 
 .sideBar.opened .topSection {
-  left: 0;
+  /* left: 0; */
+  opacity: 1;
 }
 
 .settingBtn {
@@ -56,7 +71,6 @@
   padding: 5px 0px;
   user-select: none;
 }
-
 
 .settingOutput {
   width: 95px;

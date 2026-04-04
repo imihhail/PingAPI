@@ -9,8 +9,8 @@
   -webkit-user-select: none;
   -webkit-app-region: drag;
   align-items: center;
-  border-bottom: 1px solid var(--subtle);
-  margin-bottom: 1px;
+  /* border-bottom: 1px solid var(--subtle);
+  margin-bottom: 1px; */
 }
 
 .pingLocation {

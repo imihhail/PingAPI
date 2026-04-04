@@ -4,9 +4,18 @@ export class IpLocation {
     this.location   = location;
   }
 }
+    // const MAX = 4;
+    // let buffer = new Array(MAX);
+    // let index = 0;
+
+    // function add(item) {
+    //     buffer[index] = item;
+    //     index = (index + 1) % MAX;
+    // }
 
 export class PingAttributes extends IpLocation {
-    ipLog      = []
+    ipLog      = new Array(this.circualBuffer)
+    bufferInd  = 0
     pingCount  = 0
     errorCount = 0
     pingSum    = 0
@@ -16,9 +25,10 @@ export class PingAttributes extends IpLocation {
     connection = false
 
 
-    constructor(id, ip = ['', '', '', '']) {
+    constructor(id, ip = ['', '', '', ''], circualBuffer = 10) {
       super()
       this.id = id
+      this.circualBuffer = circualBuffer
 
       if (id = 0) {
         this.ip = ['8', '8', '8', '8']
@@ -48,7 +58,9 @@ export class PingAttributes extends IpLocation {
             if (this.connection) this.errorCount++
         }
 
-        this.ipLog.push({ pingLog: str, ipConfig: ipConfig })
+        this.ipLog[this.bufferInd] = { pingLog: str, ipConfig: ipConfig }
+        this.bufferInd = (this.bufferInd + 1) % this.circualBuffer;
+        //this.ipLog.push({ pingLog: str, ipConfig: ipConfig })
     }
 }
 

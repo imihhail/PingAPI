@@ -6,7 +6,7 @@ import PingOutput from "./pingOutput";
 
 
 function IpList({ isPinging, setIsPinging, ipLists, setIplists }) {
-    const { currentLoc } = useContext(LocationContext)
+    const { currentLoc, settingsData } = useContext(LocationContext)
     const locInd = currentLoc.i
     const ipList = ipLists[locInd]
     const deBounceTimer = useRef(null)
@@ -65,13 +65,14 @@ function IpList({ isPinging, setIsPinging, ipLists, setIplists }) {
             .map(item => (item.ip.some(o => o === "") ? null :
             {...item, ip: item.ip.join(".") })).filter(Boolean); // removes null/undefined/empty
         
-        window.startPig.sendIP(ipAddresses)
+        window.startPig.sendIP(ipAddresses, settingsData)
         window.startPig.clearPingListeners();
         window.startPig.onPing(pingResp => {
+            console.log(pingResp);
             
             // if (!isSpeedTestRunning && pingResp[0].connection) {
             //     isSpeedTestRunning    = true
-            //     const controller      = startSpeedTest(setSpeed_Mbps)
+            //     const controller      = startSpeedTest(setSpeed_Mbps, settingsData.DownloadSize)
             //     controllerRef.current = controller
             // }
 
@@ -98,14 +99,11 @@ function IpList({ isPinging, setIsPinging, ipLists, setIplists }) {
     }
    
     function resizeLog(y) {      
-        console.log("rezising");
-        
         if (ipList[y].ipLog && ipList[y].ipLog.length > 0) {            
             setSelectedIpLog(prev => ({
                 id: y,
                 isExpanded: !prev.isExpanded
             }));
-
             window.winapi.resize(selectedIpLog.isExpanded)
         }
     }  
@@ -128,7 +126,6 @@ function IpList({ isPinging, setIsPinging, ipLists, setIplists }) {
                                             type="number"
                                         />
                                     }
-
                                     {x < 3 && <span className="dot">.</span>}
                                 </React.Fragment>
                             ))}
@@ -137,9 +134,10 @@ function IpList({ isPinging, setIsPinging, ipLists, setIplists }) {
                     </div>
                 ))}
 
-                {isPinging ? <button onClick={stopPing} className="stopBtn">Stop</button>:
-                             <button onClick={ping} className="startBtn">Ping</button>
-                }  
+                {isPinging ?
+                    <button onClick={stopPing} className="stopBtn">Stop</button>:
+                    <button onClick={ping} className="startBtn">Ping</button>
+                } 
 
             </div>
 

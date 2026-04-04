@@ -10,7 +10,7 @@ contextBridge.exposeInMainWorld('winapi', {
 });
 
 contextBridge.exposeInMainWorld('startPig', {
-  sendIP: (ip) => ipcRenderer.invoke('startPing', ip),
+  sendIP: (ip, settings) => ipcRenderer.invoke('startPing', ip, settings),
   onPing: (cb) => ipcRenderer.on('ping-data', (event, data) => cb(data)),
   stopPing: () => ipcRenderer.send('stopPing'),
   clearPingListeners: () => ipcRenderer.removeAllListeners('ping-data')

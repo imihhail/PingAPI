@@ -1,17 +1,12 @@
-import React, { useContext, useState } from "react";
-
+import React from "react";
 
 
 function PingOutput({ ipList, onClick, speed_Mbps }) {
     const hasSpeed    = Boolean(ipList.speed)
     const lastPingLog = ipList.ipLog?.[ipList.ipLog.length - 1]?.pingLog ?? ""
     const isFirstItem = ipList.id === 0
-    console.log(ipList);
+    //console.log(ipList);
     
-  
-
-
-
 
     return (
         <div onClick={onClick} className="pingLog">

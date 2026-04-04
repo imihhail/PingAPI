@@ -32,6 +32,8 @@ body, #root, html {
 }
 
 #settingsForm {
+  /* filter:blur(1px); */
+  z-index: 0;
   margin-top: 20px;
   flex: 1;          
   display: flex;
@@ -43,7 +45,8 @@ body, #root, html {
 }
 
 .ipsBorder, .pingLogExpanded {
-  border: 1px solid var(--subtle);
+  /* border: 1px solid var(--subtle); */
+  
   border-radius: 7px;
   padding: 22px 22px;
   background-color: #000000;

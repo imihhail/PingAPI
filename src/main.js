@@ -69,14 +69,11 @@ app.whenReady().then(async() => {
   });
 });
 
-
 //RECIEVE INPUT
-ipcMain.handle('startPing', (e, ipListObj) => {
-  console.log(ipListObj);
+ipcMain.handle('startPing', (e, ipListObj, settings) => {
+  const ipMap   = new Map()
+  let isRunning = true
   
-  const ipMap      = new Map()
-  let isRunning    = true
-
   ipListObj.forEach((ip => ipMap.set(ip.id, new PingAttributes(ip.id, ip.ip)))) 
   
   //STOP PING
@@ -127,7 +124,7 @@ ipcMain.handle('startPing', (e, ipListObj) => {
           resolve(ipClass)
           cleanUp()
         }
-      }, 2000);
+      }, settings.PingInterval);
 
       //ON STD OUTPUT
       rl.on('line', (line) => {

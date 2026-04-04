@@ -1,8 +1,10 @@
-export function startSpeedTest(setSpeed_Mbps) {    
+export function startSpeedTest(setSpeed_Mbps, dlSize) {    
     const controller = new AbortController();
+    const dlSize_KB  = dlSize * 1000000;
+    
 
     (async () => {
-        const url            = 'https://speed.cloudflare.com/__down?bytes=50000000'; 
+        const url            = `https://speed.cloudflare.com/__down?bytes=${dlSize_KB}`; 
         const start          = performance.now();
         let progressInterval = null
 
