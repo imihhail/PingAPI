@@ -13,8 +13,8 @@ function IpList({ isPinging, setIsPinging, ipLists, setIplists }) {
     const controllerRef = useRef(null)
     const [speed_Mbps, setSpeed_Mbps] = useState("")
     const [selectedIpLog, setSelectedIpLog] = useState({id: null, isExpanded: false});
-    
 
+    
     function changeIP(y, x, e) {
         const value = e.target.value
         
@@ -68,7 +68,7 @@ function IpList({ isPinging, setIsPinging, ipLists, setIplists }) {
         window.startPig.sendIP(ipAddresses, settingsData)
         window.startPig.clearPingListeners();
         window.startPig.onPing(pingResp => {
-            console.log(pingResp);
+            // console.log(pingResp);
             
             // if (!isSpeedTestRunning && pingResp[0].connection) {
             //     isSpeedTestRunning    = true
@@ -98,15 +98,19 @@ function IpList({ isPinging, setIsPinging, ipLists, setIplists }) {
         window.startPig.clearPingListeners();
     }
    
-    function resizeLog(y) {      
-        if (ipList[y].ipLog && ipList[y].ipLog.length > 0) {            
-            setSelectedIpLog(prev => ({
-                id: y,
-                isExpanded: !prev.isExpanded
-            }));
-            window.winapi.resize(selectedIpLog.isExpanded)
-        }
-    }  
+    function resizeLog(y) {
+        if (!ipList[y].ipLog || ipList[y].ipLog.length === 0) return
+
+        setSelectedIpLog(prev => ({
+            id: y,
+            isExpanded: prev.id === y ? !prev.isExpanded : true 
+        }))
+    }
+
+    useEffect(()=> {
+        window.winapi.resize(selectedIpLog.isExpanded)
+    }, [selectedIpLog])
+
 
     return (
         <div id="settingsForm">
@@ -130,7 +134,12 @@ function IpList({ isPinging, setIsPinging, ipLists, setIplists }) {
                                 </React.Fragment>
                             ))}
                         </div>
-                        <PingOutput ipList = { ipList[y] } speed_Mbps = {speed_Mbps} onClick={() => resizeLog(y)}/>
+                        <PingOutput
+                            ipList        = { ipList[y] }
+                            selectedIpLog = { selectedIpLog }
+                            speed_Mbps    = { speed_Mbps }
+                            onClick={() => resizeLog(y)}
+                        />
                     </div>
                 ))}
 

@@ -181,6 +181,6 @@ ipcMain.handle('store-get-all', () => {
 ipcMain.handle('window-minimize', () => win.minimize());
 ipcMain.handle('window-close',    () => win.close());
 app.on('window-all-closed',       () => app.quit());
-ipcMain.handle('window-resize',   (_, isOpened) => {
-  isOpened ? win.setSize(1000, 475) : win.setSize(1000, 823)
+ipcMain.handle('window-resize',   (_, isOpened) => {  
+   isOpened ? win.setSize(1000, 823) : win.setSize(1000, 475)
 })
