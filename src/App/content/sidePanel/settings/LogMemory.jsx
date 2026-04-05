@@ -1,14 +1,14 @@
 import React, { useContext, useState } from "react";
 import { LocationContext } from "../../../layout";
 
-import { CircleGauge, CloudDownload, MapPinHouse, MapPinned, MemoryStick } from 'lucide-react';
+import { MemoryStick } from 'lucide-react';
 
 
 function LogMemory({ isPinging }) {
     const { settingsData, setSettingsData } = useContext(LocationContext)
     const [displaySetting, setDisplaySetting] = useState(false)
-  
 
+  
     function decrease() {
         if (settingsData.LogMemory < 20 || isPinging) return 
 

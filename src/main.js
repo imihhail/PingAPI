@@ -74,7 +74,7 @@ ipcMain.handle('startPing', (e, ipListObj, settings) => {
   const ipMap   = new Map()
   let isRunning = true
   
-  ipListObj.forEach((ip => ipMap.set(ip.id, new PingAttributes(ip.id, ip.ip)))) 
+  ipListObj.forEach((ip => ipMap.set(ip.id, new PingAttributes(ip.id, ip.ip, settings.LogMemory)))) 
   
   //STOP PING
   ipcMain.once('stopPing', (e) => {  
@@ -155,7 +155,7 @@ ipcMain.handle('startPing', (e, ipListObj, settings) => {
 
   (async function loop() {
     while (isRunning) {
-      console.log("pining");
+      console.log("pinging");
       
       const ipConfigResp = await getIpConfig();
 

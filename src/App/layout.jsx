@@ -21,6 +21,7 @@ export default function Layout({ ipData }) {
         <div className='app'>
             <TitleBar
                 setSideBarOpened = { setSideBarOpened }
+                sideBarOpened    = { sideBarOpened }
                 currentLoc       = { currentLoc }
                 settingsData     = { settingsData }
             />

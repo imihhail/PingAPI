@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { LocationContext } from "../../../layout";
 
-import { CircleGauge, CloudDownload, MapPinHouse, MapPinned } from 'lucide-react';
+import { CloudDownload } from 'lucide-react';
 
 
 function DownloadSize({ isPinging }) {

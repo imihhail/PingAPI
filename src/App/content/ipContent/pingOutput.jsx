@@ -1,4 +1,5 @@
 import React from "react";
+import { ChevronDown } from 'lucide-react';
 
 
 function PingOutput({ ipList, onClick, speed_Mbps }) {
@@ -22,16 +23,20 @@ function PingOutput({ ipList, onClick, speed_Mbps }) {
                         <span className="pingStats_pl">
                             PL: <strong>{ipList.packetLoss ?? "-"}%</strong>
                         </span>
-                        
                         {isFirstItem && (
                             <span className="pingStats_pl">
                                 Download speed: <strong>{speed_Mbps}Mbps</strong>
                             </span>
                         )}
+                        <div className="arrowDown">
+                            <ChevronDown/>
+                        </div>
                     </>
                 ) : (
                     lastPingLog
+                    
                 )}
+                
             </span>
         </div>
     );
