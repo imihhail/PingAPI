@@ -67,14 +67,13 @@ function IpList({ isPinging, setIsPinging, ipLists, setIplists }) {
         
         window.startPig.sendIP(ipAddresses, settingsData)
         window.startPig.clearPingListeners();
+        
         window.startPig.onPing(pingResp => {
-            // console.log(pingResp);
-            
-            // if (!isSpeedTestRunning && pingResp[0].connection) {
-            //     isSpeedTestRunning    = true
-            //     const controller      = startSpeedTest(setSpeed_Mbps, settingsData.DownloadSize)
-            //     controllerRef.current = controller
-            // }
+            if (!isSpeedTestRunning && pingResp[0].connection) {
+                isSpeedTestRunning    = true
+                const controller      = startSpeedTest(setSpeed_Mbps, settingsData.DownloadSize)
+                controllerRef.current = controller
+            }
 
             setIplists(prev => {
                 const copy = prev.slice()             

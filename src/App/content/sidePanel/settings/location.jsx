@@ -1,40 +1,33 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { LocationContext } from "../../../layout";
-import { CircleGauge, CloudDownload, MapPinHouse, MapPinned } from 'lucide-react';
+import { MapPinHouse } from 'lucide-react';
 
-function PingLocation({ pingLocations, isPinging }) {
+function PingLocation({ pingLocations, isPinging, isOpen, onToggle }) {
     const { currentLoc, setCurrentLoc } = useContext(LocationContext)
-    const [displaySetting, setDisplaySetting] = useState(false)
 
 
     function prevLoc() {        
         if (currentLoc.i < 1 || isPinging) return
-
-        const newLoc = pingLocations[currentLoc.i - 1]
-        setCurrentLoc(newLoc)   
+        setCurrentLoc(pingLocations[currentLoc.i - 1])   
     }
 
     function nextLoc() {
         if (currentLoc.i >= pingLocations.length - 1 || isPinging) return
-
-        const newLoc = pingLocations[currentLoc.i + 1]
-        setCurrentLoc(newLoc)
+        setCurrentLoc(pingLocations[currentLoc.i + 1])
     }
-
-    const toggleSetting = () => setDisplaySetting(prev => !prev)
-
+    
 
     return (
         <>
             <div
-                className={`settingBtn ${displaySetting ? 'opened' : ''}`}
-                onClick={toggleSetting}
+                className={`settingBtn ${isOpen ? 'opened' : ''}`}
+                onClick={onToggle}
             >
                 <MapPinHouse strokeWidth={1.5}/>
                 <span className="settingTxt">Server location</span>
             </div>
 
-            <div className={`toggleSetting ${displaySetting ? 'opened' : ''}`}>
+            <div className={`toggleSetting ${isOpen ? 'opened' : ''}`}>
                 <button className="navBtn" onClick={prevLoc}>◄</button>
 
                 <input

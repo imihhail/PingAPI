@@ -1,46 +1,33 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { LocationContext } from "../../../layout";
-
 import { CloudDownload } from 'lucide-react';
 
-
-function DownloadSize({ isPinging }) {
+function DownloadSize({ isPinging, isOpen, onToggle }) {
     const { settingsData, setSettingsData } = useContext(LocationContext)
-    const [displaySetting, setDisplaySetting] = useState(false)
-  
+
 
     function decrease() {
         if (settingsData.DownloadSize < 10 || isPinging) return 
-
-        setSettingsData(prev => ({
-            ...prev,
-            DownloadSize: prev.DownloadSize - 5
-        }))  
+        setSettingsData(prev => ({ ...prev, DownloadSize: prev.DownloadSize - 5 }))  
     }
 
     function increase() {
         if (settingsData.DownloadSize > 95 || isPinging) return 
-        
-        setSettingsData(prev => ({
-            ...prev,
-            DownloadSize: prev.DownloadSize + 5
-        }))                        
+        setSettingsData(prev => ({ ...prev, DownloadSize: prev.DownloadSize + 5 }))                        
     }
-
-    const toggleSetting = () => setDisplaySetting(prev => !prev)
-
+    
 
     return (
         <>
             <div
-                className={`settingBtn ${displaySetting ? 'opened' : ''}`}
-                onClick={toggleSetting}
+                className={`settingBtn ${isOpen ? 'opened' : ''}`}
+                onClick={onToggle}
             >
                 <CloudDownload strokeWidth={1.5}/>
                 <span className="settingTxt">Download size</span>
             </div>
 
-            <div className={`toggleSetting ${displaySetting ? 'opened' : ''}`}>
+            <div className={`toggleSetting ${isOpen ? 'opened' : ''}`}>
                 <button className="navBtn" onClick={decrease}>◄</button>
 
                 <input

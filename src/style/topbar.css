@@ -74,7 +74,7 @@
   background: var(--color);
   border-radius: 4px;
   position: relative;
-  transition: 0.2s ease;
+  transition: 0.1s linear;
 }
 
 .line + .line {

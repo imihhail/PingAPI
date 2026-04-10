@@ -30,7 +30,7 @@ function PingLog({ selectedIpLog, ipList }) {
 
             {ipList[selectedIpLog.id]?.ipLog?.map((log, i) => (
                 <div className="pingOutput" key={i}>
-                    <p>{log.pingLog}</p>
+                    <p className="pingResp">{log.pingLog}</p>
                     <p className="ipConfig">IPv4: {log.ipConfig}</p>
                 </div>
             ))}

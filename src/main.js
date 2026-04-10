@@ -86,16 +86,22 @@ ipcMain.handle('startPing', (e, ipListObj, settings) => {
   function getIpConfig() {
     return new Promise((resolve, reject) => {
       const ipConfig = spawn('ipconfig', ipConfigCmd);
+      let output     = '';
 
-      ipConfig.on('close', (code) => {
-        resolve("Not found")
-      })
+      // ipConfig.on('close', (code) => {
+      //   resolve("Not found")
+      // })
 
       ipConfig.stdout.on('data', (data) => {
-        const ipConfigResp = data.toString().trim()   
-        resolve(ipConfigResp)
+        output += data.toString();
       })
 
+      ipConfig.on('close', () => {
+        const match = output.match(/IPv4 Address.*:\s*([0-9.]+)/);
+        resolve(match ? match[1] : "Not found");
+      });
+
+      ipConfig.on('error', reject);
     })
   }
 
@@ -181,6 +187,7 @@ ipcMain.handle('store-get-all', () => {
 ipcMain.handle('window-minimize', () => win.minimize());
 ipcMain.handle('window-close',    () => win.close());
 app.on('window-all-closed',       () => app.quit());
-ipcMain.handle('window-resize',   (_, isOpened) => {  
-   isOpened ? win.setSize(1000, 823) : win.setSize(1000, 475)
+ipcMain.handle('window-resize',   (_, isOpened) => {
+  const { width } = win.getBounds()
+  isOpened ? win.setSize(width, 823) : win.setSize(width, 475)
 })

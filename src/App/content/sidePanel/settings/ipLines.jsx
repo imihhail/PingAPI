@@ -1,29 +1,25 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { LocationContext } from "../../../layout";
 import { PingAttributes } from "../../../ipCLass";
 import { Server } from 'lucide-react';
 
-
-function IpLines({ ipList, setIplists, isPinging }) {
+function IpLines({ ipList, setIplists, isPinging, isOpen, onToggle }) {
     const { currentLoc } = useContext(LocationContext)
-    const [displaySetting, setDisplaySetting] = useState(false)
     const locInd     = currentLoc.i
     const ipListLen  = ipList[locInd].length    
+    
 
     function addIP() {
         if (ipList[locInd].length > 6 || isPinging) return 
-
         setIplists(prev => {
             const copy   = [...prev]
-            copy[locInd] = [...copy[locInd],
-                new PingAttributes(ipListLen, ["", "", "", ""])];
+            copy[locInd] = [...copy[locInd], new PingAttributes(ipListLen, ["", "", "", ""])];
             return copy
         })
     }
 
     function removeIP() {
         if (ipList[locInd].length < 2 || isPinging) return 
-
         setIplists(prev => {
             const copy   = [...prev]
             copy[locInd] = copy[locInd].slice(0, -1)
@@ -31,20 +27,18 @@ function IpLines({ ipList, setIplists, isPinging }) {
         })                
     }
 
-    const toggleSetting = () => setDisplaySetting(prev => !prev)
-
 
     return (
         <>
             <div
-                className={`settingBtn ${displaySetting ? 'opened' : ''}`}
-                onClick={toggleSetting}
+                className={`settingBtn ${isOpen ? 'opened' : ''}`}
+                onClick={onToggle}
             >
                 <Server strokeWidth={1.5}/>
                 <span className="settingTxt">IP count</span>
             </div>
 
-            <div className={`toggleSetting ${displaySetting ? 'opened' : ''}`}>
+            <div className={`toggleSetting ${isOpen ? 'opened' : ''}`}>
                 <button className="navBtn" onClick={removeIP}>◄</button>
 
                 <input

@@ -1,46 +1,33 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { LocationContext } from "../../../layout";
-import { PingAttributes } from "../../../ipCLass";
-import { CircleGauge, CloudDownload, MapPinHouse, MapPinned } from 'lucide-react';
+import { CircleGauge } from 'lucide-react';
 
-
-function PingInterval({ isPinging }) {
+function PingInterval({ isPinging, isOpen, onToggle }) {
     const { settingsData, setSettingsData } = useContext(LocationContext)
-    const [displaySetting, setDisplaySetting] = useState(false)
-  
 
+    
     function decrease() {
         if (settingsData.PingInterval < 750 || isPinging) return 
-
-        setSettingsData(prev => ({
-            ...prev,
-            PingInterval: prev.PingInterval - 250
-        }))  
+        setSettingsData(prev => ({ ...prev, PingInterval: prev.PingInterval - 250 }))  
     }
 
     function increase() {
         if (isPinging) return 
-        
-        setSettingsData(prev => ({
-            ...prev,
-            PingInterval: prev.PingInterval + 250
-        }))                        
+        setSettingsData(prev => ({ ...prev, PingInterval: prev.PingInterval + 250 }))                        
     }
-
-    const toggleSetting = () => setDisplaySetting(prev => !prev)
 
 
     return (
         <>
             <div
-                className={`settingBtn ${displaySetting ? 'opened' : ''}`}
-                onClick={toggleSetting}
+                className={`settingBtn ${isOpen ? 'opened' : ''}`}
+                onClick={onToggle}
             >
                 <CircleGauge strokeWidth={1.5}/>
                 <span className="settingTxt">Ping interval</span>
             </div>
 
-            <div className={`toggleSetting ${displaySetting ? 'opened' : ''}`}>
+            <div className={`toggleSetting ${isOpen ? 'opened' : ''}`}>
                 <button className="navBtn" onClick={decrease}>◄</button>
 
                 <input

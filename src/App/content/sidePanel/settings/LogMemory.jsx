@@ -1,46 +1,33 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { LocationContext } from "../../../layout";
-
 import { MemoryStick } from 'lucide-react';
 
-
-function LogMemory({ isPinging }) {
+function LogMemory({ isPinging, isOpen, onToggle }) {
     const { settingsData, setSettingsData } = useContext(LocationContext)
-    const [displaySetting, setDisplaySetting] = useState(false)
+    
 
-  
     function decrease() {
         if (settingsData.LogMemory < 20 || isPinging) return 
-
-        setSettingsData(prev => ({
-            ...prev,
-            LogMemory: prev.LogMemory - 10
-        }))  
+        setSettingsData(prev => ({ ...prev, LogMemory: prev.LogMemory - 10 }))  
     }
 
     function increase() {
         if (isPinging) return 
-        
-        setSettingsData(prev => ({
-            ...prev,
-            LogMemory: prev.LogMemory + 10
-        }))                        
+        setSettingsData(prev => ({ ...prev, LogMemory: prev.LogMemory + 10 }))                        
     }
-
-    const toggleSetting = () => setDisplaySetting(prev => !prev)
 
 
     return (
         <>
             <div
-                className={`settingBtn ${displaySetting ? 'opened' : ''}`}
-                onClick={toggleSetting}
+                className={`settingBtn ${isOpen ? 'opened' : ''}`}
+                onClick={onToggle}
             >
                 <MemoryStick strokeWidth={1.5}/>
                 <span className="settingTxt">Log memory</span>
             </div>
 
-            <div className={`toggleSetting ${displaySetting ? 'opened' : ''}`}>
+            <div className={`toggleSetting ${isOpen ? 'opened' : ''}`}>
                 <button className="navBtn" onClick={decrease}>◄</button>
 
                 <input

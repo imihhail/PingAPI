@@ -11,21 +11,10 @@ function PingOutput({ ipList, onClick, speed_Mbps, selectedIpLog }) {
 
 
     useEffect(() => {
-        console.log(selectedIpLog);
-        if (selectedIpLog.id == ipList.id) {
-            if (selectedIpLog.isExpanded) {
-                setIsFocused(true)
-            } else {
-                setIsFocused(false)
-            }
-        }
-        
-        // if (!selectedIpLog.isExpanded) return
-        //console.log(selectedIpLog); // two renders on closing with another bar
-        
-        // setIsFocused(prev => !prev)
-
-    },[selectedIpLog])
+        setIsFocused(
+            selectedIpLog?.id == ipList.id && selectedIpLog?.isExpanded
+        );
+    }, [selectedIpLog]);
     
 
     return (
