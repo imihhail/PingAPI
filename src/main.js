@@ -3,7 +3,7 @@ import path from 'node:path';
 import started from 'electron-squirrel-startup';
 import { spawn } from 'child_process'
 import Store from 'electron-store';
-import { PingAttributes } from "./App/ipCLass";
+import { PingAttributes } from './App/layout/content/ipContent/ipCLass';
 import readline from 'readline'
 import installExtension from 'electron-devtools-installer';
 import { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
@@ -99,6 +99,9 @@ ipcMain.handle('startPing', (e, ipListObj, settings) => {
       ipConfig.on('close', () => {
         const match = output.match(/IPv4 Address.*:\s*([0-9.]+)/);
         resolve(match ? match[1] : "Not found");
+
+        ipConfig.kill('SIGTERM')
+        ipConfig.removeAllListeners()
       });
 
       ipConfig.on('error', reject);
@@ -179,7 +182,6 @@ ipcMain.handle('startPing', (e, ipListObj, settings) => {
 ipcMain.handle('store-get', (_, key) => store.get(key));
 ipcMain.handle('store-set', (_, { key, value }) => store.set(key, value));
 ipcMain.handle('store-has', (_, key) => store.has(key));
-ipcMain.handle('store-delete', (_, key) => store.delete(key));
 ipcMain.handle('store-get-all', () => {
   return { ...store.store };
 });

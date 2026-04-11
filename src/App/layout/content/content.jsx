@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useContext } from "react";
-import { LocationContext } from "../layout";
+import { LocationContext } from "../../layout/layout";
 import SidePanel from "./sidePanel/sidePanel"
 import IpList from './ipContent/ipList'
 
@@ -17,7 +17,7 @@ export default function Content({ sideBarOpened, pingLocations, ipData }) {
 
     
     return (
-        <div className="content">
+        <div className="layout">
 
             <div className={`sideBar ${sideBarOpened ? 'opened' : ''}`}>
                 <SidePanel

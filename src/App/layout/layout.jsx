@@ -25,6 +25,10 @@ export default function Layout({ ipData }) {
                 currentLoc       = { currentLoc }
                 settingsData     = { settingsData }
             />
+            
+            { sideBarOpened &&
+                <div className="overlay" onClick={() => setSideBarOpened(false)}/> 
+            }
 
             <LocationContext.Provider value = { contextValue }>
 

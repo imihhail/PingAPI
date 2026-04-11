@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { LocationContext } from "../../../layout";
+import { LocationContext } from "../../../../layout/layout";
 import { MapPinHouse } from 'lucide-react';
 
 function PingLocation({ pingLocations, isPinging, isOpen, onToggle }) {

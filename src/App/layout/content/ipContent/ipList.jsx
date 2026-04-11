@@ -1,5 +1,5 @@
 import React, { useState, useRef, useContext, useEffect } from "react";
-import { LocationContext } from "../../layout";
+import { LocationContext } from "../../../layout/layout";
 import { startSpeedTest } from "./speedTest";
 import PingLog from "./pingLog";
 import PingOutput from "./pingOutput";
@@ -112,7 +112,7 @@ function IpList({ isPinging, setIsPinging, ipLists, setIplists }) {
 
 
     return (
-        <div id="settingsForm">
+        <div id="content">
             <div className='ipsBorder'>
 
                 {ipList?.map((_, y) => (

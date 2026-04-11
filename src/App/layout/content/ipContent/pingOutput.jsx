@@ -32,7 +32,7 @@ function PingOutput({ ipList, onClick, speed_Mbps, selectedIpLog }) {
                             PL: <strong>{ipList.packetLoss ?? "-"}%</strong>
                         </span>
 
-                        {isFirstItem && (
+                        {isFirstItem && speed_Mbps && (
                             <span className="pingStats_pl">
                                 Download speed: <strong>{speed_Mbps}Mbps</strong>
                             </span>

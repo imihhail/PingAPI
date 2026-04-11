@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import TitleBar from './titlebar';
-import Layout from "./layout";
+import TitleBar from './layout/titlebar';
+import Layout from "./layout/layout";
 
 
 export default function App() {

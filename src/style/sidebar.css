@@ -27,7 +27,6 @@
   pointer-events: auto;
   /* border-right: 1px solid var(--subtle);
   border-top: 1px solid var(--subtle); */
-
 }
 
 .topSection {
@@ -71,7 +70,6 @@
     rgba(28, 49, 51, 0) 100%
   );
 }
-
 
 .settingTxt {
   padding: 5px 0px;
@@ -120,7 +118,6 @@
   padding: 13px 0px;
   opacity: 1;
   border-radius: 4px;
-
 }
 
 .navBtn:hover { filter: brightness(0.85); }

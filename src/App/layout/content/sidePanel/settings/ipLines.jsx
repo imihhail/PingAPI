@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import { LocationContext } from "../../../layout";
-import { PingAttributes } from "../../../ipCLass";
+import { LocationContext } from "../../../../layout/layout";
+import { PingAttributes } from "../../ipContent/ipCLass";
 import { Server } from 'lucide-react';
 
 function IpLines({ ipList, setIplists, isPinging, isOpen, onToggle }) {

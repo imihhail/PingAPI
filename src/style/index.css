@@ -1,11 +1,5 @@
-:root{
-  --bg: #0f172496;           
-  --panel: #0b122073;     
+:root{          
   --muted: #9aa4b2;
-  --accent: #00d1b2;       
-  --danger: #ff6b6b;
-  --glass: rgba(255, 255, 255, 0.244);
-  --glass-2: rgba(255, 255, 255, 0.323);
   --text: #e6eef6;
   --subtle: rgba(230, 238, 246, 0.172);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
@@ -25,13 +19,19 @@ body, #root, html {
   flex-direction: column;
 }
 
-.content {
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 5; 
+}
+
+.layout {
   flex: 1;
   display: flex;
   min-height: 0; 
 }
 
-#settingsForm {
+#content {
   z-index: 0;
   margin-top: 20px;
   flex: 1;          
@@ -48,20 +48,33 @@ body, #root, html {
   /* border: 1px solid var(--subtle); */
   width: 900px;
   border-radius: 7px;
-  padding: 22px 22px;
+  padding: 22px;
   background-color: #000000;
   box-shadow: -3px -3px 2px rgba(46, 46, 46, 0.311),
     5px 5px 5px rgba(0, 0, 0, 0.211),
     10px 10px 10px rgba(0, 0, 0, 0.211);
 }
 
+.ipsBorder:has(> :nth-child(7)) .field  {
+  margin-bottom: 20px;
+}
+
+.ipsBorder:has(> :nth-child(8)) .field  {
+  margin-bottom: 12.8px;
+}
+
+.ipsBorder:has(> :nth-child(8)) .field .IPinput input {
+  font-size: 14px;
+  height: 15px;
+}
+
 .field {
   display: flex;
   align-items: center;
   gap: 52px;
-  margin-bottom: 30px;
   width: 100%;                
-  min-width: 0;               
+  min-width: 0;  
+  margin-bottom: 30px;
 }
 
 .IPinput {
@@ -184,6 +197,10 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .startBtn {
   background-color: hsla(135, 43%, 50%, 0.869);
+}
+
+.startBtn:active, .stopBtn:active {
+  transform: translateY(-2px);
 }
 
 .startBtn:hover {

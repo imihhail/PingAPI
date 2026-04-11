@@ -1,21 +1,21 @@
 import React, { useContext } from "react";
-import { LocationContext } from "../../../layout";
-import { CloudDownload } from 'lucide-react';
+import { LocationContext } from "../../../../layout/layout";
+import { CircleGauge } from 'lucide-react';
 
-function DownloadSize({ isPinging, isOpen, onToggle }) {
+function PingInterval({ isPinging, isOpen, onToggle }) {
     const { settingsData, setSettingsData } = useContext(LocationContext)
 
-
+    
     function decrease() {
-        if (settingsData.DownloadSize < 10 || isPinging) return 
-        setSettingsData(prev => ({ ...prev, DownloadSize: prev.DownloadSize - 5 }))  
+        if (settingsData.PingInterval < 750 || isPinging) return 
+        setSettingsData(prev => ({ ...prev, PingInterval: prev.PingInterval - 250 }))  
     }
 
     function increase() {
-        if (settingsData.DownloadSize > 95 || isPinging) return 
-        setSettingsData(prev => ({ ...prev, DownloadSize: prev.DownloadSize + 5 }))                        
+        if (isPinging) return 
+        setSettingsData(prev => ({ ...prev, PingInterval: prev.PingInterval + 250 }))                        
     }
-    
+
 
     return (
         <>
@@ -23,8 +23,8 @@ function DownloadSize({ isPinging, isOpen, onToggle }) {
                 className={`settingBtn ${isOpen ? 'opened' : ''}`}
                 onClick={onToggle}
             >
-                <CloudDownload strokeWidth={1.5}/>
-                <span className="settingTxt">Download size</span>
+                <CircleGauge strokeWidth={1.5}/>
+                <span className="settingTxt">Ping interval</span>
             </div>
 
             <div className={`toggleSetting ${isOpen ? 'opened' : ''}`}>
@@ -33,7 +33,7 @@ function DownloadSize({ isPinging, isOpen, onToggle }) {
                 <input
                     className="settingOutput"
                     type="number"
-                    value={settingsData.DownloadSize}
+                    value={settingsData.PingInterval}
                     disabled
                 />
 
@@ -43,4 +43,4 @@ function DownloadSize({ isPinging, isOpen, onToggle }) {
     );
 }
 
-export default DownloadSize;
+export default PingInterval;

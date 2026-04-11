@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { LocationContext } from "../../../layout";
+import { LocationContext } from "../../../../layout/layout";
 import { MemoryStick } from 'lucide-react';
 
 function LogMemory({ isPinging, isOpen, onToggle }) {
