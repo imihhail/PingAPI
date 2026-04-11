@@ -6,7 +6,8 @@
 }
 
 body, #root, html {
-  background: radial-gradient(circle 700px at 0% 100%, #151515 0%, rgb(19, 19, 19) 70%);
+  /* background: radial-gradient(circle 700px at 0% 100%, #151515 0%, rgb(21, 21, 21) 70%); */
+  background-image: linear-gradient(0deg, rgb(33, 33, 33), rgb(20, 20, 20));
   margin: 0;
   color: var(--text);
   height: 100%;

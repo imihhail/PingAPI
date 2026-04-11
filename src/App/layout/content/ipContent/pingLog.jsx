@@ -14,7 +14,7 @@ function PingLog({ selectedIpLog, ipList }) {
         if (scrollVal == logBox.scrollHeight) {
             logBox.scrollTop = logBox.scrollHeight    
         }
-    }, );
+    },)
 
     useLayoutEffect(() => {             
         const logBox = logBoxRef.current

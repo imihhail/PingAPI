@@ -97,6 +97,13 @@ ipcMain.handle('startPing', (e, ipListObj, settings) => {
       })
 
       ipConfig.on('close', () => {
+        if (os == "darwin") {
+          resolve(output)
+          ipConfig.kill('SIGTERM')
+          ipConfig.removeAllListeners()
+          return
+        }
+        
         const match = output.match(/IPv4 Address.*:\s*([0-9.]+)/);
         resolve(match ? match[1] : "Not found");
 

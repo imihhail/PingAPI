@@ -6,7 +6,6 @@ import DownloadSize from "./settings/downloadSize";
 import LogMemory from "./settings/LogMemory";
 
 
-// SidePanel
 function SidePanel({ isPinging, pingLocations, setIplists, ipList }) {
     const [openSetting, setOpenSetting] = useState(null);
     
