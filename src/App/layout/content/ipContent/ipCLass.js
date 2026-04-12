@@ -1,11 +1,4 @@
-export class IpLocation {
-  constructor(id, location) {
-    this.locationId = id;
-    this.location   = location;
-  }
-}
-
-export class PingAttributes extends IpLocation {
+export class PingAttributes {
     ipLog      = []
     pingCount  = 0
     errorCount = 0
@@ -17,11 +10,10 @@ export class PingAttributes extends IpLocation {
 
 
     constructor(id, ip = ['', '', '', ''], buffer = 30) {
-      super()
       this.id = id
       this.buffer = buffer
 
-      if (id = 0) {
+      if (id == 0) {
         this.ip = ['8', '8', '8', '8']
       } else {
         this.ip = ip

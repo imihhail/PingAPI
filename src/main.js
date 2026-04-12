@@ -15,6 +15,8 @@ const os    = process.platform
 const arg   = os == "darwin" ? "-c" : "-n"
 const stdOS = os == "darwin" ? 2 : 3
 const ipConfigCmd = os == "darwin" ? ['getifaddr', 'en0'] : []
+const pingExeCmd  = os === "darwin" ? "ping"      : `${process.env.SystemRoot}\\System32\\ping.exe`
+const ipconfigExe = os === "darwin" ? "getifaddr" : `${process.env.SystemRoot}\\System32\\ipconfig.exe`
 
 
 if (started) {
@@ -53,6 +55,7 @@ app.whenReady().then(async() => {
     } catch (err) {
       console.error(err);
     } 
+    console.log("UserData path:", app.getPath('userData'));
   }
 
   createWindow()
@@ -79,18 +82,13 @@ ipcMain.handle('startPing', (e, ipListObj, settings) => {
   //STOP PING
   ipcMain.once('stopPing', (e) => {  
     ipMap.clear()  
-    isRunning = false
-    e.sender.delete();    
+    isRunning = false   
   });
 
   function getIpConfig() {
     return new Promise((resolve, reject) => {
-      const ipConfig = spawn('ipconfig', ipConfigCmd);
+      const ipConfig = spawn(ipconfigExe, ipConfigCmd, { windowsHide: true });
       let output     = '';
-
-      // ipConfig.on('close', (code) => {
-      //   resolve("Not found")
-      // })
 
       ipConfig.stdout.on('data', (data) => {
         output += data.toString();
@@ -121,7 +119,7 @@ ipcMain.handle('startPing', (e, ipListObj, settings) => {
     let stdResponded = false
  
     return new Promise((resolve, reject) => {
-      const ping  = spawn('ping', [[arg], '1', ipList.ip]);
+      const ping = spawn(pingExeCmd, [arg, '1', ipList.ip], { windowsHide: true });
 
       ping.stdout.setEncoding('utf8')
       ping.stderr.setEncoding('utf8')
@@ -170,9 +168,7 @@ ipcMain.handle('startPing', (e, ipListObj, settings) => {
   }
 
   (async function loop() {
-    while (isRunning) {
-      console.log("pinging");
-      
+    while (isRunning) {      
       const ipConfigResp = await getIpConfig();
 
       const pingPromises = ipListObj.map(ipList => {
